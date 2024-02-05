@@ -17,11 +17,37 @@ enum Role {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  name          String
-  email         String    @unique
-  emailVerified DateTime?
-  password      String
-  role          Role      @default(USER)
-  picture       String?
+  id              String           @id @default(uuid())
+  name            String
+  email           String           @unique
+  emailVerified   DateTime?
+  password        String
+  role            Role             @default(USER)
+  picture         String?
+  ShippingAddress ShippingAddress?
+}
+
+model Country {
+  id   String @id
+  name String
+
+  ShippingAddress ShippingAddress[]
+}
+
+model ShippingAddress {
+  id         String  @id @default(uuid())
+  firstName  String
+  lastName   String
+  address    String
+  address2   String?
+  postalCode String
+  phone      String
+  city       String
+
+  //! Relaciones
+  country   Country @relation(fields: [countryId], references: [id])
+  countryId String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
 }

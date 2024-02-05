@@ -41,10 +41,23 @@ enum UserRole {
   SUPERUSER
 }
 
+type ShippingAddress {
+  """Shipping id"""
+  id: ID!
+  firstName: String!
+  lastName: String!
+  address: String!
+  address2: String!
+  postalCode: String!
+  phone: String!
+  city: String!
+}
+
 type Query {
   authentication(id: Int!): Authentication!
   users: [User!]!
   user(id: Int!): User!
+  shippingAddress(id: Int!): ShippingAddress!
 }
 
 type Mutation {
@@ -54,6 +67,9 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
+  createShippingAddress(createShippingAddressInput: CreateShippingAddressInput!): ShippingAddress!
+  updateShippingAddress(updateShippingAddressInput: UpdateShippingAddressInput!): ShippingAddress!
+  removeShippingAddress(id: Int!): ShippingAddress!
 }
 
 input CreateAuthenticationInput {
@@ -73,6 +89,17 @@ input CreateUserInput {
 }
 
 input UpdateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateShippingAddressInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateShippingAddressInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!

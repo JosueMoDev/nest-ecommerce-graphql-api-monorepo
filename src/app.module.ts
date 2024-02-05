@@ -7,6 +7,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { PrismaService } from './prisma.service';
 import { UsersModule } from './users/users.module';
+import { ShippingAddressModule } from './shipping-address/shipping-address.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { UsersModule } from './users/users.module';
     }),
     AuthenticationModule,
     UsersModule,
+    ShippingAddressModule,
   ],
   providers: [PrismaService],
 })
