@@ -7,14 +7,53 @@ type Authentication {
   exampleField: Int!
 }
 
+type User {
+  """User ID"""
+  id: ID!
+
+  """User name"""
+  name: String!
+
+  """User Email"""
+  email: String!
+
+  """Confirmation account date"""
+  emailVerified: Timestamp!
+
+  """User password"""
+  password: String!
+
+  """User Role"""
+  role: UserRole!
+
+  """User picture"""
+  picture: String!
+}
+
+"""
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
+
+enum UserRole {
+  CLIENT
+  USER
+  SUPERUSER
+}
+
 type Query {
   authentication(id: Int!): Authentication!
+  users: [User!]!
+  user(id: Int!): User!
 }
 
 type Mutation {
   createAuthentication(createAuthenticationInput: CreateAuthenticationInput!): Authentication!
   updateAuthentication(updateAuthenticationInput: UpdateAuthenticationInput!): Authentication!
   removeAuthentication(id: Int!): Authentication!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
 }
 
 input CreateAuthenticationInput {
@@ -23,6 +62,17 @@ input CreateAuthenticationInput {
 }
 
 input UpdateAuthenticationInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateUserInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
