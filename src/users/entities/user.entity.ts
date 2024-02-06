@@ -4,24 +4,24 @@ import { UserRole } from '../enum/user-role.enum';
 
 @ObjectType()
 export class User {
-  @Field(() => ID, { description: 'User ID' })
-  id:  string;
+  @Field(() => ID)
+  id: string;
 
-  @Field(() => String, { description: 'User name' })
+  @Field(() => String)
   name: string;
 
-  @Field(() => String, { description: 'User Email' })
+  @Field(() => String)
   email: string;
 
-  @Field(() => Date, { description: 'Confirmation account date' })
+  @Field(() => Date)
   emailVerified: Date;
 
-  @Field(() => String, { description: 'User password' })
-  password: String;
+  @Field(() => String)
+  password: string;
 
-  @Field(() => UserRole, { description: 'User Role' })
+  @Field(() => UserRole)
   role: UserRole;
 
-  @Field(() => String, { description: 'User picture' })
-  picture: String;
+  @Field(() => String)
+  picture: string;
 }

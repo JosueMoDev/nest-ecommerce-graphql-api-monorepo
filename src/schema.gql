@@ -8,25 +8,12 @@ type Authentication {
 }
 
 type User {
-  """User ID"""
   id: ID!
-
-  """User name"""
   name: String!
-
-  """User Email"""
   email: String!
-
-  """Confirmation account date"""
   emailVerified: Timestamp!
-
-  """User password"""
   password: String!
-
-  """User Role"""
   role: UserRole!
-
-  """User picture"""
   picture: String!
 }
 
@@ -53,11 +40,26 @@ type ShippingAddress {
   city: String!
 }
 
+type Order {
+  id: ID!
+  subTotal: Float!
+  tax: Float!
+  total: Float!
+  itemsInOrder: Int!
+  isPaid: Boolean!
+  paidAt: Timestamp!
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  transactionId: String!
+}
+
 type Query {
   authentication(id: Int!): Authentication!
   users: [User!]!
   user(id: Int!): User!
   shippingAddress(id: Int!): ShippingAddress!
+  orders: [Order!]!
+  order(id: Int!): Order!
 }
 
 type Mutation {
@@ -70,6 +72,9 @@ type Mutation {
   createShippingAddress(createShippingAddressInput: CreateShippingAddressInput!): ShippingAddress!
   updateShippingAddress(updateShippingAddressInput: UpdateShippingAddressInput!): ShippingAddress!
   removeShippingAddress(id: Int!): ShippingAddress!
+  createOrder(createOrderInput: CreateOrderInput!): Order!
+  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  removeOrder(id: Int!): Order!
 }
 
 input CreateAuthenticationInput {
@@ -100,6 +105,17 @@ input CreateShippingAddressInput {
 }
 
 input UpdateShippingAddressInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateOrderInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateOrderInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!

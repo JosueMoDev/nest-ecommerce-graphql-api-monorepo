@@ -8,6 +8,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { PrismaService } from './prisma.service';
 import { UsersModule } from './users/users.module';
 import { ShippingAddressModule } from './shipping-address/shipping-address.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ShippingAddressModule } from './shipping-address/shipping-address.modul
     AuthenticationModule,
     UsersModule,
     ShippingAddressModule,
+    OrdersModule,
   ],
   providers: [PrismaService],
 })
