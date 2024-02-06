@@ -16,6 +16,91 @@ enum Role {
   SUPERUSER
 }
 
+model Color {
+  id          String @id @default(uuid())
+  name        String @unique
+  hexadecimal String
+}
+
+// model Cpu {
+//   id    String @id @default(uuid())
+//   cores String
+//   value Float
+// }
+
+// model Gpu {
+//   id    String @id @default(uuid())
+//   cores String
+//   value Float
+// }
+
+// model unifiedMemory {
+//   id       String @id @default(uuid())
+//   capacity String
+//   value    Float
+// }
+
+model Storage {
+  id       String          @id @default(uuid())
+  capacity String
+  value    Float
+  chips    StorageOnChip[]
+}
+
+enum NeuralEngine {
+  SexTeenCores
+  ThirtyCores
+}
+
+model StorageOnChip {
+  chip      Chip    @relation(fields: [chipId], references: [id])
+  chipId    String
+  storage   Storage @relation(fields: [storageId], references: [id])
+  storageId String
+
+  @@id([storageId, chipId])
+}
+
+model Chip {
+  id           String          @id @default(uuid())
+  name         String
+  neuralEngine NeuralEngine[]
+  storage      StorageOnChip[]
+  Product      Product[]
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String
+  Product     Product?
+}
+
+model Product {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  slug        String @unique
+  price       Float  @default(0)
+
+  // * relationships
+  chip           Chip             @relation(fields: [chipId], references: [id])
+  chipId         String
+
+  ProductPicture ProductPicture[]
+  category       Category         @relation(fields: [categoryId], references: [id])
+  
+  categoryId     String           @unique
+}
+
+model ProductPicture {
+  id  Int    @id @default(autoincrement())
+  url String
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+}
+
 model User {
   id            String    @id @default(uuid())
   name          String
@@ -28,7 +113,7 @@ model User {
   // * relationships
   ShippingAddress ShippingAddress[]
 
-  Order           Order[]
+  Order Order[]
 }
 
 model Country {
@@ -53,22 +138,22 @@ model ShippingAddress {
   country   Country @relation(fields: [countryId], references: [id])
   countryId String
 
-  user   User    @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  Order  Order[]
+  Order Order[]
 }
 
 model Order {
-  id           String    @id @default(uuid())
-  subTotal     Float
-  tax          Float
-  total        Float
-  itemsInOrder Int
-  isPaid       Boolean   @default(false)
-  paidAt       DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id            String    @id @default(uuid())
+  subTotal      Float
+  tax           Float
+  total         Float
+  itemsInOrder  Int
+  isPaid        Boolean   @default(false)
+  paidAt        DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   transactionId String?
 
   // * relationships
@@ -77,6 +162,6 @@ model Order {
 
   OrderAddress      ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
   shippingAddressId String?
-  
+
   // OrderItem    OrderItem[]
 }
