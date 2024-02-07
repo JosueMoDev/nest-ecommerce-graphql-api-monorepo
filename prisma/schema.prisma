@@ -16,40 +16,116 @@ enum Role {
   SUPERUSER
 }
 
+enum NeuralEngine {
+  SixTeenCores
+  ThirtyCores
+}
+
+enum CapacityOn {
+  GB
+  TB
+}
+
+enum ChipFamilyName {
+  M1
+  M2
+  M3
+  S8
+  S9
+  A15
+  A16
+  A17
+}
+
+enum ChipGama {
+  BASE
+  PRO
+  MAX
+  ULTRA
+}
+
+enum Gender {
+  DISPLAY
+  LAPTOP
+  DESKTOP
+  PHONE
+  TABLET
+  WATCH
+  AUDIO
+  ACCESSORY
+}
+
 model Color {
   id          String @id @default(uuid())
   name        String @unique
   hexadecimal String
 }
 
-// model Cpu {
-//   id    String @id @default(uuid())
-//   cores String
-//   value Float
-// }
-
-// model Gpu {
-//   id    String @id @default(uuid())
-//   cores String
-//   value Float
-// }
-
-// model unifiedMemory {
-//   id       String @id @default(uuid())
-//   capacity String
-//   value    Float
-// }
-
-model Storage {
-  id       String          @id @default(uuid())
-  capacity String
-  value    Float
-  chips    StorageOnChip[]
+model ChipFamily {
+  id             String         @id @default(uuid())
+  chipFamilyName ChipFamilyName
+  gama           ChipGama
+  description    String
+  Chip           Chip?
 }
 
-enum NeuralEngine {
-  SexTeenCores
-  ThirtyCores
+model CPU {
+  id        String      @id @default(uuid())
+  cores     Int
+  value     Float
+  CPUOnChip CPUOnChip[]
+}
+
+model CPUOnChip {
+  chip   Chip   @relation(fields: [chipId], references: [id])
+  chipId String
+
+  CPU   CPU    @relation(fields: [cpuId], references: [id])
+  cpuId String
+
+  @@id([cpuId, chipId])
+}
+
+model GPU {
+  id        String      @id @default(uuid())
+  cores     Int
+  value     Float
+  GPUOnChip GPUOnChip[]
+}
+
+model GPUOnChip {
+  chip   Chip   @relation(fields: [chipId], references: [id])
+  chipId String
+
+  GPU   GPU    @relation(fields: [gpuId], references: [id])
+  gpuId String
+
+  @@id([gpuId, chipId])
+}
+
+model UnifiedMemory {
+  id                  String                @id @default(uuid())
+  capacity            Int
+  value               Float
+  UnifiedMemoryOnChip UnifiedMemoryOnChip[]
+}
+
+model UnifiedMemoryOnChip {
+  chip   Chip   @relation(fields: [chipId], references: [id])
+  chipId String
+
+  undefinedMemory   UnifiedMemory @relation(fields: [undefinedMemoryId], references: [id])
+  undefinedMemoryId String
+
+  @@id([undefinedMemoryId, chipId])
+}
+
+model Storage {
+  id         String          @id @default(uuid())
+  capacity   Int
+  value      Float
+  capacityOn CapacityOn
+  chips      StorageOnChip[]
 }
 
 model StorageOnChip {
@@ -62,18 +138,35 @@ model StorageOnChip {
 }
 
 model Chip {
-  id           String          @id @default(uuid())
-  name         String
-  neuralEngine NeuralEngine[]
-  storage      StorageOnChip[]
-  Product      Product[]
+  id                  String                @id @default(uuid())
+  neuralEngine        NeuralEngine[]
+  Product             Product[]
+  // * Relationships
+  chipFamily          ChipFamily?           @relation(fields: [chipFamilyId], references: [id])
+  chipFamilyId        String                @unique
+  GPUOnChip           GPUOnChip[]
+  CPUOnChip           CPUOnChip[]
+  storage             StorageOnChip[]
+  UnifiedMemoryOnChip UnifiedMemoryOnChip[]
 }
 
 model Category {
-  id          String   @id @default(uuid())
-  name        String   @unique
+  id          String       @id @default(uuid())
+  name        String       @unique
   description String
-  Product     Product?
+  // * Relationships
+  subCategory SubCategory?
+}
+
+model SubCategory {
+  id         String   @id @default(uuid())
+  name       String
+  slug       String   @unique
+  gender     Gender
+  //  * Relationships
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String   @unique
+  Product    Product?
 }
 
 model Product {
@@ -84,13 +177,13 @@ model Product {
   price       Float  @default(0)
 
   // * relationships
-  chip           Chip             @relation(fields: [chipId], references: [id])
-  chipId         String
+  chip   Chip   @relation(fields: [chipId], references: [id])
+  chipId String
+
+  subCategory   SubCategory @relation(fields: [subCategoryId], references: [id])
+  subCategoryId String      @unique
 
   ProductPicture ProductPicture[]
-  category       Category         @relation(fields: [categoryId], references: [id])
-  
-  categoryId     String           @unique
 }
 
 model ProductPicture {
