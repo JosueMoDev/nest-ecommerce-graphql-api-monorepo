@@ -53,6 +53,18 @@ enum Gender {
   WATCH
   AUDIO
   ACCESSORY
+  VISION
+}
+
+enum CategoryName {
+  IPHONE
+  IPAD
+  WATCH
+  MAC
+  VISION
+  AIRPODS
+  TVHOME
+  ACCESSORIES
 }
 
 model Color {
@@ -69,35 +81,35 @@ model ChipFamily {
   Chip           Chip?
 }
 
-model CPU {
+model Cpu {
   id        String      @id @default(uuid())
   cores     Int
   value     Float
-  CPUOnChip CPUOnChip[]
+  CpuOnChip CpuOnChip[]
 }
 
-model CPUOnChip {
+model CpuOnChip {
   chip   Chip   @relation(fields: [chipId], references: [id])
   chipId String
 
-  CPU   CPU    @relation(fields: [cpuId], references: [id])
+  Cpu   Cpu    @relation(fields: [cpuId], references: [id])
   cpuId String
 
   @@id([cpuId, chipId])
 }
 
-model GPU {
+model Gpu {
   id        String      @id @default(uuid())
   cores     Int
   value     Float
-  GPUOnChip GPUOnChip[]
+  GpuOnChip GpuOnChip[]
 }
 
-model GPUOnChip {
+model GpuOnChip {
   chip   Chip   @relation(fields: [chipId], references: [id])
   chipId String
 
-  GPU   GPU    @relation(fields: [gpuId], references: [id])
+  Gpu   Gpu    @relation(fields: [gpuId], references: [id])
   gpuId String
 
   @@id([gpuId, chipId])
@@ -144,18 +156,17 @@ model Chip {
   // * Relationships
   chipFamily          ChipFamily?           @relation(fields: [chipFamilyId], references: [id])
   chipFamilyId        String                @unique
-  GPUOnChip           GPUOnChip[]
-  CPUOnChip           CPUOnChip[]
+  Gpu           GpuOnChip[]
+  Cpu           CpuOnChip[]
   storage             StorageOnChip[]
-  UnifiedMemoryOnChip UnifiedMemoryOnChip[]
+  undefinedMemory UnifiedMemoryOnChip[]
 }
 
 model Category {
   id          String       @id @default(uuid())
-  name        String       @unique
-  description String
+  name        CategoryName @unique
   // * Relationships
-  subCategory SubCategory?
+  subCategory SubCategory[]
 }
 
 model SubCategory {
@@ -165,7 +176,7 @@ model SubCategory {
   gender     Gender
   //  * Relationships
   category   Category @relation(fields: [categoryId], references: [id])
-  categoryId String   @unique
+  categoryId String   
   Product    Product?
 }
 
