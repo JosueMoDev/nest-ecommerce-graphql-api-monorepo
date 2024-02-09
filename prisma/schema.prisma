@@ -67,17 +67,13 @@ enum CategoryName {
   ACCESSORIES
 }
 
-model Color {
-  id          String @id @default(uuid())
-  name        String @unique
-  hexadecimal String
-}
-
 model ChipFamily {
   id             String         @id @default(uuid())
   chipFamilyName ChipFamilyName
   gama           ChipGama
   description    String
+  // * Relations
+
   chip           Chip?
 }
 
@@ -85,13 +81,14 @@ model Cpu {
   id        String      @id @default(uuid())
   cores     Int
   value     Float
+  // * Relations
+  
   cpuOnChip CpuOnChip[]
 }
 
 model CpuOnChip {
   chip   Chip   @relation(fields: [chipId], references: [id])
   chipId String
-
   cpu   Cpu    @relation(fields: [cpuId], references: [id])
   cpuId String
 
@@ -102,13 +99,14 @@ model Gpu {
   id        String      @id @default(uuid())
   cores     Int
   value     Float
+  // * Relations
+
   gpuOnChip GpuOnChip[]
 }
 
 model GpuOnChip {
   chip   Chip   @relation(fields: [chipId], references: [id])
   chipId String
-
   gpu   Gpu    @relation(fields: [gpuId], references: [id])
   gpuId String
 
@@ -119,13 +117,14 @@ model UnifiedMemory {
   id                  String                @id @default(uuid())
   capacity            Int
   value               Float
+  // * Relations
+
   UnifiedMemoryOnChip UnifiedMemoryOnChip[]
 }
 
 model UnifiedMemoryOnChip {
   chip   Chip   @relation(fields: [chipId], references: [id])
   chipId String
-
   undefinedMemory   UnifiedMemory @relation(fields: [undefinedMemoryId], references: [id])
   undefinedMemoryId String
 
@@ -137,6 +136,8 @@ model Storage {
   capacity   Int
   value      Float
   capacityOn CapacityOn
+  // * Relations
+
   chips      StorageOnChip[]
 }
 
@@ -152,29 +153,32 @@ model StorageOnChip {
 model Chip {
   id              String                @id @default(uuid())
   neuralEngine    NeuralEngine[]
-  product         Product[]
-  // * Relationships
+  // * Relations
+
   chipFamily      ChipFamily?           @relation(fields: [chipFamilyId], references: [id])
   chipFamilyId    String                @unique
   Gpu             GpuOnChip[]
   Cpu             CpuOnChip[]
   storage         StorageOnChip[]
   undefinedMemory UnifiedMemoryOnChip[]
+  product         Product[]
 }
 
 model Category {
   id          String        @id @default(uuid())
   name        CategoryName  @unique
-  // * Relationships
+  // * Relations
+
   subCategory SubCategory[]
 }
 
 model SubCategory {
-  id                 String               @id @default(uuid())
-  name               String
-  slug               String               @unique
-  gender             Gender
-  //  * Relationships
+  id     String @id @default(uuid())
+  name   String
+  slug   String @unique
+  gender Gender
+  //  * Relations
+
   category           Category             @relation(fields: [categoryId], references: [id])
   categoryId         String
   product            Product?
@@ -182,11 +186,14 @@ model SubCategory {
 }
 
 model TechSpecsOnProduct {
-  id            String      @id @default(uuid())
-  name          String      @unique
+  id        String @id @default(uuid())
+  name      String @unique
+  techSpecs Json?
+  // * Relations
+
   subCategory   SubCategory @relation(fields: [subCategoryId], references: [id])
   subCategoryId String
-  techSpecs     Json?
+  Product       Product?
 }
 
 model Product {
@@ -196,22 +203,56 @@ model Product {
   slug        String @unique
   price       Float  @default(0)
 
-  // * relationships
+  // * Relations
+
   chip   Chip   @relation(fields: [chipId], references: [id])
   chipId String
-
-  subCategory   SubCategory @relation(fields: [subCategoryId], references: [id])
-  subCategoryId String      @unique
-
+  subCategory    SubCategory      @relation(fields: [subCategoryId], references: [id])
+  subCategoryId  String           @unique
   productPicture ProductPicture[]
+  techSpecsOnProduct   TechSpecsOnProduct @relation(fields: [techSpecsOnProductId], references: [id])
+  techSpecsOnProductId String             @unique
+  ColorOnProduct       ColorOnProduct[]
+  OrderItem            OrderItem[]
+}
+
+model Color {
+  id               String           @id @default(uuid())
+  name             String
+  hexadecimalColor String           @unique
+  // * Relations
+
+  ColorOnProduct   ColorOnProduct[]
+}
+
+model ColorOnProduct {
+  product                 Product                   @relation(fields: [productId], references: [id])
+  productId               String
+  color                   Color                     @relation(fields: [colorId], references: [id])
+  colorId                 String                    @unique
+  stockerByColor          Int
+  PictureByColorOnProduct PictureByColorOnProduct[]
+
+  @@id([productId, colorId])
+}
+
+model PictureByColorOnProduct {
+  colorProduct     ColorOnProduct @relation(fields: [colorProductId], references: [colorId])
+  colorProductId   String
+  productPicture   ProductPicture @relation(fields: [productPictureId], references: [id])
+  productPictureId String
+
+  @@id([colorProductId, productPictureId])
 }
 
 model ProductPicture {
-  id  Int    @id @default(autoincrement())
+  id  String @id @default(uuid())
   url String
+  // * Relations
 
-  product   Product @relation(fields: [productId], references: [id])
-  productId String
+  product                 Product                   @relation(fields: [productId], references: [id])
+  productId               String
+  PictureByColorOnProduct PictureByColorOnProduct[]
 }
 
 model User {
@@ -222,18 +263,17 @@ model User {
   password      String
   role          Role      @default(USER)
   picture       String?
+  // * Relations
 
-  // * relationships
   shippingAddress ShippingAddress[]
-
   order Order[]
 }
 
 model Country {
   id   String @id
   name String
+  // * Relations
 
-  // * relationships
   shippingAddress ShippingAddress[]
 }
 
@@ -246,15 +286,25 @@ model ShippingAddress {
   postalCode String
   phone      String
   city       String
+  // * Relations
 
-  // * relationships
   country   Country @relation(fields: [countryId], references: [id])
   countryId String
-
   user   User   @relation(fields: [userId], references: [id])
   userId String
-
   order Order[]
+}
+
+model OrderItem {
+  id       String @id @default(uuid())
+  quantity Int
+  price    Float
+
+  //* Relations
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
 }
 
 model Order {
@@ -269,12 +319,10 @@ model Order {
   updatedAt     DateTime  @updatedAt
   transactionId String?
 
-  // * relationships
+  // * Relations
   user   User   @relation(fields: [userId], references: [id])
   userId String
-
   orderAddress      ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
   shippingAddressId String?
-
-  // OrderItem    OrderItem[]
+  OrderItem OrderItem[]
 }
