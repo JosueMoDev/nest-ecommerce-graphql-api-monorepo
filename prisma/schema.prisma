@@ -40,6 +40,7 @@ enum ChipFamilyName {
 enum ChipGama {
   BASE
   PRO
+  BIONIC
   MAX
   ULTRA
 }
@@ -80,7 +81,6 @@ model ChipFamily {
 model Cpu {
   id    String @id @default(uuid())
   cores Int
-  value Float
   // * Relations
 
   cpuOnChip CpuOnChip[]
@@ -98,7 +98,6 @@ model CpuOnChip {
 model Gpu {
   id    String @id @default(uuid())
   cores Int
-  value Float
   // * Relations
 
   gpuOnChip GpuOnChip[]
@@ -116,7 +115,6 @@ model GpuOnChip {
 model UnifiedMemory {
   id       String @id @default(uuid())
   capacity Int
-  value    Float
   // * Relations
 
   UnifiedMemoryOnChip UnifiedMemoryOnChip[]
@@ -134,7 +132,6 @@ model UnifiedMemoryOnChip {
 model Storage {
   id         String     @id @default(uuid())
   capacity   Int
-  value      Float
   capacityOn CapacityOn
   // * Relations
 
@@ -222,22 +219,22 @@ model Color {
   hexadecimalColor String @unique
   // * Relations
 
-  ColorOnProduct ColorOnProduct[]
+  ColorOnProduct          ColorOnProduct[]
+  PictureByColorOnProduct PictureByColorOnProduct[]
 }
 
 model ColorOnProduct {
-  product                 Product                   @relation(fields: [productId], references: [id])
-  productId               String
-  color                   Color                     @relation(fields: [colorId], references: [id])
-  colorId                 String                    @unique
-  stockByColor            Int
-  PictureByColorOnProduct PictureByColorOnProduct[]
+  product      Product @relation(fields: [productId], references: [id])
+  productId    String
+  color        Color   @relation(fields: [colorId], references: [id])
+  colorId      String  
+  stockByColor Int
 
   @@id([productId, colorId])
 }
 
 model PictureByColorOnProduct {
-  colorProduct     ColorOnProduct @relation(fields: [colorProductId], references: [colorId])
+  colorProduct     Color          @relation(fields: [colorProductId], references: [id])
   colorProductId   String
   productPicture   ProductPicture @relation(fields: [productPictureId], references: [id])
   productPictureId String

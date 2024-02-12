@@ -60,8 +60,8 @@ async function bootstrap() {
 
   // const r = await prisma.techSpecsOnProduct.create({
   //   data: {
-  //     name: 'iPhone 15 Pro',
-  //     subCategoryId: 'de222f13-0f32-4cff-86c1-04b8d14d1f14',
+  //     name: 'Macbook Pro M3',
+  //     subCategoryId: 'a7ee22b3-63e1-48c2-b930-e0f66f97ab7a',
   //     techSpecs: {
   //       camera: {
   //         main: {
@@ -142,62 +142,62 @@ async function bootstrap() {
 
   // const r = await prisma.product.create({
   //   data: {
-  //     name: 'Macbook Pro',
+  //     name: 'Macbook Pro M3',
   //     description: 'Disegned By Apple in California',
-  //     slug: 'macbook-pro-m1-12gb',
-  //     price: 1299,
-  //     chipId: '80d0f268-fd9a-42ce-aff7-87ab2eec7497',
-  //     subCategoryId: '535479ea-680b-4988-95ae-f82662c2ea24',
-  //     techSpecsOnProductId: '1ecf60fd-e50c-497e-8aca-4a075f0af141',
+  //     slug: 'macbook-pro-m3',
+  //     price: 1799,
+  //     chipId: 'afa98c42-7528-4ab2-adce-f1d9a170fbfe',
+  //     subCategoryId: 'a7ee22b3-63e1-48c2-b930-e0f66f97ab7a',
+  //     techSpecsOnProductId: 'cfa845fa-8e32-4024-8adf-c2bd58fefcd6',
   //   },
   // });
-  const r = await prisma.product.update({
-    where: {
-      id: 'bf309ba1-b3b1-4e48-9543-ee5f270bae2c',
-    },
-    data: {
-      ColorOnProduct: {
-        create: [
-          {
-            colorId: '44d0b00d-6582-40f4-b76d-cd729eeaac16',
-            stockByColor: 20000,
-          },
-          // {
-          //   colorId: '65da0776-ea99-4849-8a7b-a29316fa0bd7',
-          //   stockByColor: 2300,
-          // },
-        ],
-      },
-      productPicture: {
-        create: [
-          {
-            url: 'https://store.storeimages.cdn-apple.com/slug-color-1.jpg',
-            PictureByColorOnProduct: {
-              create: {
-                colorProductId: '44d0b00d-6582-40f4-b76d-cd729eeaac16',
-              },
-            },
-          },
-          {
-            url: 'https://store.storeimages.cdn-apple.com/slug-color-1.jpg',
-            PictureByColorOnProduct: {
-              create: {
-                colorProductId: '44d0b00d-6582-40f4-b76d-cd729eeaac16',
-              },
-            },
-          },
-          {
-            url: 'https://store.storeimages.cdn-apple.com/slug-color-1.jpg',
-            PictureByColorOnProduct: {
-              create: {
-                colorProductId: '44d0b00d-6582-40f4-b76d-cd729eeaac16',
-              },
-            },
-          },
-        ],
-      },
-    },
-  });
+  // const r = await prisma.product.update({
+  //   where: {
+  //     id: 'c8e39921-f139-4773-8f2e-2ac5ac7feafb',
+  //   },
+  //   data: {
+  //     ColorOnProduct: {
+  //       create: [
+  //         {
+  //           colorId: 'a153bcde-564d-4af0-8371-d423fad591da',
+  //           stockByColor: 50000,
+  //         },
+  //         // {
+  //         //   colorId: '65da0776-ea99-4849-8a7b-a29316fa0bd7',
+  //         //   stockByColor: 2300,
+  //         // },
+  //       ],
+  //     },
+  //     productPicture: {
+  //       create: [
+  //         {
+  //           url: 'https://store.storeimages.cdn-apple.com/slug-color-1.jpg',
+  //           PictureByColorOnProduct: {
+  //             create: {
+  //               colorProductId: 'a153bcde-564d-4af0-8371-d423fad591da',
+  //             },
+  //           },
+  //         },
+  //         {
+  //           url: 'https://store.storeimages.cdn-apple.com/slug-color-2.jpg',
+  //           PictureByColorOnProduct: {
+  //             create: {
+  //               colorProductId: 'a153bcde-564d-4af0-8371-d423fad591da',
+  //             },
+  //           },
+  //         },
+  //         {
+  //           url: 'https://store.storeimages.cdn-apple.com/slug-color-3.jpg',
+  //           PictureByColorOnProduct: {
+  //             create: {
+  //               colorProductId: 'a153bcde-564d-4af0-8371-d423fad591da',
+  //             },
+  //           },
+  //         },
+  //       ],
+  //     },
+  //   },
+  // });
 
   // const r = await prisma.product.findMany({
   //   where: {
@@ -267,33 +267,133 @@ async function bootstrap() {
   // const r = await prisma.chip.create({
   //   data: {
   //     neuralEngine: [NeuralEngine.SixTeenCores],
-  //     chipFamilyId: 'c2e6100c-afc1-4aaa-b169-bf1842d11140',
+  //     chipFamilyId: '9653e517-6053-4f1f-a6df-1129831ba036',
   //     storage: {
   //       create: [
-  //         { storageId: '00786d15-76bd-4884-b862-a040f1246339' },
-  //         { storageId: '6ce28b1d-721c-49db-aa20-0f2883c4d364' },
-  //         { storageId: '9a110c4c-950d-4fb9-813e-0370509cebe2' },
+  //         { storageId: 'c842ab6d-2c62-4086-bfbe-9dd806c6b500' },
+  //         { storageId: '67386350-c58c-4763-a3db-5f069c5abad7' },
+  //         { storageId: 'a49f48c4-f2df-4689-9745-25379bb45358' },
   //       ],
   //     },
   //     Cpu: {
-  //       create: [{ cpuId: 'c848e24d-b431-4364-82c2-86aa66c82f99' }],
+  //       create: [
+  //         { cpuId: '29a6c35a-fbbe-479c-84a6-f0d009e9cd26' },
+  //         { cpuId: '39c5589f-f8ea-4776-a43f-62089834e70e' },
+  //       ],
   //     },
   //     Gpu: {
-  //       create: [{ gpuId: '77766d75-be41-40ad-8467-b7fa1995f707' }],
+  //       create: [{ gpuId: 'b01d779a-1b3e-48f0-baf8-cfae33a91a4e' }],
   //     },
   //     undefinedMemory: {
-  //       create: [{ undefinedMemoryId: '2af3d375-a0ea-4e5b-b7f6-99e67522e002' }],
+  //       create: [
+  //         { undefinedMemoryId: 'c7107b4a-b57f-4e62-8ef6-0924a05083ce' },
+  //         { undefinedMemoryId: '7e54d82c-1581-4db5-afd2-5106d2bd38f6' },
+  //       ],
   //     },
   //   },
   // });
 
   // const r = await prisma.color.create({
   //   data: {
-  //     name: 'Silver',
-  //     hexadecimalColor: '#CCD1D1 ',
+  //     name: 'Space Gray',
+  //     hexadecimalColor: '#616A6B',
   //   },
   // });
 
-  console.log(r);
+
+  // const r = await prisma.product.findUnique({
+  //   where: {
+  //     slug: 'macbook-pro-m3',
+  //   },
+  //   select: {
+  //     name: true,
+  //     slug: true,
+  //     price: true,
+  //     chip: {
+  //       include: {
+  //         chipFamily: {
+  //           select: {
+  //             gama: true,
+  //             chipFamilyName: true,
+  //           }
+  //         },
+  //         storage: {
+  //           select: {
+  //             storage: {
+  //               select: {
+  //                 capacity: true,
+  //                 capacityOn: true
+  //               }
+  //             }
+  //           }
+  //         },
+  //         undefinedMemory: {
+  //           select: {
+  //             undefinedMemory: {
+  //               select: {
+  //                 capacity: true,
+  //               }
+  //             }
+  //           }
+  //         },
+  //         Cpu: {
+  //           select: {
+  //             cpu: {
+  //               select: {
+  //                 cores: true,
+  //               }
+  //             }
+  //           }
+  //         },
+  //         Gpu: {
+  //           select: {
+  //             gpu: {
+  //               select: {
+  //                 cores: true,
+  //               }
+  //             }
+  //           }
+  //         },
+  //       }
+  //     },
+  //     ColorOnProduct: {
+  //       select: {
+  //         stockByColor: true,
+  //         color: {
+  //           select: {
+  //             name: true,
+  //             hexadecimalColor: true,
+  //             PictureByColorOnProduct: {
+  //               select: {
+  //                 productPicture: {
+  //                   select: {
+  //                     url: true,
+  //                   }
+  //                 },
+  //                 colorProduct: {
+  //                   select: {
+  //                     name: true,
+  //                   }
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         },
+  //       }
+  //     },
+  //   }
+  // });
+
+  // const photos = r.ColorOnProduct.map(({stockByColor, color}) => ({
+  //   stoke: stockByColor,
+  //   color: color.hexadecimalColor,
+  //   colorName: color.name,
+  //   pictures: color.PictureByColorOnProduct.map((picture) => ({
+  //     url: picture.productPicture.url,
+  //     color: picture.colorProduct.name,
+  //   })),
+  // }));
+
+  // console.log(photos[0].pictures);
 }
 bootstrap();
