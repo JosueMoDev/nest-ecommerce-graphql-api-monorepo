@@ -60,8 +60,8 @@ async function bootstrap() {
 
   // const r = await prisma.techSpecsOnProduct.create({
   //   data: {
-  //     name: 'Macbook Pro M3',
-  //     subCategoryId: 'a7ee22b3-63e1-48c2-b930-e0f66f97ab7a',
+  //     name: 'Macbook Pro M1',
+  //     subCategoryId: 'b8b2de7d-2ea6-4884-aae6-890f59eec5a0',
   //     techSpecs: {
   //       camera: {
   //         main: {
@@ -142,24 +142,24 @@ async function bootstrap() {
 
   // const r = await prisma.product.create({
   //   data: {
-  //     name: 'Macbook Pro M3',
+  //     name: 'Macbook Air M1',
   //     description: 'Disegned By Apple in California',
-  //     slug: 'macbook-pro-m3',
-  //     price: 1799,
-  //     chipId: 'afa98c42-7528-4ab2-adce-f1d9a170fbfe',
-  //     subCategoryId: 'a7ee22b3-63e1-48c2-b930-e0f66f97ab7a',
-  //     techSpecsOnProductId: 'cfa845fa-8e32-4024-8adf-c2bd58fefcd6',
+  //     slug: 'macbook-air-m1',
+  //     price: 1199,
+  //     chipId: '9a1fdadf-c090-4521-9458-b9bf3ea297b8',
+  //     subCategoryId: '811ef79d-0d8c-4aaa-99de-eed2460d0f6b',
+  //     techSpecsOnProductId: '3ff2a837-6980-4c32-913e-290743d11c65',
   //   },
   // });
   // const r = await prisma.product.update({
   //   where: {
-  //     id: 'c8e39921-f139-4773-8f2e-2ac5ac7feafb',
+  //     id: '9c782399-75d5-452a-b0cf-4ff99f2567f9',
   //   },
   //   data: {
   //     ColorOnProduct: {
   //       create: [
   //         {
-  //           colorId: 'a153bcde-564d-4af0-8371-d423fad591da',
+  //           colorId: '88fe635b-da72-4565-83a8-df5718248372',
   //           stockByColor: 50000,
   //         },
   //         // {
@@ -174,7 +174,7 @@ async function bootstrap() {
   //           url: 'https://store.storeimages.cdn-apple.com/slug-color-1.jpg',
   //           PictureByColorOnProduct: {
   //             create: {
-  //               colorProductId: 'a153bcde-564d-4af0-8371-d423fad591da',
+  //               colorProductId: '88fe635b-da72-4565-83a8-df5718248372',
   //             },
   //           },
   //         },
@@ -182,7 +182,7 @@ async function bootstrap() {
   //           url: 'https://store.storeimages.cdn-apple.com/slug-color-2.jpg',
   //           PictureByColorOnProduct: {
   //             create: {
-  //               colorProductId: 'a153bcde-564d-4af0-8371-d423fad591da',
+  //               colorProductId: '88fe635b-da72-4565-83a8-df5718248372',
   //             },
   //           },
   //         },
@@ -190,7 +190,7 @@ async function bootstrap() {
   //           url: 'https://store.storeimages.cdn-apple.com/slug-color-3.jpg',
   //           PictureByColorOnProduct: {
   //             create: {
-  //               colorProductId: 'a153bcde-564d-4af0-8371-d423fad591da',
+  //               colorProductId: '88fe635b-da72-4565-83a8-df5718248372',
   //             },
   //           },
   //         },
@@ -199,9 +199,9 @@ async function bootstrap() {
   //   },
   // });
 
-  // const r = await prisma.product.findMany({
+  // const r = await prisma.product.findUnique({
   //   where: {
-  //     slug: 'iphone-15-pro-a-17-128gb',
+  //     slug: 'macbook-pro-m1',
   //   },
   //   select: {
   //     name: true,
@@ -222,6 +222,7 @@ async function bootstrap() {
   //         storage: {
   //           select: {
   //             storage: true,
+  //             price: true,
   //           },
   //         },
   //         chipFamily: {
@@ -233,11 +234,19 @@ async function bootstrap() {
   //         Cpu: {
   //           select: {
   //             cpu: true,
+  //             price: true,
   //           },
   //         },
   //         Gpu: {
   //           select: {
   //             gpu: true,
+  //             price: true,
+  //           },
+  //         },
+  //         undefinedMemory: {
+  //           select: {
+  //             undefinedMemory: true,
+  //             price: true,
   //           },
   //         },
   //       },
@@ -253,8 +262,14 @@ async function bootstrap() {
   //             },
   //             colorProduct: {
   //               select: {
-  //                 stockByColor: true,
-  //                 color: true,
+  //                 hexadecimalColor: true,
+  //                 name: true,
+  //                 ColorOnProduct: {
+  //                   select: {
+  //                     stockByColor: true,
+  //                     color: true,
+  //                   },
+  //                 },
   //               },
   //             },
   //           },
@@ -303,7 +318,7 @@ async function bootstrap() {
 
   // const r = await prisma.product.findUnique({
   //   where: {
-  //     slug: 'macbook-pro-m3',
+  //     slug: 'macbook-air-m1',
   //   },
   //   select: {
   //     name: true,
@@ -322,9 +337,10 @@ async function bootstrap() {
   //             storage: {
   //               select: {
   //                 capacity: true,
-  //                 capacityOn: true
+  //                 capacityOn: true,
   //               }
-  //             }
+  //             },
+  //             price: true,
   //           }
   //         },
   //         undefinedMemory: {
@@ -333,7 +349,8 @@ async function bootstrap() {
   //               select: {
   //                 capacity: true,
   //               }
-  //             }
+  //             },
+  //             price: true,
   //           }
   //         },
   //         Cpu: {
@@ -342,7 +359,8 @@ async function bootstrap() {
   //               select: {
   //                 cores: true,
   //               }
-  //             }
+  //             },
+  //             price: true,
   //           }
   //         },
   //         Gpu: {
@@ -351,49 +369,177 @@ async function bootstrap() {
   //               select: {
   //                 cores: true,
   //               }
-  //             }
+  //             },
+  //             price: true
   //           }
   //         },
   //       }
   //     },
+  //     // ColorOnProduct: {
+  //     //   select: {
+  //     //     stockByColor: true,
+  //     //     color: {
+  //     //       select: {
+  //     //         name: true,
+  //     //         hexadecimalColor: true,
+  //     //         PictureByColorOnProduct: {
+  //     //           include: {
+  //     //             productPicture: {
+  //     //               select: {
+  //     //                 url: true,
+  //     //                 productId: true
+  //     //               }
+  //     //             },
+  //     //             colorProduct: {
+  //     //               select: {
+  //     //                 name: true,
+  //     //               }
+  //     //             }
+  //     //           }
+  //     //         }
+  //     //       }
+  //     //     },
+  //     //   }
+  //     // },
   //     ColorOnProduct: {
   //       select: {
-  //         stockByColor: true,
-  //         color: {
+  //         product: {
   //           select: {
-  //             name: true,
-  //             hexadecimalColor: true,
-  //             PictureByColorOnProduct: {
-  //               select: {
-  //                 productPicture: {
-  //                   select: {
-  //                     url: true,
-  //                   }
-  //                 },
-  //                 colorProduct: {
+  //             ColorOnProduct: {
+  //               select:{
+  //                stockByColor: true,
+  //                 color: {
   //                   select: {
   //                     name: true,
+  //                     hexadecimalColor: true,
+                  
+  //                   }
+  //                 },
+  //               }
+  //             },
+  //             productPicture: {
+  //               select: {
+  //                 url: true,
+  //                 PictureByColorOnProduct: {
+  //                   select: {
+  //                     colorProduct: {
+  //                       select: {
+  //                         name: true,
+  //                       }
+  //                     }
   //                   }
   //                 }
   //               }
-  //             }
+  //             },
   //           }
   //         },
+          
   //       }
-  //     },
+  //     }
   //   }
   // });
 
-  // const photos = r.ColorOnProduct.map(({stockByColor, color}) => ({
-  //   stoke: stockByColor,
-  //   color: color.hexadecimalColor,
-  //   colorName: color.name,
-  //   pictures: color.PictureByColorOnProduct.map((picture) => ({
-  //     url: picture.productPicture.url,
-  //     color: picture.colorProduct.name,
+  // const photos = r.ColorOnProduct.map(({product}) => ({
+    
+  //   color: product.ColorOnProduct.map(({stockByColor, color}) =>({
+  //     hexadecimalCode: color.hexadecimalColor,
+  //     name: color.name,
+  //     stock: stockByColor
   //   })),
+
+  //   pictures: product.productPicture.map(({url, PictureByColorOnProduct})=>({
+  //     url,
+  //     color: PictureByColorOnProduct[0].colorProduct.name
+  //   })),
+    
   // }));
 
   // console.log(photos[0].pictures);
+
+//   const r = await prisma.product.findMany({
+//     where: {
+//       subCategory: {
+//         category: {
+//           name: 'MAC'
+//         }
+//       }
+//     },
+//     select: {
+//       name: true,
+//       price: true,
+//       slug: true,
+//       ColorOnProduct: {
+//         select: {
+//           color: {
+//             select: {
+//               name: true,
+//               hexadecimalColor: true,PictureByColorOnProduct: {
+//                 select: {
+//                   productPicture: {
+//                     select: {
+//                       url: true,
+//                     }
+//                   },
+//                   colorProduct: {
+//                     select: {
+//                       name: true,
+//                     }
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       },
+//       chip: {
+//         select: {
+//           chipFamily: {
+//             select: {
+//               chipFamilyName: true
+//             }
+//           }
+//         }
+//       }
+//     }
+//   })
+
+// const r = await prisma.chip.create({
+//   data: {
+//     neuralEngine: [NeuralEngine.SixTeenCores],
+//     chipFamilyId: '72491fd9-b2e3-4233-ab3f-f44ceb2d1863',
+//     storage: {
+//       create: [
+//         {
+//           storageId: '27138d1c-5cb0-48ca-a4e2-6df4debb41fe',
+//           price: 0,
+//         },
+//         {
+//           storageId: 'cb1057bd-0315-4058-bdf4-a1e2bdf20eab',
+//           price: 200,
+//         },
+//         {
+//           storageId: 'ad64f848-f1c4-4bfa-9504-c0edc3a43e58',
+//           price: 400,
+//         },
+//       ],
+//     },
+//     undefinedMemory: {
+//       create: [
+//         { undefinedMemoryId: 'dbeb5b83-a1c0-4394-8f39-49f6e0681d97', price: 0 },
+//         {
+//           undefinedMemoryId: '7b85bb42-1242-476d-b06b-2c5c1e953982',
+//           price: 200,
+//         },
+//       ],
+//     },
+//     Cpu: {
+//       create: [{ cpuId: 'dd971b04-c774-4c48-8fca-9b2f3918a3f2', price: 0 }],
+//     },
+//     Gpu: {
+//       create: [{ gpuId: 'bd762700-87fb-42d7-8cde-613566f9e5b2', price: 0 }],
+//     },
+//   },
+// });
+
 }
 bootstrap();

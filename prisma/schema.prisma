@@ -91,6 +91,7 @@ model CpuOnChip {
   chipId String
   cpu    Cpu    @relation(fields: [cpuId], references: [id])
   cpuId  String
+  price  Float
 
   @@id([cpuId, chipId])
 }
@@ -108,6 +109,7 @@ model GpuOnChip {
   chipId String
   gpu    Gpu    @relation(fields: [gpuId], references: [id])
   gpuId  String
+  price  Float
 
   @@id([gpuId, chipId])
 }
@@ -125,6 +127,7 @@ model UnifiedMemoryOnChip {
   chipId            String
   undefinedMemory   UnifiedMemory @relation(fields: [undefinedMemoryId], references: [id])
   undefinedMemoryId String
+  price             Float
 
   @@id([undefinedMemoryId, chipId])
 }
@@ -143,6 +146,7 @@ model StorageOnChip {
   chipId    String
   storage   Storage @relation(fields: [storageId], references: [id])
   storageId String
+  price     Float
 
   @@id([storageId, chipId])
 }
@@ -227,7 +231,7 @@ model ColorOnProduct {
   product      Product @relation(fields: [productId], references: [id])
   productId    String
   color        Color   @relation(fields: [colorId], references: [id])
-  colorId      String  
+  colorId      String
   stockByColor Int
 
   @@id([productId, colorId])
