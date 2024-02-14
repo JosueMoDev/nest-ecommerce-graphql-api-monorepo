@@ -1,4 +1,5 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { User } from 'src/users/entities/user.entity';
 
 @ObjectType()
 export class ShippingAddress {
@@ -25,4 +26,9 @@ export class ShippingAddress {
 
   @Field(() => String)
   city: string;
+
+  // * Relations
+
+  @Field(() => User)
+  user: User;
 }

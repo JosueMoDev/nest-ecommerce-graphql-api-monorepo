@@ -38,6 +38,7 @@ type ShippingAddress {
   postalCode: String!
   phone: String!
   city: String!
+  user: User!
 }
 
 type Order {
@@ -51,6 +52,64 @@ type Order {
   createdAt: Timestamp!
   updatedAt: Timestamp!
   transactionId: String!
+  user: User!
+  shippingAddress: ShippingAddress
+}
+
+type Product {
+  """Product"""
+  id: ID!
+  name: String!
+  description: String!
+  slug: String!
+  price: Float!
+}
+
+type OrderItem {
+  """Order Item Id"""
+  id: ID!
+  quantity: Int!
+  price: Float!
+  product: Product!
+  order: Order!
+}
+
+type Category {
+  """Category Id"""
+  id: ID!
+  name: CategoryName!
+}
+
+enum CategoryName {
+  IPHONE
+  IPAD
+  WATCH
+  MAC
+  VISION
+  AIRPODS
+  TVHOME
+  ACCESSORIES
+}
+
+type SubCategory {
+  """Subcategory Id"""
+  id: ID!
+  name: String!
+  slug: String!
+  gender: Gender!
+  category: Category!
+}
+
+enum Gender {
+  DISPLAY
+  LAPTOP
+  DESKTOP
+  PHONE
+  TABLET
+  WATCH
+  AUDIO
+  ACCESSORY
+  VISION
 }
 
 type Query {
@@ -60,6 +119,10 @@ type Query {
   shippingAddress(id: Int!): ShippingAddress!
   orders: [Order!]!
   order(id: Int!): Order!
+  product(id: Int!): Product!
+  orderItem(id: Int!): OrderItem!
+  category(id: Int!): Category!
+  subCategory(id: Int!): SubCategory!
 }
 
 type Mutation {
@@ -75,6 +138,18 @@ type Mutation {
   createOrder(createOrderInput: CreateOrderInput!): Order!
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
   removeOrder(id: Int!): Order!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: Int!): Product!
+  createOrderItem(createOrderItemInput: CreateOrderItemInput!): OrderItem!
+  updateOrderItem(updateOrderItemInput: UpdateOrderItemInput!): OrderItem!
+  removeOrderItem(id: Int!): OrderItem!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  removeCategory(id: Int!): Category!
+  createSubCategory(createSubCategoryInput: CreateSubCategoryInput!): SubCategory!
+  updateSubCategory(updateSubCategoryInput: UpdateSubCategoryInput!): SubCategory!
+  removeSubCategory(id: Int!): SubCategory!
 }
 
 input CreateAuthenticationInput {
@@ -116,6 +191,50 @@ input CreateOrderInput {
 }
 
 input UpdateOrderInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateOrderItemInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateOrderItemInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateSubCategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateSubCategoryInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!

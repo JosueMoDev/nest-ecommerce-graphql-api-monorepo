@@ -1,4 +1,6 @@
 import { ObjectType, Field, Int, ID, Float } from '@nestjs/graphql';
+import { ShippingAddress } from 'src/shipping-address/entities/shipping-address.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @ObjectType()
 export class Order {
@@ -31,4 +33,11 @@ export class Order {
 
   @Field(() => String)
   transactionId: string;
+
+  // * Relations
+  @Field(() => User)
+  user: User;
+
+  @Field(() => ShippingAddress, { nullable: true })
+  shippingAddress?: ShippingAddress | null;
 }

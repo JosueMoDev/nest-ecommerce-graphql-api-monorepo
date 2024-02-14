@@ -9,6 +9,10 @@ import { PrismaService } from './prisma.service';
 import { UsersModule } from './users/users.module';
 import { ShippingAddressModule } from './shipping-address/shipping-address.module';
 import { OrdersModule } from './orders/orders.module';
+import { ProductModule } from './product/product.module';
+import { OrderItemModule } from './order-item/order-item.module';
+import { CategoryModule } from './category/category.module';
+import { SubCategoryModule } from './sub-category/sub-category.module';
 
 @Module({
   imports: [
@@ -34,6 +38,10 @@ import { OrdersModule } from './orders/orders.module';
     UsersModule,
     ShippingAddressModule,
     OrdersModule,
+    ProductModule,
+    OrderItemModule,
+    CategoryModule,
+    SubCategoryModule,
   ],
   providers: [PrismaService],
 })
