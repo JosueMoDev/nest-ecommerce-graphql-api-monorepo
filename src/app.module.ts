@@ -13,6 +13,7 @@ import { ProductModule } from './product/product.module';
 import { OrderItemModule } from './order-item/order-item.module';
 import { CategoryModule } from './category/category.module';
 import { SubCategoryModule } from './sub-category/sub-category.module';
+import { ChipModule } from './chip/chip.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { SubCategoryModule } from './sub-category/sub-category.module';
         },
         playground: false,
         autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+        sortSchema: true,
         plugins: [ApolloServerPluginLandingPageLocalDefault()],
         // TODO implement -> context() {},
       }),
@@ -42,6 +44,7 @@ import { SubCategoryModule } from './sub-category/sub-category.module';
     OrderItemModule,
     CategoryModule,
     SubCategoryModule,
+    ChipModule,
   ],
   providers: [PrismaService],
 })

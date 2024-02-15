@@ -3,7 +3,7 @@ import { CategoryName } from '../enum/category-name.enum';
 
 @ObjectType()
 export class Category {
-  @Field(() => ID, { description: 'Category Id' })
+  @Field(() => ID)
   id: string;
 
   @Field(() => CategoryName)
