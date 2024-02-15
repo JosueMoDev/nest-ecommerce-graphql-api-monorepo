@@ -1,4 +1,6 @@
 import { ObjectType, Field, Float, ID } from '@nestjs/graphql';
+import { Chip } from 'src/chip/entities/chip.entity';
+import { SubCategory } from 'src/sub-category/entities/sub-category.entity';
 
 @ObjectType()
 export class Product {
@@ -16,4 +18,10 @@ export class Product {
 
   @Field(() => Float)
   price: number;
+
+  @Field(() => SubCategory)
+  subCategory: SubCategory;
+
+  @Field(() => Chip)
+  chip: Chip;
 }

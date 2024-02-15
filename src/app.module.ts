@@ -31,7 +31,7 @@ import { ChipModule } from './chip/chip.module';
         },
         playground: false,
         autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-        sortSchema: true,
+        // sortSchema: true,
         plugins: [ApolloServerPluginLandingPageLocalDefault()],
         // TODO implement -> context() {},
       }),

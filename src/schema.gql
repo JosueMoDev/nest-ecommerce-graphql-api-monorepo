@@ -7,9 +7,92 @@ type Authentication {
   exampleField: Int!
 }
 
-enum CapacityOn {
-  GB
-  TB
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  emailVerified: Timestamp!
+  password: String!
+  role: UserRole!
+  picture: String!
+}
+
+"""
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
+
+enum UserRole {
+  CLIENT
+  USER
+  SUPERUSER
+}
+
+type ShippingAddress {
+  """Shipping id"""
+  id: ID!
+  firstName: String!
+  lastName: String!
+  address: String!
+  address2: String!
+  postalCode: String!
+  phone: String!
+  city: String!
+  user: User!
+}
+
+type Order {
+  id: ID!
+  subTotal: Float!
+  tax: Float!
+  total: Float!
+  itemsInOrder: Int!
+  isPaid: Boolean!
+  paidAt: Timestamp!
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  transactionId: String!
+  user: User!
+  shippingAddress: ShippingAddress
+}
+
+type ChipFamily {
+  """Chip Family ID"""
+  id: ID!
+  chipFamilyName: ChipFamilyName!
+  gama: ChipGama!
+  description: String!
+}
+
+enum ChipFamilyName {
+  M1
+  M2
+  M3
+  S8
+  S9
+  A15
+  A16
+  A17
+}
+
+enum ChipGama {
+  BASE
+  PRO
+  BIONIC
+  MAX
+  ULTRA
+}
+
+type Chip {
+  """Chip ID"""
+  id: ID!
+  neuralEngine: [NeuralEngine!]!
+  chipFamily: ChipFamily!
+}
+
+enum NeuralEngine {
+  SixTeenCores
+  ThirtyCores
 }
 
 type Category {
@@ -18,293 +101,185 @@ type Category {
 }
 
 enum CategoryName {
-  ACCESSORIES
-  AIRPODS
-  IPAD
   IPHONE
-  MAC
-  TVHOME
-  VISION
+  IPAD
   WATCH
+  MAC
+  VISION
+  AIRPODS
+  TVHOME
+  ACCESSORIES
 }
 
-type Chip {
-  chipFamily: ChipFamily!
-
-  """Chip ID"""
+type SubCategory {
+  """Subcategory Id"""
   id: ID!
-  neuralEngine: [NeuralEngine!]!
-}
-
-type ChipFamily {
-  chipFamilyName: ChipFamilyName!
-  description: String!
-  gama: ChipGama!
-
-  """Chip Family ID"""
-  id: ID!
-}
-
-enum ChipFamilyName {
-  A15
-  A16
-  A17
-  M1
-  M2
-  M3
-  S8
-  S9
-}
-
-enum ChipGama {
-  BASE
-  BIONIC
-  MAX
-  PRO
-  ULTRA
-}
-
-type Cpu {
-  cores: Int!
-
-  """Storage ID"""
-  id: ID!
-}
-
-input CreateAuthenticationInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input CreateCategoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input CreateChipFamilyInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input CreateChipInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input CreateCpuInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input CreateGpuInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input CreateOrderInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input CreateOrderItemInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input CreateProductInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input CreateShippingAddressInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input CreateStorageInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input CreateSubCategoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input CreateUndefinedMemoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input CreateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
+  slug: String!
+  gender: Gender!
+  category: Category!
 }
 
 enum Gender {
-  ACCESSORY
-  AUDIO
-  DESKTOP
   DISPLAY
   LAPTOP
+  DESKTOP
   PHONE
   TABLET
-  VISION
   WATCH
+  AUDIO
+  ACCESSORY
+  VISION
 }
 
-type Gpu {
-  cores: Int!
-
-  """Storage ID"""
+type Product {
+  """Product"""
   id: ID!
+  name: String!
+  description: String!
+  slug: String!
+  price: Float!
+  subCategory: SubCategory!
+  chip: Chip!
 }
 
-type Mutation {
-  createAuthentication(createAuthenticationInput: CreateAuthenticationInput!): Authentication!
-  createCategory(createCategoryInput: CreateCategoryInput!): Category!
-  createChip(createChipInput: CreateChipInput!): Chip!
-  createChipFamily(createChipFamilyInput: CreateChipFamilyInput!): ChipFamily!
-  createCpu(createCpuInput: CreateCpuInput!): Cpu!
-  createGpu(createGpuInput: CreateGpuInput!): Gpu!
-  createOrder(createOrderInput: CreateOrderInput!): Order!
-  createOrderItem(createOrderItemInput: CreateOrderItemInput!): OrderItem!
-  createProduct(createProductInput: CreateProductInput!): Product!
-  createShippingAddress(createShippingAddressInput: CreateShippingAddressInput!): ShippingAddress!
-  createStorage(createStorageInput: CreateStorageInput!): Storage!
-  createSubCategory(createSubCategoryInput: CreateSubCategoryInput!): SubCategory!
-  createUndefinedMemory(createUndefinedMemoryInput: CreateUndefinedMemoryInput!): UndefinedMemory!
-  createUser(createUserInput: CreateUserInput!): User!
-  removeAuthentication(id: Int!): Authentication!
-  removeCategory(id: Int!): Category!
-  removeChip(id: Int!): Chip!
-  removeChipFamily(id: Int!): ChipFamily!
-  removeCpu(id: Int!): Cpu!
-  removeGpu(id: Int!): Gpu!
-  removeOrder(id: Int!): Order!
-  removeOrderItem(id: Int!): OrderItem!
-  removeProduct(id: Int!): Product!
-  removeShippingAddress(id: Int!): ShippingAddress!
-  removeStorage(id: Int!): Storage!
-  removeSubCategory(id: Int!): SubCategory!
-  removeUndefinedMemory(id: Int!): UndefinedMemory!
-  removeUser(id: Int!): User!
-  updateAuthentication(updateAuthenticationInput: UpdateAuthenticationInput!): Authentication!
-  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
-  updateChip(updateChipInput: UpdateChipInput!): Chip!
-  updateChipFamily(updateChipFamilyInput: UpdateChipFamilyInput!): ChipFamily!
-  updateCpu(updateCpuInput: UpdateCpuInput!): Cpu!
-  updateGpu(updateGpuInput: UpdateGpuInput!): Gpu!
-  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
-  updateOrderItem(updateOrderItemInput: UpdateOrderItemInput!): OrderItem!
-  updateProduct(updateProductInput: UpdateProductInput!): Product!
-  updateShippingAddress(updateShippingAddressInput: UpdateShippingAddressInput!): ShippingAddress!
-  updateStorage(updateStorageInput: UpdateStorageInput!): Storage!
-  updateSubCategory(updateSubCategoryInput: UpdateSubCategoryInput!): SubCategory!
-  updateUndefinedMemory(updateUndefinedMemoryInput: UpdateUndefinedMemoryInput!): UndefinedMemory!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-}
-
-enum NeuralEngine {
-  SixTeenCores
-  ThirtyCores
-}
-
-type Order {
-  createdAt: Timestamp!
+type Color {
   id: ID!
-  isPaid: Boolean!
-  itemsInOrder: Int!
-  paidAt: Timestamp!
-  shippingAddress: ShippingAddress
-  subTotal: Float!
-  tax: Float!
-  total: Float!
-  transactionId: String!
-  updatedAt: Timestamp!
-  user: User!
+  name: String!
+  hexadecimalColor: String!
+}
+
+type ProductPicture {
+  id: ID!
+  url: String!
+  product: Product!
+}
+
+type TechSpec {
+  id: ID!
+  name: String!
+  subCategory: SubCategory!
 }
 
 type OrderItem {
   """Order Item Id"""
   id: ID!
-  order: Order!
+  quantity: Int!
   price: Float!
   product: Product!
-  quantity: Int!
+  order: Order!
 }
 
-type Product {
-  description: String!
-
-  """Product"""
+type Storage {
+  """Storage ID"""
   id: ID!
-  name: String!
-  price: Float!
-  slug: String!
+  capacity: Int!
+  capacityOn: CapacityOn!
+}
+
+enum CapacityOn {
+  GB
+  TB
+}
+
+type Cpu {
+  """Storage ID"""
+  id: ID!
+  cores: Int!
+}
+
+type Gpu {
+  """Storage ID"""
+  id: ID!
+  cores: Int!
+}
+
+type UndefinedMemory {
+  """Undefined Memory ID"""
+  id: ID!
+  capacity: Int!
 }
 
 type Query {
   authentication(id: Int!): Authentication!
+  users: [User!]!
+  user(id: Int!): User!
+  shippingAddress(id: Int!): ShippingAddress!
+  orders: [Order!]!
+  order(id: Int!): Order!
+  product(id: Int!): Product!
+  color(id: Int!): Color!
+  productPicture(id: Int!): ProductPicture!
+  techSpecs: [TechSpec!]!
+  techSpec(id: Int!): TechSpec!
+  orderItem(id: Int!): OrderItem!
   category(id: Int!): Category!
+  subCategory(id: Int!): SubCategory!
   chip(id: Int!): Chip!
   chipFamily(id: Int!): ChipFamily!
+  storage(id: Int!): Storage!
   cpu(id: Int!): Cpu!
   gpu(id: Int!): Gpu!
-  order(id: Int!): Order!
-  orderItem(id: Int!): OrderItem!
-  orders: [Order!]!
-  product(id: Int!): Product!
-  shippingAddress(id: Int!): ShippingAddress!
-  storage(id: Int!): Storage!
-  subCategory(id: Int!): SubCategory!
   undefinedMemory(id: Int!): UndefinedMemory!
-  user(id: Int!): User!
-  users: [User!]!
 }
 
-type ShippingAddress {
-  address: String!
-  address2: String!
-  city: String!
-  firstName: String!
-
-  """Shipping id"""
-  id: ID!
-  lastName: String!
-  phone: String!
-  postalCode: String!
-  user: User!
+type Mutation {
+  createAuthentication(createAuthenticationInput: CreateAuthenticationInput!): Authentication!
+  updateAuthentication(updateAuthenticationInput: UpdateAuthenticationInput!): Authentication!
+  removeAuthentication(id: Int!): Authentication!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+  createShippingAddress(createShippingAddressInput: CreateShippingAddressInput!): ShippingAddress!
+  updateShippingAddress(updateShippingAddressInput: UpdateShippingAddressInput!): ShippingAddress!
+  removeShippingAddress(id: Int!): ShippingAddress!
+  createOrder(createOrderInput: CreateOrderInput!): Order!
+  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  removeOrder(id: Int!): Order!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: Int!): Product!
+  createColor(createColorInput: CreateColorInput!): Color!
+  updateColor(updateColorInput: UpdateColorInput!): Color!
+  removeColor(id: Int!): Color!
+  createProductPicture(createProductPictureInput: CreateProductPictureInput!): ProductPicture!
+  updateProductPicture(updateProductPictureInput: UpdateProductPictureInput!): ProductPicture!
+  removeProductPicture(id: Int!): ProductPicture!
+  createTechSpec(createTechSpecInput: CreateTechSpecInput!): TechSpec!
+  updateTechSpec(updateTechSpecInput: UpdateTechSpecInput!): TechSpec!
+  removeTechSpec(id: Int!): TechSpec!
+  createOrderItem(createOrderItemInput: CreateOrderItemInput!): OrderItem!
+  updateOrderItem(updateOrderItemInput: UpdateOrderItemInput!): OrderItem!
+  removeOrderItem(id: Int!): OrderItem!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  removeCategory(id: Int!): Category!
+  createSubCategory(createSubCategoryInput: CreateSubCategoryInput!): SubCategory!
+  updateSubCategory(updateSubCategoryInput: UpdateSubCategoryInput!): SubCategory!
+  removeSubCategory(id: Int!): SubCategory!
+  createChip(createChipInput: CreateChipInput!): Chip!
+  updateChip(updateChipInput: UpdateChipInput!): Chip!
+  removeChip(id: Int!): Chip!
+  createChipFamily(createChipFamilyInput: CreateChipFamilyInput!): ChipFamily!
+  updateChipFamily(updateChipFamilyInput: UpdateChipFamilyInput!): ChipFamily!
+  removeChipFamily(id: Int!): ChipFamily!
+  createStorage(createStorageInput: CreateStorageInput!): Storage!
+  updateStorage(updateStorageInput: UpdateStorageInput!): Storage!
+  removeStorage(id: Int!): Storage!
+  createCpu(createCpuInput: CreateCpuInput!): Cpu!
+  updateCpu(updateCpuInput: UpdateCpuInput!): Cpu!
+  removeCpu(id: Int!): Cpu!
+  createGpu(createGpuInput: CreateGpuInput!): Gpu!
+  updateGpu(updateGpuInput: UpdateGpuInput!): Gpu!
+  removeGpu(id: Int!): Gpu!
+  createUndefinedMemory(createUndefinedMemoryInput: CreateUndefinedMemoryInput!): UndefinedMemory!
+  updateUndefinedMemory(updateUndefinedMemoryInput: UpdateUndefinedMemoryInput!): UndefinedMemory!
+  removeUndefinedMemory(id: Int!): UndefinedMemory!
 }
 
-type Storage {
-  capacity: Int!
-  capacityOn: CapacityOn!
-
-  """Storage ID"""
-  id: ID!
-}
-
-type SubCategory {
-  category: Category!
-  gender: Gender!
-
-  """Subcategory Id"""
-  id: ID!
-  name: String!
-  slug: String!
-}
-
-"""
-`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
-"""
-scalar Timestamp
-
-type UndefinedMemory {
-  capacity: Int!
-
-  """Undefined Memory ID"""
-  id: ID!
+input CreateAuthenticationInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
 
 input UpdateAuthenticationInput {
@@ -313,76 +288,9 @@ input UpdateAuthenticationInput {
   id: Int!
 }
 
-input UpdateCategoryInput {
+input CreateUserInput {
   """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input UpdateChipFamilyInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input UpdateChipInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input UpdateCpuInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input UpdateGpuInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input UpdateOrderInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input UpdateOrderItemInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input UpdateProductInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input UpdateShippingAddressInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input UpdateStorageInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input UpdateSubCategoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input UpdateUndefinedMemoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  exampleField: Int!
 }
 
 input UpdateUserInput {
@@ -391,18 +299,167 @@ input UpdateUserInput {
   id: Int!
 }
 
-type User {
-  email: String!
-  emailVerified: Timestamp!
-  id: ID!
-  name: String!
-  password: String!
-  picture: String!
-  role: UserRole!
+input CreateShippingAddressInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
 
-enum UserRole {
-  CLIENT
-  SUPERUSER
-  USER
+input UpdateShippingAddressInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateOrderInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateOrderInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateColorInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateColorInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateProductPictureInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateProductPictureInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateTechSpecInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateTechSpecInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateOrderItemInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateOrderItemInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateSubCategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateSubCategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateChipInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateChipInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateChipFamilyInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateChipFamilyInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateStorageInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateStorageInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCpuInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCpuInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateGpuInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateGpuInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateUndefinedMemoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateUndefinedMemoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
