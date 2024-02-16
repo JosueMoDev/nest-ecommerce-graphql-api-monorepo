@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGpuInput } from './dto/create-gpu.input';
-import { UpdateGpuInput } from './dto/update-gpu.input';
+import { CreateGpuInput } from './inputs/create-gpu.input';
+import { UpdateGpuInput } from './inputs/update-gpu.input';
 
 @Injectable()
 export class GpuService {

@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { TechSpecsService } from './tech-specs.service';
 import { TechSpec } from './entities/tech-spec.entity';
-import { CreateTechSpecInput } from './dto/create-tech-spec.input';
-import { UpdateTechSpecInput } from './dto/update-tech-spec.input';
+import { CreateTechSpecInput } from './inputs/create-tech-spec.input';
+import { UpdateTechSpecInput } from './inputs/update-tech-spec.input';
 
 @Resolver(() => TechSpec)
 export class TechSpecsResolver {

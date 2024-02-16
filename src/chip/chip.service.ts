@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateChipInput } from './dto/create-chip.input';
-import { UpdateChipInput } from './dto/update-chip.input';
+import { CreateChipInput } from './inputs/create-chip.input';
+import { UpdateChipInput } from './inputs/update-chip.input';
 
 @Injectable()
 export class ChipService {

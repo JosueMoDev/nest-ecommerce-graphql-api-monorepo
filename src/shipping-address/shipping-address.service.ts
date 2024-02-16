@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateShippingAddressInput } from './dto/create-shipping-address.input';
-import { UpdateShippingAddressInput } from './dto/update-shipping-address.input';
+import { CreateShippingAddressInput } from './inputs/create-shipping-address.input';
+import { UpdateShippingAddressInput } from './inputs/update-shipping-address.input';
 
 @Injectable()
 export class ShippingAddressService {

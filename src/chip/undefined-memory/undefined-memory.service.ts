@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUndefinedMemoryInput } from './dto/create-undefined-memory.input';
-import { UpdateUndefinedMemoryInput } from './dto/update-undefined-memory.input';
+import { CreateUndefinedMemoryInput } from './inputs/create-undefined-memory.input';
+import { UpdateUndefinedMemoryInput } from './inputs/update-undefined-memory.input';
 
 @Injectable()
 export class UndefinedMemoryService {

@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { ProductPictureService } from './product-picture.service';
 import { ProductPicture } from './entities/product-picture.entity';
-import { CreateProductPictureInput } from './dto/create-product-picture.input';
-import { UpdateProductPictureInput } from './dto/update-product-picture.input';
+import { CreateProductPictureInput } from './inputs/create-product-picture.input';
+import { UpdateProductPictureInput } from './inputs/update-product-picture.input';
 
 @Resolver(() => ProductPicture)
 export class ProductPictureResolver {

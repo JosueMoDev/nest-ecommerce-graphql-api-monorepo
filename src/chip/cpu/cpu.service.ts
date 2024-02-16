@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCpuInput } from './dto/create-cpu.input';
-import { UpdateCpuInput } from './dto/update-cpu.input';
+import { CreateCpuInput } from './inputs/create-cpu.input';
+import { UpdateCpuInput } from './inputs/update-cpu.input';
 
 @Injectable()
 export class CpuService {

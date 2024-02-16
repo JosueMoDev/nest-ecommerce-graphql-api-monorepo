@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { ChipService } from './chip.service';
 import { Chip } from './entities/chip.entity';
-import { CreateChipInput } from './dto/create-chip.input';
-import { UpdateChipInput } from './dto/update-chip.input';
+import { CreateChipInput } from './inputs/create-chip.input';
+import { UpdateChipInput } from './inputs/update-chip.input';
 
 @Resolver(() => Chip)
 export class ChipResolver {

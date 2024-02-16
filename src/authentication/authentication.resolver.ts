@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { AuthenticationService } from './authentication.service';
 import { Authentication } from './entities/authentication.entity';
-import { CreateAuthenticationInput } from './dto/create-authentication.input';
-import { UpdateAuthenticationInput } from './dto/update-authentication.input';
+import { CreateAuthenticationInput } from './inputs/create-authentication.input';
+import { UpdateAuthenticationInput } from './inputs/update-authentication.input';
 
 @Resolver(() => Authentication)
 export class AuthenticationResolver {

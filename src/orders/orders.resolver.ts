@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { OrdersService } from './orders.service';
 import { Order } from './entities/order.entity';
-import { CreateOrderInput } from './dto/create-order.input';
-import { UpdateOrderInput } from './dto/update-order.input';
+import { CreateOrderInput } from './inputs/create-order.input';
+import { UpdateOrderInput } from './inputs/update-order.input';
 
 @Resolver(() => Order)
 export class OrdersResolver {

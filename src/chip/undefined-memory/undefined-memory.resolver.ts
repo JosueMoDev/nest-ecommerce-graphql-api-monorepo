@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { UndefinedMemoryService } from './undefined-memory.service';
 import { UndefinedMemory } from './entities/undefined-memory.entity';
-import { CreateUndefinedMemoryInput } from './dto/create-undefined-memory.input';
-import { UpdateUndefinedMemoryInput } from './dto/update-undefined-memory.input';
+import { CreateUndefinedMemoryInput } from './inputs/create-undefined-memory.input';
+import { UpdateUndefinedMemoryInput } from './inputs/update-undefined-memory.input';
 
 @Resolver(() => UndefinedMemory)
 export class UndefinedMemoryResolver {

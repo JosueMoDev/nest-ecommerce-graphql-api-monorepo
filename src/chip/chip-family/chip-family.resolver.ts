@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { ChipFamilyService } from './chip-family.service';
 import { ChipFamily } from './entities/chip-family.entity';
-import { CreateChipFamilyInput } from './dto/create-chip-family.input';
-import { UpdateChipFamilyInput } from './dto/update-chip-family.input';
+import { CreateChipFamilyInput } from './inputs/create-chip-family.input';
+import { UpdateChipFamilyInput } from './inputs/update-chip-family.input';
 
 @Resolver(() => ChipFamily)
 export class ChipFamilyResolver {

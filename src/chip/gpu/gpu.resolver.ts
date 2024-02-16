@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { GpuService } from './gpu.service';
 import { Gpu } from './entities/gpu.entity';
-import { CreateGpuInput } from './dto/create-gpu.input';
-import { UpdateGpuInput } from './dto/update-gpu.input';
+import { CreateGpuInput } from './inputs/create-gpu.input';
+import { UpdateGpuInput } from './inputs/update-gpu.input';
 
 @Resolver(() => Gpu)
 export class GpuResolver {

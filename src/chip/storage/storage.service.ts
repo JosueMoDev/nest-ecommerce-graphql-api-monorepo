@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateStorageInput } from './dto/create-storage.input';
-import { UpdateStorageInput } from './dto/update-storage.input';
+import { CreateStorageInput } from './inputs/create-storage.input';
+import { UpdateStorageInput } from './inputs/update-storage.input';
 
 @Injectable()
 export class StorageService {

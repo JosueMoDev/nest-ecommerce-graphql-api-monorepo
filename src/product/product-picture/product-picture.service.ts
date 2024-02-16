@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductPictureInput } from './dto/create-product-picture.input';
-import { UpdateProductPictureInput } from './dto/update-product-picture.input';
+import { CreateProductPictureInput } from './inputs/create-product-picture.input';
+import { UpdateProductPictureInput } from './inputs/update-product-picture.input';
 
 @Injectable()
 export class ProductPictureService {

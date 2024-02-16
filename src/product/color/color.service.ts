@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateColorInput } from './dto/create-color.input';
-import { UpdateColorInput } from './dto/update-color.input';
+import { CreateColorInput } from './inputs/create-color.input';
+import { UpdateColorInput } from './inputs/update-color.input';
 
 @Injectable()
 export class ColorService {

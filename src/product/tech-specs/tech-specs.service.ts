@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTechSpecInput } from './dto/create-tech-spec.input';
-import { UpdateTechSpecInput } from './dto/update-tech-spec.input';
+import { CreateTechSpecInput } from './inputs/create-tech-spec.input';
+import { UpdateTechSpecInput } from './inputs/update-tech-spec.input';
 
 @Injectable()
 export class TechSpecsService {
