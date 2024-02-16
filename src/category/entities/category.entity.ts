@@ -1,11 +1,10 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { CategoryName } from '../enum/category-name.enum';
 
 @ObjectType()
 export class Category {
   @Field(() => ID)
   id: string;
 
-  @Field(() => CategoryName)
-  name: CategoryName;
+  @Field(() => String)
+  name: string;
 }

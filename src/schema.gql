@@ -11,22 +11,16 @@ type User {
   id: ID!
   name: String!
   email: String!
-  emailVerified: Timestamp!
+  emailVerified: Timestamp
   password: String!
-  role: UserRole!
-  picture: String!
+  role: String!
+  picture: String
 }
 
 """
 `Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
 """
 scalar Timestamp
-
-enum UserRole {
-  CLIENT
-  USER
-  SUPERUSER
-}
 
 type ShippingAddress {
   """Shipping id"""
@@ -97,18 +91,7 @@ enum NeuralEngine {
 
 type Category {
   id: ID!
-  name: CategoryName!
-}
-
-enum CategoryName {
-  IPHONE
-  IPAD
-  WATCH
-  MAC
-  VISION
-  AIRPODS
-  TVHOME
-  ACCESSORIES
+  name: String!
 }
 
 type SubCategory {
@@ -227,7 +210,7 @@ type Mutation {
   createAuthentication(createAuthenticationInput: CreateAuthenticationInput!): Authentication!
   updateAuthentication(updateAuthenticationInput: UpdateAuthenticationInput!): Authentication!
   removeAuthentication(id: Int!): Authentication!
-  createUser(createUserInput: CreateUserInput!): User!
+  registerUser(registerUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
   createShippingAddress(createShippingAddressInput: CreateShippingAddressInput!): ShippingAddress!
@@ -289,13 +272,25 @@ input UpdateAuthenticationInput {
 }
 
 input CreateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
+  email: String!
+  password: String!
+  userRole: UserRole!
+  picture: String
+}
+
+enum UserRole {
+  CLIENT
+  USER
+  SUPERUSER
 }
 
 input UpdateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  name: String
+  email: String
+  password: String
+  userRole: UserRole
+  picture: String
   id: Int!
 }
 
@@ -377,13 +372,22 @@ input UpdateOrderItemInput {
 }
 
 input CreateCategoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  categoryName: CategoryName!
+}
+
+enum CategoryName {
+  IPHONE
+  IPAD
+  WATCH
+  MAC
+  VISION
+  AIRPODS
+  TVHOME
+  ACCESSORIES
 }
 
 input UpdateCategoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  categoryName: CategoryName
   id: Int!
 }
 

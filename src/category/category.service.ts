@@ -1,11 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateCategoryInput } from './inputs/create-category.input';
 import { UpdateCategoryInput } from './inputs/update-category.input';
+import { PrismaService } from 'src/prisma.service';
+import { CategoryName } from './enum/category-name.enum';
 
 @Injectable()
 export class CategoryService {
-  create(createCategoryInput: CreateCategoryInput) {
-    return 'This action adds a new category';
+  constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
+
+  async create(createCategoryInput: CreateCategoryInput) {
+    return await this.prismaService.category.create({
+      data: {
+        name: CategoryName[createCategoryInput.categoryName],
+      },
+    });
   }
 
   findAll() {

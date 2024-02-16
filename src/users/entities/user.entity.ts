@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { UserRole } from '../enum/user-role.enum';
 
 @ObjectType()
 export class User {
@@ -13,15 +12,15 @@ export class User {
   @Field(() => String)
   email: string;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   emailVerified: Date;
 
   @Field(() => String)
   password: string;
 
-  @Field(() => UserRole)
-  role: UserRole;
-
   @Field(() => String)
+  role: string;
+
+  @Field(() => String, { nullable: true })
   picture: string;
 }
