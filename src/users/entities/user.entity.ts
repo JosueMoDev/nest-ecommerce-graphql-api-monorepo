@@ -21,6 +21,9 @@ export class User {
   @Field(() => String)
   role: string;
 
+  @Field(() => Boolean, { nullable: true, defaultValue: true })
+  isActive: boolean;
+
   @Field(() => String, { nullable: true })
   picture: string;
 }

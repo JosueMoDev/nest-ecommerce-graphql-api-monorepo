@@ -1,8 +1,11 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { CreateUserInput } from './inputs/create-user.input';
-import { UpdateUserInput } from './inputs/update-user.input';
+import {
+  CreateUserInput,
+  UpdateUserInput,
+  ChangePasswordInput,
+} from './inputs';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -19,17 +22,28 @@ export class UsersResolver {
   }
 
   @Query(() => User, { name: 'user' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.findOne(id);
+  findOne(@Args('email', { type: () => String }) email: string) {
+    return this.usersService.findOne(email);
   }
 
   @Mutation(() => User)
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.update(updateUserInput.id, updateUserInput);
+    console.log(updateUserInput);
+    return this.usersService.update(updateUserInput);
   }
 
-  @Mutation(() => User)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.remove(id);
+  @Mutation(() => Boolean)
+  changePassword(
+    @Args('changePasswordInput', { type: () => ChangePasswordInput })
+    changePasswordInput: ChangePasswordInput,
+  ) {
+    return this.usersService.changePassword(changePasswordInput);
+  }
+
+  @Mutation(() => User, {
+    description: 'This mutations change user activate status',
+  })
+  toggleActiveStatus(@Args('email', { type: () => String }) email: string) {
+    return this.usersService.toggleActivateStatus(email);
   }
 }

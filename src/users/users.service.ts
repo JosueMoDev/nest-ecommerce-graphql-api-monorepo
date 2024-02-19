@@ -1,9 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserInput } from './inputs/create-user.input';
 import { UpdateUserInput } from './inputs/update-user.input';
 import { PrismaService } from 'src/prisma.service';
 import { UserRole } from './enum/user-role.enum';
 import * as bcrypt from 'bcrypt';
+import { ChangePasswordInput } from './inputs/change-password.input';
 
 @Injectable()
 export class UsersService {
@@ -23,19 +30,71 @@ export class UsersService {
     });
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    // TODO pagination and seaching
+    return await this.prismaService.user.findMany({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(email: string) {
+    try {
+      const user = await this.prismaService.user.findUnique({
+        where: { email },
+      });
+      if (!user) throw new NotFoundException('Any user found');
+      return user;
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+  async changePassword(changePassword: ChangePasswordInput) {
+    try {
+      const { email, password, newPassword } = changePassword;
+      const user = await this.findOne(email);
+      const hasMatch = await bcrypt.compare(password, user.password);
+      if (!hasMatch) throw new BadRequestException(`Incorrect Password`);
+      const hashPassword = await bcrypt.hash(newPassword, 10);
+      const response = await this.prismaService.user.update({
+        where: { email },
+        data: { password: hashPassword },
+      });
+      return !!response;
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async update(updateUserInput: UpdateUserInput) {
+    try {
+      const user = await this.prismaService.user.findUnique({
+        where: { id: updateUserInput.id },
+      });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, ...rest } = updateUserInput;
+      if (!user) throw new NotFoundException('Not found user');
+      return await this.prismaService.user.update({
+        where: {
+          id: updateUserInput.id,
+        },
+        data: {
+          ...user,
+          ...rest,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
+  }
+
+  async toggleActivateStatus(email: string) {
+    const { isActive } = await this.findOne(email);
+    return this.prismaService.user.update({
+      where: {
+        email,
+      },
+      data: {
+        isActive: !isActive,
+      },
+    });
   }
 }

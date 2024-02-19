@@ -14,6 +14,7 @@ type User {
   emailVerified: Timestamp
   password: String!
   role: String!
+  isActive: Boolean
   picture: String
 }
 
@@ -186,7 +187,7 @@ type UndefinedMemory {
 type Query {
   authentication(id: Int!): Authentication!
   users: [User!]!
-  user(id: Int!): User!
+  user(email: String!): User!
   shippingAddress(id: Int!): ShippingAddress!
   orders: [Order!]!
   order(id: Int!): Order!
@@ -212,7 +213,10 @@ type Mutation {
   removeAuthentication(id: Int!): Authentication!
   registerUser(registerUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
+  changePassword(changePasswordInput: ChangePasswordInput!): Boolean!
+
+  """This mutations change user activate status"""
+  toggleActiveStatus(email: String!): User!
   createShippingAddress(createShippingAddressInput: CreateShippingAddressInput!): ShippingAddress!
   updateShippingAddress(updateShippingAddressInput: UpdateShippingAddressInput!): ShippingAddress!
   removeShippingAddress(id: Int!): ShippingAddress!
@@ -288,10 +292,15 @@ enum UserRole {
 input UpdateUserInput {
   name: String
   email: String
-  password: String
   userRole: UserRole
   picture: String
-  id: Int!
+  id: ID!
+}
+
+input ChangePasswordInput {
+  newPassword: String!
+  password: String!
+  email: String!
 }
 
 input CreateShippingAddressInput {
