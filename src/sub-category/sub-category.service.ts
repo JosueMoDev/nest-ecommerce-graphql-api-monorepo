@@ -1,26 +1,80 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSubCategoryInput } from './inputs/create-sub-category.input';
 import { UpdateSubCategoryInput } from './inputs/update-sub-category.input';
+import { PrismaService } from 'src/prisma.service';
+import { ProductGender } from './enum/product-gender.enum';
 
 @Injectable()
 export class SubCategoryService {
-  create(createSubCategoryInput: CreateSubCategoryInput) {
-    return 'This action adds a new subCategory';
+  constructor(
+    @Inject(PrismaService) private readonly prismaService: PrismaService,
+  ) {}
+  async create(createSubCategoryInput: CreateSubCategoryInput) {
+    const slug = createSubCategoryInput.name
+      .split(' ')
+      .map((word) => word.toLowerCase())
+      .join('-');
+    return await this.prismaService.subCategory.create({
+      data: {
+        name: createSubCategoryInput.name,
+        slug: slug,
+        gender: ProductGender[createSubCategoryInput.productGender],
+        category: {
+          connect: {
+            id: createSubCategoryInput.categoryId,
+          },
+        },
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all subCategory`;
+  async findAll() {
+    return await this.prismaService.subCategory.findMany({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} subCategory`;
+  async findOne(id: string) {
+    const subCategory = await this.prismaService.subCategory.findUnique({
+      where: { id: id },
+    });
+    if (!subCategory) throw new NotFoundException('Sub Category not found');
+    return subCategory;
   }
 
-  update(id: number, updateSubCategoryInput: UpdateSubCategoryInput) {
-    return `This action updates a #${id} subCategory`;
+  async update(updateSubCategoryInput: UpdateSubCategoryInput) {
+    const subCategory = await this.findOne(updateSubCategoryInput.id);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, productGender, ...rest } = updateSubCategoryInput;
+
+    const slug = rest.name
+      ? rest.name
+          .split(' ')
+          .map((word) => word.toLowerCase())
+          .join('-')
+      : subCategory.slug;
+
+    const gender = !!productGender
+      ? ProductGender[productGender]
+      : subCategory.gender;
+    return await this.prismaService.subCategory.update({
+      where: { id: updateSubCategoryInput.id },
+      data: {
+        ...subCategory,
+        ...rest,
+        slug,
+        gender,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} subCategory`;
+  async toggleSubCategoryStatus(id: string) {
+    const subCategory = await this.prismaService.subCategory.findUnique({
+      where: { id },
+    });
+    return await this.prismaService.subCategory.update({
+      where: { id },
+      data: {
+        isActive: !subCategory.isActive,
+      },
+    });
   }
 }

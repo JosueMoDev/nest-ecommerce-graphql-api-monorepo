@@ -1,6 +1,5 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Category } from 'src/category/entities/category.entity';
-import { Gender } from '../enum/product-gender.enum';
 
 @ObjectType()
 export class SubCategory {
@@ -12,10 +11,11 @@ export class SubCategory {
 
   @Field(() => String)
   slug: string;
-  @Field(() => Gender)
-  gender: Gender;
+
+  @Field(() => String)
+  gender: string;
 
   // * Relations
   @Field(() => Category)
-  category: Category;
+  category: string;
 }

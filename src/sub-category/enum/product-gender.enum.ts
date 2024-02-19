@@ -1,6 +1,6 @@
 import { registerEnumType } from '@nestjs/graphql';
 
-export enum Gender {
+export enum ProductGender {
   DISPLAY,
   LAPTOP,
   DESKTOP,
@@ -11,4 +11,4 @@ export enum Gender {
   ACCESSORY,
   VISION,
 }
-registerEnumType(Gender, { name: 'Gender' });
+registerEnumType(ProductGender, { name: 'ProductGender' });

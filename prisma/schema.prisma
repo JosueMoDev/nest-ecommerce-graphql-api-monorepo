@@ -174,10 +174,11 @@ model Category {
 }
 
 model SubCategory {
-  id     String @id @default(uuid())
-  name   String
-  slug   String @unique
-  gender Gender
+  id       String  @id @default(uuid())
+  name     String
+  slug     String  @unique
+  gender   Gender
+  isActive Boolean @default(true)
   //  * Relations
 
   category           Category             @relation(fields: [categoryId], references: [id])

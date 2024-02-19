@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { UserRole } from '../enum/user-role.enum';
 
 @ObjectType()
 export class User {

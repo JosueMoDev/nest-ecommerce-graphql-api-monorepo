@@ -100,20 +100,8 @@ type SubCategory {
   id: ID!
   name: String!
   slug: String!
-  gender: Gender!
+  gender: String!
   category: Category!
-}
-
-enum Gender {
-  DISPLAY
-  LAPTOP
-  DESKTOP
-  PHONE
-  TABLET
-  WATCH
-  AUDIO
-  ACCESSORY
-  VISION
 }
 
 type Product {
@@ -198,7 +186,8 @@ type Query {
   techSpec(id: Int!): TechSpec!
   orderItem(id: Int!): OrderItem!
   category(id: Int!): Category!
-  subCategory(id: Int!): SubCategory!
+  subCategories: [SubCategory!]!
+  subCategory(id: ID!): SubCategory!
   chip(id: Int!): Chip!
   chipFamily(id: Int!): ChipFamily!
   storage(id: Int!): Storage!
@@ -243,7 +232,7 @@ type Mutation {
   removeCategory(id: Int!): Category!
   createSubCategory(createSubCategoryInput: CreateSubCategoryInput!): SubCategory!
   updateSubCategory(updateSubCategoryInput: UpdateSubCategoryInput!): SubCategory!
-  removeSubCategory(id: Int!): SubCategory!
+  toggleSubCategoryStatus(id: ID!): SubCategory!
   createChip(createChipInput: CreateChipInput!): Chip!
   updateChip(updateChipInput: UpdateChipInput!): Chip!
   removeChip(id: Int!): Chip!
@@ -401,14 +390,28 @@ input UpdateCategoryInput {
 }
 
 input CreateSubCategoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
+  productGender: ProductGender!
+  categoryId: ID!
+}
+
+enum ProductGender {
+  DISPLAY
+  LAPTOP
+  DESKTOP
+  PHONE
+  TABLET
+  WATCH
+  AUDIO
+  ACCESSORY
+  VISION
 }
 
 input UpdateSubCategoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  name: String
+  productGender: ProductGender
+  categoryId: ID
+  id: ID!
 }
 
 input CreateChipInput {
