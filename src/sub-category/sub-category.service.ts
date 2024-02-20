@@ -10,7 +10,7 @@ export class SubCategoryService {
     @Inject(PrismaService) private readonly prismaService: PrismaService,
   ) {}
 
-  async category(subCategoryId: string){
+  async category(subCategoryId: string) {
     return this.prismaService.subCategory
       .findUnique({
         where: {

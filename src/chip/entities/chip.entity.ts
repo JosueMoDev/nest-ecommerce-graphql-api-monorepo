@@ -1,6 +1,5 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { NeuralEngine } from '../enums/neural-engine.enum';
-import { ChipFamily } from '../chip-family/entities/chip-family.entity';
+import { NeuralEngine, ChipFamilyName, ChipGama } from '../enums';
 import { StorageOnChip } from './storage-on-chip.entity';
 
 @ObjectType()
@@ -8,13 +7,16 @@ export class Chip {
   @Field(() => ID, { description: 'Chip ID' })
   id: string;
 
+  @Field(() => ChipFamilyName)
+  chipFamilyName: ChipFamilyName;
+
+  @Field(() => ChipGama)
+  gama: ChipGama;
+
   @Field(() => [NeuralEngine])
   neuralEngine: NeuralEngine[];
 
   // *Relations
-  @Field(() => ChipFamily)
-  chipFamily: ChipFamily;
-
   @Field(() => [StorageOnChip])
-  storageOnChip: StorageOnChip[]
+  storageOnChip: StorageOnChip[];
 }

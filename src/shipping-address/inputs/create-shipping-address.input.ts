@@ -1,4 +1,4 @@
-import { InputType, Int, Field, ID } from '@nestjs/graphql';
+import { InputType, Field, ID } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 
 @InputType()
@@ -20,7 +20,7 @@ export class CreateShippingAddressInput {
 
   @IsOptional()
   @IsString()
-  @Field(() => String, { nullable: true})
+  @Field(() => String, { nullable: true })
   address2?: string;
 
   @IsNotEmpty()

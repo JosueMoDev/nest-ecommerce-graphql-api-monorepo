@@ -49,19 +49,22 @@ export class ShippingAddressService {
   }
 
   async findOne(id: string) {
-    return await this.prismaService.shippingAddress.findUnique({ where: { id }})
+    return await this.prismaService.shippingAddress.findUnique({
+      where: { id },
+    });
   }
 
   async update(updateShippingAddressInput: UpdateShippingAddressInput) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { id, ...rest } = updateShippingAddressInput;
     return await this.prismaService.shippingAddress.update({
       where: {
         id: updateShippingAddressInput.id,
       },
       data: {
-        ...rest
-      }
-    })
+        ...rest,
+      },
+    });
   }
   // TODO pensar implementacion de eliminar direccion
   remove(id: number) {

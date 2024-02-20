@@ -1,9 +1,17 @@
-import { Resolver, Query, Mutation, Args, Int, ID, ResolveField, Root } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ID,
+  ResolveField,
+  Root,
+} from '@nestjs/graphql';
 import { ShippingAddressService } from './shipping-address.service';
 import { ShippingAddress } from './entities/shipping-address.entity';
 import { CreateShippingAddressInput } from './inputs/create-shipping-address.input';
 import { UpdateShippingAddressInput } from './inputs/update-shipping-address.input';
-import { User } from 'src/users/entities/user.entity';
 
 @Resolver(() => ShippingAddress)
 export class ShippingAddressResolver {
@@ -12,16 +20,14 @@ export class ShippingAddressResolver {
   ) {}
 
   @ResolveField()
-   user(@Root() shippingAddress: ShippingAddress) {
+  user(@Root() shippingAddress: ShippingAddress) {
     return this.shippingAddressService.user(shippingAddress.id);
   }
-  
+
   @ResolveField()
   country(@Root() shippingAddress: ShippingAddress) {
     return this.shippingAddressService.country(shippingAddress.id);
   }
-
- 
 
   @Mutation(() => ShippingAddress)
   createShippingAddress(

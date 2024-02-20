@@ -68,15 +68,6 @@ enum CategoryName {
   ACCESSORIES
 }
 
-model ChipFamily {
-  id             String         @id @default(uuid())
-  chipFamilyName ChipFamilyName
-  gama           ChipGama
-  description    String
-  // * Relations
-
-  chip Chip?
-}
 
 model Cpu {
   id    String @id @default(uuid())
@@ -154,10 +145,9 @@ model StorageOnChip {
 model Chip {
   id           String         @id @default(uuid())
   neuralEngine NeuralEngine[]
+  chipFamilyName ChipFamilyName
+  gama           ChipGama
   // * Relations
-
-  chipFamily      ChipFamily?           @relation(fields: [chipFamilyId], references: [id])
-  chipFamilyId    String                @unique
   Gpu             GpuOnChip[]
   Cpu             CpuOnChip[]
   storage         StorageOnChip[]

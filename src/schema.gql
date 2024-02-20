@@ -58,33 +58,6 @@ type Order {
   shippingAddress: ShippingAddress
 }
 
-type ChipFamily {
-  """Chip Family ID"""
-  id: ID!
-  chipFamilyName: ChipFamilyName!
-  gama: ChipGama!
-  description: String!
-}
-
-enum ChipFamilyName {
-  M1
-  M2
-  M3
-  S8
-  S9
-  A15
-  A16
-  A17
-}
-
-enum ChipGama {
-  BASE
-  PRO
-  BIONIC
-  MAX
-  ULTRA
-}
-
 type Storage {
   """Storage ID"""
   id: ID!
@@ -107,9 +80,29 @@ type StorageOnChip {
 type Chip {
   """Chip ID"""
   id: ID!
+  chipFamilyName: ChipFamilyName!
+  gama: ChipGama!
   neuralEngine: [NeuralEngine!]!
-  chipFamily: ChipFamily!
   storageOnChip: [StorageOnChip!]!
+}
+
+enum ChipFamilyName {
+  M1
+  M2
+  M3
+  S8
+  S9
+  A15
+  A16
+  A17
+}
+
+enum ChipGama {
+  BASE
+  PRO
+  BIONIC
+  MAX
+  ULTRA
 }
 
 enum NeuralEngine {
@@ -206,7 +199,6 @@ type Query {
   subCategories: [SubCategory!]!
   subCategory(id: ID!): SubCategory!
   chip(id: ID!): Chip!
-  chipFamily(id: Int!): ChipFamily!
   storage(id: Int!): Storage!
   cpu(id: Int!): Cpu!
   gpu(id: Int!): Gpu!
@@ -253,9 +245,6 @@ type Mutation {
   createChip(createChipInput: CreateChipInput!): Chip!
   updateChip(updateChipInput: UpdateChipInput!): Chip!
   removeChip(id: Int!): Chip!
-  createChipFamily(createChipFamilyInput: CreateChipFamilyInput!): ChipFamily!
-  updateChipFamily(updateChipFamilyInput: UpdateChipFamilyInput!): ChipFamily!
-  removeChipFamily(id: Int!): ChipFamily!
   createStorage(createStorageInput: CreateStorageInput!): Storage!
   updateStorage(updateStorageInput: UpdateStorageInput!): Storage!
   removeStorage(id: Int!): Storage!
@@ -451,17 +440,6 @@ input CreateChipInput {
 }
 
 input UpdateChipInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input CreateChipFamilyInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateChipFamilyInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
