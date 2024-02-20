@@ -26,6 +26,7 @@ export class UsersService {
         email: createUserInput.email,
         password: passwordHash,
         role: UserRole[createUserInput.userRole],
+        picture: createUserInput.picture ?? null,
       },
     });
   }

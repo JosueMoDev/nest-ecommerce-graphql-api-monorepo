@@ -15,6 +15,9 @@ export class SubCategory {
   @Field(() => String)
   gender: string;
 
+  @Field(() => Boolean, { nullable: true, defaultValue: true })
+  isActive: boolean;
+
   // * Relations
   @Field(() => Category)
   category: string;

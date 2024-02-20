@@ -101,6 +101,7 @@ type SubCategory {
   name: String!
   slug: String!
   gender: String!
+  isActive: Boolean
   category: Category!
 }
 
