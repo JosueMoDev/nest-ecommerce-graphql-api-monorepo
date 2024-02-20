@@ -18,7 +18,7 @@ export class ChipService {
   }
 
   async findOne(id: string) {
-    return await this.prismaService.chip.findUnique({ where: { id }});
+    return await this.prismaService.chip.findUnique({ where: { id } });
   }
 
   update(id: number, updateChipInput: UpdateChipInput) {

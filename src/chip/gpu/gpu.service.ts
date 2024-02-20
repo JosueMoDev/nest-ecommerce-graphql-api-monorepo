@@ -1,26 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateGpuInput } from './inputs/create-gpu.input';
 import { UpdateGpuInput } from './inputs/update-gpu.input';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class GpuService {
-  create(createGpuInput: CreateGpuInput) {
-    return 'This action adds a new gpu';
+  constructor(
+    @Inject(PrismaService) private readonly prismaService: PrismaService,
+  ) {}
+
+  async create(createGpuInput: CreateGpuInput) {
+    return await this.prismaService.gpu.create({
+      data: { ...createGpuInput },
+    });
   }
 
-  findAll() {
-    return `This action returns all gpu`;
+  async findAll() {
+    return await this.prismaService.gpu.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} gpu`;
+  async findOne(id: string) {
+    const gpu = await this.prismaService.gpu.findUnique({
+      where: { id },
+    });
+    if (!gpu) throw new NotFoundException('Not Found');
+    return gpu;
   }
 
-  update(id: number, updateGpuInput: UpdateGpuInput) {
-    return `This action updates a #${id} gpu`;
+  async update(updateGpuInput: UpdateGpuInput) {
+    const { id, ...rest } = updateGpuInput;
+    return await this.prismaService.gpu.update({
+      where: { id },
+      data: { ...rest },
+    });
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} gpu`;
   }
 }

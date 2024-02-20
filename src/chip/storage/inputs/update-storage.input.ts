@@ -1,8 +1,11 @@
+import { IsNotEmpty, IsUUID } from 'class-validator';
 import { CreateStorageInput } from './create-storage.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { InputType, Field, PartialType, ID } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateStorageInput extends PartialType(CreateStorageInput) {
-  @Field(() => Int)
-  id: number;
+  @IsNotEmpty()
+  @IsUUID()
+  @Field(() => ID)
+  id: string;
 }

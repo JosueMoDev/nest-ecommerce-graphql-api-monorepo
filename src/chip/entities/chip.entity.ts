@@ -1,6 +1,6 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { NeuralEngine, ChipFamilyName, ChipGama } from '../enums';
-import { StorageOnChip } from './storage-on-chip.entity';
+import { CpuOnChip, GpuOnChip, StorageOnChip, UndefinedMemoryOnChip } from './';
 
 @ObjectType()
 export class Chip {
@@ -19,4 +19,13 @@ export class Chip {
   // *Relations
   @Field(() => [StorageOnChip])
   storageOnChip: StorageOnChip[];
+
+  @Field(() => [UndefinedMemoryOnChip])
+  undefinedMemoryOnChip: UndefinedMemoryOnChip[];
+
+  @Field(() => [CpuOnChip])
+  cpuOnChip: CpuOnChip[];
+
+  @Field(() => [GpuOnChip])
+  gpuOnChip: GpuOnChip[];
 }

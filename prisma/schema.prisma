@@ -125,11 +125,11 @@ model UnifiedMemoryOnChip {
 
 model Storage {
   id         String     @id @default(uuid())
-  capacity   Int
+  capacity   Int @unique()
   capacityOn CapacityOn
   // * Relations
 
-  chips StorageOnChip[]
+  storageOnChip StorageOnChip[]
 }
 
 model StorageOnChip {
@@ -148,10 +148,10 @@ model Chip {
   chipFamilyName ChipFamilyName
   gama           ChipGama
   // * Relations
-  Gpu             GpuOnChip[]
-  Cpu             CpuOnChip[]
+  cpu             GpuOnChip[]
+  gpu             CpuOnChip[]
   storage         StorageOnChip[]
-  undefinedMemory UnifiedMemoryOnChip[]
+  unifiedMemory UnifiedMemoryOnChip[]
   product         Product[]
 }
 

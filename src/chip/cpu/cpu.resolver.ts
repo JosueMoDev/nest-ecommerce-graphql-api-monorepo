@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { CpuService } from './cpu.service';
 import { Cpu } from './entities/cpu.entity';
 import { CreateCpuInput } from './inputs/create-cpu.input';
@@ -19,17 +19,17 @@ export class CpuResolver {
   }
 
   @Query(() => Cpu, { name: 'cpu' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }) id: string) {
     return this.cpuService.findOne(id);
   }
 
   @Mutation(() => Cpu)
   updateCpu(@Args('updateCpuInput') updateCpuInput: UpdateCpuInput) {
-    return this.cpuService.update(updateCpuInput.id, updateCpuInput);
+    return this.cpuService.update(updateCpuInput);
   }
 
   @Mutation(() => Cpu)
-  removeCpu(@Args('id', { type: () => Int }) id: number) {
+  removeCpu(@Args('id', { type: () => ID }) id: string) {
     return this.cpuService.remove(id);
   }
 }

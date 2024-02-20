@@ -1,5 +1,4 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
-import { CapacityOn } from '../enums/capacity-on.enum';
 
 @ObjectType()
 export class Storage {
@@ -9,6 +8,6 @@ export class Storage {
   @Field(() => Int)
   capacity: number;
 
-  @Field(() => CapacityOn)
-  capacityOn: CapacityOn;
+  @Field(() => String)
+  capacityOn: string;
 }

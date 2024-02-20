@@ -1,7 +1,11 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
+import { IsInt, IsNotEmpty, IsPositive } from 'class-validator';
 
 @InputType()
 export class CreateCpuInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @IsNotEmpty()
+  @IsPositive()
+  @IsInt()
+  @Field(() => Int)
+  cores: number;
 }

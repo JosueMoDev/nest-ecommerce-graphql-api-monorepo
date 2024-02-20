@@ -58,22 +58,56 @@ type Order {
   shippingAddress: ShippingAddress
 }
 
+type Cpu {
+  """Storage ID"""
+  id: ID!
+  cores: Int!
+}
+
+"""Cpu On Chip"""
+type CpuOnChip {
+  chip: Chip!
+  cpu: Cpu!
+  price: Float!
+}
+
+type Gpu {
+  """Storage ID"""
+  id: ID!
+  cores: Int!
+}
+
+"""Cpu On Chip"""
+type GpuOnChip {
+  chip: Chip!
+  gpu: Gpu!
+  price: Float!
+}
+
 type Storage {
   """Storage ID"""
   id: ID!
   capacity: Int!
-  capacityOn: CapacityOn!
-}
-
-enum CapacityOn {
-  GB
-  TB
+  capacityOn: String!
 }
 
 """Storage On Chip"""
 type StorageOnChip {
   chip: Chip!
   storage: Storage!
+  price: Float!
+}
+
+type UnifiedMemory {
+  """Undefined Memory ID"""
+  id: ID!
+  capacity: Int!
+}
+
+"""Undefined Memory On Chip"""
+type UndefinedMemoryOnChip {
+  chip: Chip!
+  undefinedMomory: UnifiedMemory!
   price: Float!
 }
 
@@ -84,6 +118,9 @@ type Chip {
   gama: ChipGama!
   neuralEngine: [NeuralEngine!]!
   storageOnChip: [StorageOnChip!]!
+  undefinedMemoryOnChip: [UndefinedMemoryOnChip!]!
+  cpuOnChip: [CpuOnChip!]!
+  gpuOnChip: [GpuOnChip!]!
 }
 
 enum ChipFamilyName {
@@ -163,24 +200,6 @@ type OrderItem {
   order: Order!
 }
 
-type Cpu {
-  """Storage ID"""
-  id: ID!
-  cores: Int!
-}
-
-type Gpu {
-  """Storage ID"""
-  id: ID!
-  cores: Int!
-}
-
-type UndefinedMemory {
-  """Undefined Memory ID"""
-  id: ID!
-  capacity: Int!
-}
-
 type Query {
   authentication(id: Int!): Authentication!
   users: [User!]!
@@ -199,10 +218,11 @@ type Query {
   subCategories: [SubCategory!]!
   subCategory(id: ID!): SubCategory!
   chip(id: ID!): Chip!
-  storage(id: Int!): Storage!
-  cpu(id: Int!): Cpu!
-  gpu(id: Int!): Gpu!
-  undefinedMemory(id: Int!): UndefinedMemory!
+  storages: [Storage!]!
+  storage(id: ID!): Storage!
+  cpu(id: ID!): Cpu!
+  gpu(id: ID!): Gpu!
+  undefinedMemory(id: ID!): UnifiedMemory!
 }
 
 type Mutation {
@@ -247,16 +267,16 @@ type Mutation {
   removeChip(id: Int!): Chip!
   createStorage(createStorageInput: CreateStorageInput!): Storage!
   updateStorage(updateStorageInput: UpdateStorageInput!): Storage!
-  removeStorage(id: Int!): Storage!
+  removeStorage(id: ID!): Storage!
   createCpu(createCpuInput: CreateCpuInput!): Cpu!
   updateCpu(updateCpuInput: UpdateCpuInput!): Cpu!
-  removeCpu(id: Int!): Cpu!
+  removeCpu(id: ID!): Cpu!
   createGpu(createGpuInput: CreateGpuInput!): Gpu!
   updateGpu(updateGpuInput: UpdateGpuInput!): Gpu!
-  removeGpu(id: Int!): Gpu!
-  createUndefinedMemory(createUndefinedMemoryInput: CreateUndefinedMemoryInput!): UndefinedMemory!
-  updateUndefinedMemory(updateUndefinedMemoryInput: UpdateUndefinedMemoryInput!): UndefinedMemory!
-  removeUndefinedMemory(id: Int!): UndefinedMemory!
+  removeGpu(id: ID!): Gpu!
+  createUnifiedMemory(createUndefinedMemoryInput: CreateUnifiedMemoryInput!): UnifiedMemory!
+  updateUnifiedMemory(updateUndefinedMemoryInput: UpdateUnifiedMemoryInput!): UnifiedMemory!
+  removeUnifedMemory(id: ID!): UnifiedMemory!
 }
 
 input CreateAuthenticationInput {
@@ -446,45 +466,44 @@ input UpdateChipInput {
 }
 
 input CreateStorageInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  capacity: Int!
+  capacityOn: CapacityOn!
+}
+
+enum CapacityOn {
+  GB
+  TB
 }
 
 input UpdateStorageInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  capacity: Int
+  capacityOn: CapacityOn
+  id: ID!
 }
 
 input CreateCpuInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  cores: Int!
 }
 
 input UpdateCpuInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  cores: Int
+  id: ID!
 }
 
 input CreateGpuInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  cores: Int!
 }
 
 input UpdateGpuInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  cores: Int
+  id: ID!
 }
 
-input CreateUndefinedMemoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+input CreateUnifiedMemoryInput {
+  capacity: Int!
 }
 
-input UpdateUndefinedMemoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input UpdateUnifiedMemoryInput {
+  capacity: Int
+  id: ID!
 }

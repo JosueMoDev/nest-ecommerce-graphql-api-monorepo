@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { GpuService } from './gpu.service';
 import { Gpu } from './entities/gpu.entity';
 import { CreateGpuInput } from './inputs/create-gpu.input';
@@ -19,17 +19,17 @@ export class GpuResolver {
   }
 
   @Query(() => Gpu, { name: 'gpu' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }) id: string) {
     return this.gpuService.findOne(id);
   }
 
   @Mutation(() => Gpu)
   updateGpu(@Args('updateGpuInput') updateGpuInput: UpdateGpuInput) {
-    return this.gpuService.update(updateGpuInput.id, updateGpuInput);
+    return this.gpuService.update(updateGpuInput);
   }
 
   @Mutation(() => Gpu)
-  removeGpu(@Args('id', { type: () => Int }) id: number) {
+  removeGpu(@Args('id', { type: () => ID }) id: string) {
     return this.gpuService.remove(id);
   }
 }
