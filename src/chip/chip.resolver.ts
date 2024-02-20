@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
 import { ChipService } from './chip.service';
 import { Chip } from './entities/chip.entity';
 import { CreateChipInput } from './inputs/create-chip.input';
@@ -19,7 +19,7 @@ export class ChipResolver {
   }
 
   @Query(() => Chip, { name: 'chip' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }) id: string) {
     return this.chipService.findOne(id);
   }
 

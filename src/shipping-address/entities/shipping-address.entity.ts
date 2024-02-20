@@ -1,5 +1,6 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { User } from 'src/users/entities/user.entity';
+import { Country } from './country.entity';
 
 @ObjectType()
 export class ShippingAddress {
@@ -15,8 +16,8 @@ export class ShippingAddress {
   @Field(() => String)
   address: string;
 
-  @Field(() => String)
-  address2: string;
+  @Field(() => String, { nullable: true})
+  address2?: string | null;
 
   @Field(() => String)
   postalCode: string;
@@ -31,4 +32,7 @@ export class ShippingAddress {
 
   @Field(() => User)
   user: User;
+
+  @Field(() => Country)
+  country: Country;
 }

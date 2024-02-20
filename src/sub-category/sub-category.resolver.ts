@@ -9,34 +9,25 @@ import {
 } from '@nestjs/graphql';
 import { SubCategoryService } from './sub-category.service';
 import { SubCategory } from './entities/sub-category.entity';
-import { CreateSubCategoryInput } from './inputs/create-sub-category.input';
-import { UpdateSubCategoryInput } from './inputs/update-sub-category.input';
-import { Category } from '@prisma/client';
-import { Inject } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { CreateSubCategoryInput, UpdateSubCategoryInput } from './inputs';
+
 
 @Resolver(() => SubCategory)
 export class SubCategoryResolver {
   constructor(
     private readonly subCategoryService: SubCategoryService,
-    @Inject(PrismaService) private prismaService: PrismaService,
   ) {}
+  
   @ResolveField()
-  category(@Root() subCategory: SubCategory): Promise<Category | null> {
-    return this.prismaService.subCategory
-      .findUnique({
-        where: {
-          id: subCategory.id,
-        },
-      })
-      .category();
+  category(@Root() subCategory: SubCategory) {
+    return this.subCategoryService.category(subCategory.id);
   }
 
   @Mutation(() => SubCategory)
   createSubCategory(
     @Args('createSubCategoryInput')
     createSubCategoryInput: CreateSubCategoryInput,
-  ) {
+  ){
     return this.subCategoryService.create(createSubCategoryInput);
   }
 

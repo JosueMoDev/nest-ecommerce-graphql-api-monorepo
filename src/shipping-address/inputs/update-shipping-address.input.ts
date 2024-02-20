@@ -1,8 +1,11 @@
+import { IsNotEmpty, IsUUID } from 'class-validator';
 import { CreateShippingAddressInput } from './create-shipping-address.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { InputType, Field, PartialType, ID } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateShippingAddressInput extends PartialType(CreateShippingAddressInput) {
-  @Field(() => Int)
-  id: number;
+  @IsNotEmpty()
+  @IsUUID()
+  @Field(() => ID)
+  id: string;
 }

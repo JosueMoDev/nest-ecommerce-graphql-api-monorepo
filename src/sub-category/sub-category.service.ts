@@ -9,6 +9,17 @@ export class SubCategoryService {
   constructor(
     @Inject(PrismaService) private readonly prismaService: PrismaService,
   ) {}
+
+  async category(subCategoryId: string){
+    return this.prismaService.subCategory
+      .findUnique({
+        where: {
+          id: subCategoryId,
+        },
+      })
+      .category();
+  }
+
   async create(createSubCategoryInput: CreateSubCategoryInput) {
     const slug = createSubCategoryInput.name
       .split(' ')
