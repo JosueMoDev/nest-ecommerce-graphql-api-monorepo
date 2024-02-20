@@ -13,7 +13,7 @@ export class CpuResolver {
     return this.cpuService.create(createCpuInput);
   }
 
-  @Query(() => [Cpu], { name: 'cpu' })
+  @Query(() => [Cpu], { name: 'cpus' })
   findAll() {
     return this.cpuService.findAll();
   }

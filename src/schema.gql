@@ -66,7 +66,6 @@ type Cpu {
 
 """Cpu On Chip"""
 type CpuOnChip {
-  chip: Chip!
   cpu: Cpu!
   price: Float!
 }
@@ -79,7 +78,6 @@ type Gpu {
 
 """Cpu On Chip"""
 type GpuOnChip {
-  chip: Chip!
   gpu: Gpu!
   price: Float!
 }
@@ -93,7 +91,6 @@ type Storage {
 
 """Storage On Chip"""
 type StorageOnChip {
-  chip: Chip!
   storage: Storage!
   price: Float!
 }
@@ -105,46 +102,22 @@ type UnifiedMemory {
 }
 
 """Undefined Memory On Chip"""
-type UndefinedMemoryOnChip {
-  chip: Chip!
-  undefinedMomory: UnifiedMemory!
+type UnifedMemoryOnChip {
+  unifiedMemory: UnifiedMemory!
   price: Float!
 }
 
 type Chip {
   """Chip ID"""
   id: ID!
-  chipFamilyName: ChipFamilyName!
-  gama: ChipGama!
-  neuralEngine: [NeuralEngine!]!
+  chipFamilyName: String!
+  gama: String!
+  name: String!
+  neuralEngine: [String!]!
   storageOnChip: [StorageOnChip!]!
-  undefinedMemoryOnChip: [UndefinedMemoryOnChip!]!
+  unifedMemoryOnChip: [UnifedMemoryOnChip!]!
   cpuOnChip: [CpuOnChip!]!
   gpuOnChip: [GpuOnChip!]!
-}
-
-enum ChipFamilyName {
-  M1
-  M2
-  M3
-  S8
-  S9
-  A15
-  A16
-  A17
-}
-
-enum ChipGama {
-  BASE
-  PRO
-  BIONIC
-  MAX
-  ULTRA
-}
-
-enum NeuralEngine {
-  SixTeenCores
-  ThirtyCores
 }
 
 type Category {
@@ -217,10 +190,13 @@ type Query {
   category(id: Int!): Category!
   subCategories: [SubCategory!]!
   subCategory(id: ID!): SubCategory!
+  chips: [Chip!]!
   chip(id: ID!): Chip!
   storages: [Storage!]!
   storage(id: ID!): Storage!
+  cpus: [Cpu!]!
   cpu(id: ID!): Cpu!
+  gpus: [Gpu!]!
   gpu(id: ID!): Gpu!
   undefinedMemory(id: ID!): UnifiedMemory!
 }
@@ -264,7 +240,7 @@ type Mutation {
   toggleSubCategoryStatus(id: ID!): SubCategory!
   createChip(createChipInput: CreateChipInput!): Chip!
   updateChip(updateChipInput: UpdateChipInput!): Chip!
-  removeChip(id: Int!): Chip!
+  removeChip(id: ID!): Chip!
   createStorage(createStorageInput: CreateStorageInput!): Storage!
   updateStorage(updateStorageInput: UpdateStorageInput!): Storage!
   removeStorage(id: ID!): Storage!
@@ -455,13 +431,52 @@ input UpdateSubCategoryInput {
 }
 
 input CreateChipInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  chipFamilyName: ChipFamilyName!
+  gama: ChipGama!
+  neuralEngine: [NeuralEngine!]!
+  storageOnChip: [OnChipInput!]!
+  unifiedMemoryOnChip: [OnChipInput!]!
+  cpuOnChip: [OnChipInput!]!
+  gpuOnChip: [OnChipInput!]!
+}
+
+enum ChipFamilyName {
+  M1
+  M2
+  M3
+  S8
+  S9
+  A15
+  A16
+  A17
+}
+
+enum ChipGama {
+  BASE
+  PRO
+  BIONIC
+  MAX
+  ULTRA
+}
+
+enum NeuralEngine {
+  SixTeenCores
+  ThirtyCores
+}
+
+input OnChipInput {
+  id: ID!
+  price: Float!
 }
 
 input UpdateChipInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  chipFamilyName: ChipFamilyName
+  gama: ChipGama
+  neuralEngine: [NeuralEngine!]
+  storageOnChip: [OnChipInput!]
+  unifiedMemoryOnChip: [OnChipInput!]
+  cpuOnChip: [OnChipInput!]
+  gpuOnChip: [OnChipInput!]
   id: Int!
 }
 

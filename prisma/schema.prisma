@@ -68,7 +68,6 @@ enum CategoryName {
   ACCESSORIES
 }
 
-
 model Cpu {
   id    String @id @default(uuid())
   cores Int
@@ -116,16 +115,16 @@ model UnifiedMemory {
 model UnifiedMemoryOnChip {
   chip              Chip          @relation(fields: [chipId], references: [id])
   chipId            String
-  undefinedMemory   UnifiedMemory @relation(fields: [undefinedMemoryId], references: [id])
-  undefinedMemoryId String
+  unifiedMemory   UnifiedMemory @relation(fields: [unifiedMemoryId], references: [id])
+  unifiedMemoryId String
   price             Float
 
-  @@id([undefinedMemoryId, chipId])
+  @@id([unifiedMemoryId, chipId])
 }
 
 model Storage {
   id         String     @id @default(uuid())
-  capacity   Int @unique()
+  capacity   Int        @unique()
   capacityOn CapacityOn
   // * Relations
 
@@ -143,16 +142,17 @@ model StorageOnChip {
 }
 
 model Chip {
-  id           String         @id @default(uuid())
-  neuralEngine NeuralEngine[]
+  id             String                @id @default(uuid())
+  neuralEngine   NeuralEngine[]
   chipFamilyName ChipFamilyName
+  name           String                 @unique()
   gama           ChipGama
   // * Relations
-  cpu             GpuOnChip[]
-  gpu             CpuOnChip[]
-  storage         StorageOnChip[]
-  unifiedMemory UnifiedMemoryOnChip[]
-  product         Product[]
+  gpu            GpuOnChip[]
+  cpu            CpuOnChip[]
+  storage        StorageOnChip[]
+  unifiedMemory  UnifiedMemoryOnChip[]
+  product        Product[]
 }
 
 model Category {

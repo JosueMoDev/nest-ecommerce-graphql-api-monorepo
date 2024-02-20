@@ -13,7 +13,7 @@ export class GpuResolver {
     return this.gpuService.create(createGpuInput);
   }
 
-  @Query(() => [Gpu], { name: 'gpu' })
+  @Query(() => [Gpu], { name: 'gpus' })
   findAll() {
     return this.gpuService.findAll();
   }

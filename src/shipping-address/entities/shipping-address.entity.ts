@@ -16,7 +16,7 @@ export class ShippingAddress {
   @Field(() => String)
   address: string;
 
-  @Field(() => String, { nullable: true})
+  @Field(() => String, { nullable: true })
   address2?: string | null;
 
   @Field(() => String)

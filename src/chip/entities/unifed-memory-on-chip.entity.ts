@@ -1,14 +1,10 @@
 import { ObjectType, Field, Float } from '@nestjs/graphql';
-import { Chip } from './chip.entity';
 import { UnifiedMemory } from '../unified-memory/entities/unified-memory.entity';
 
 @ObjectType({ description: 'Undefined Memory On Chip' })
-export class UndefinedMemoryOnChip {
-  @Field(() => Chip)
-  chip: Chip;
-
+export class UnifedMemoryOnChip {
   @Field(() => UnifiedMemory)
-  undefinedMomory: UnifiedMemory;
+  unifiedMemory: UnifiedMemory;
 
   @Field(() => Float)
   price: number;
