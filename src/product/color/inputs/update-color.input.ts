@@ -1,8 +1,11 @@
+import { IsNotEmpty, IsUUID } from 'class-validator';
 import { CreateColorInput } from './create-color.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateColorInput extends PartialType(CreateColorInput) {
-  @Field(() => Int)
-  id: number;
+  @IsNotEmpty()
+  @IsUUID()
+  @Field(() => ID)
+  id: string;
 }

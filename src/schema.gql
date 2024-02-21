@@ -11,7 +11,7 @@ type User {
   id: ID!
   name: String!
   email: String!
-  emailVerified: Timestamp
+  emailVerified: DateTime
   password: String!
   role: String!
   isActive: Boolean
@@ -19,9 +19,9 @@ type User {
 }
 
 """
-`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
-scalar Timestamp
+scalar DateTime
 
 type Country {
   """Shipping id"""
@@ -50,9 +50,9 @@ type Order {
   total: Float!
   itemsInOrder: Int!
   isPaid: Boolean!
-  paidAt: Timestamp!
-  createdAt: Timestamp!
-  updatedAt: Timestamp!
+  paidAt: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   transactionId: String!
   user: User!
   shippingAddress: ShippingAddress
@@ -150,6 +150,7 @@ type Color {
   id: ID!
   name: String!
   hexadecimalColor: String!
+  release: DateTime!
 }
 
 type ProductPicture {
@@ -182,7 +183,8 @@ type Query {
   orders: [Order!]!
   order(id: Int!): Order!
   product(id: Int!): Product!
-  color(id: Int!): Color!
+  colors: [Color!]!
+  color(id: ID!): Color!
   productPicture(id: Int!): ProductPicture!
   techSpecs: [TechSpec!]!
   techSpec(id: Int!): TechSpec!
@@ -223,7 +225,7 @@ type Mutation {
   removeProduct(id: Int!): Product!
   createColor(createColorInput: CreateColorInput!): Color!
   updateColor(updateColorInput: UpdateColorInput!): Color!
-  removeColor(id: Int!): Color!
+  removeColor(id: ID!): Color!
   createProductPicture(createProductPictureInput: CreateProductPictureInput!): ProductPicture!
   updateProductPicture(updateProductPictureInput: UpdateProductPictureInput!): ProductPicture!
   removeProductPicture(id: Int!): ProductPicture!
@@ -343,14 +345,16 @@ input UpdateProductInput {
 }
 
 input CreateColorInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
+  hexadecimalColor: String!
+  release: DateTime
 }
 
 input UpdateColorInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  name: String
+  hexadecimalColor: String
+  release: DateTime
+  id: ID!
 }
 
 input CreateProductPictureInput {

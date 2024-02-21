@@ -194,6 +194,7 @@ model Product {
   description String
   slug        String @unique
   price       Float  @default(0)
+  release DateTime @default(now())
 
   // * Relations
 
@@ -212,6 +213,7 @@ model Color {
   id               String @id @default(uuid())
   name             String
   hexadecimalColor String @unique
+  release DateTime @default(now())
   // * Relations
 
   ColorOnProduct          ColorOnProduct[]

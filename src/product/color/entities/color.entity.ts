@@ -10,4 +10,7 @@ export class Color {
 
   @Field(() => String)
   hexadecimalColor: string;
+
+  @Field(() => Date)
+  release: Date
 }

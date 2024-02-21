@@ -27,7 +27,7 @@ import { ChipModule } from './chip/chip.module';
       inject: [],
       useFactory: async () => ({
         buildSchemaOptions: {
-          dateScalarMode: 'timestamp',
+          dateScalarMode: 'isoDate',
         },
         playground: false,
         autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
