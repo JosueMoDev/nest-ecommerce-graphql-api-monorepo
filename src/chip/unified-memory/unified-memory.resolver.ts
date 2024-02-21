@@ -9,28 +9,28 @@ export class UnifiedMemoryResolver {
 
   @Mutation(() => UnifiedMemory)
   createUnifiedMemory(
-    @Args('createUndefinedMemoryInput')
+    @Args('createUnifiedMemoryInput')
     createUndefinedMemoryInput: CreateUnifiedMemoryInput,
   ) {
     return this.unifiedMemoryService.create(createUndefinedMemoryInput);
   }
 
-  @Query(() => [UnifiedMemory], { name: 'undefinedMemory' })
+  @Query(() => [UnifiedMemory], { name: 'unifiedMemories' })
   findAll() {
     return this.unifiedMemoryService.findAll();
   }
 
-  @Query(() => UnifiedMemory, { name: 'undefinedMemory' })
+  @Query(() => UnifiedMemory, { name: 'unifiedMemory' })
   findOne(@Args('id', { type: () => ID }) id: string) {
     return this.unifiedMemoryService.findOne(id);
   }
 
   @Mutation(() => UnifiedMemory)
   updateUnifiedMemory(
-    @Args('updateUndefinedMemoryInput')
-    updateUndefinedMemoryInput: UpdateUnifiedMemoryInput,
+    @Args('updateUnifedMemoryInput')
+    updateUnifiedMemoryInput: UpdateUnifiedMemoryInput,
   ) {
-    return this.unifiedMemoryService.update(updateUndefinedMemoryInput);
+    return this.unifiedMemoryService.update(updateUnifiedMemoryInput);
   }
 
   @Mutation(() => UnifiedMemory)

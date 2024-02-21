@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreateChipInput, UpdateChipInput } from './inputs';
 import { PrismaService } from 'src/prisma.service';
 import { ChipFamilyName, ChipGama, NeuralEngine } from './enums';
+import { StorageOnChip } from './entities/storage-on-chip.entity';
 
 @Injectable()
 export class ChipService {
@@ -117,12 +118,15 @@ export class ChipService {
     });
   }
 
-  findAll() {
-    return `This action returns all chip`;
+  async findAll() {
+    return await this.prismaService.chip.findMany({});
   }
 
   async findOne(id: string) {
-    return await this.prismaService.chip.findUnique({ where: { id } });
+    return await this.prismaService.chip.findUnique({
+      where: { id },
+      include: { storage: true, cpu: true, gpu: true, unifiedMemory: true },
+    });
   }
 
   update(updateChipInput: UpdateChipInput) {

@@ -198,7 +198,8 @@ type Query {
   cpu(id: ID!): Cpu!
   gpus: [Gpu!]!
   gpu(id: ID!): Gpu!
-  undefinedMemory(id: ID!): UnifiedMemory!
+  unifiedMemories: [UnifiedMemory!]!
+  unifiedMemory(id: ID!): UnifiedMemory!
 }
 
 type Mutation {
@@ -250,8 +251,8 @@ type Mutation {
   createGpu(createGpuInput: CreateGpuInput!): Gpu!
   updateGpu(updateGpuInput: UpdateGpuInput!): Gpu!
   removeGpu(id: ID!): Gpu!
-  createUnifiedMemory(createUndefinedMemoryInput: CreateUnifiedMemoryInput!): UnifiedMemory!
-  updateUnifiedMemory(updateUndefinedMemoryInput: UpdateUnifiedMemoryInput!): UnifiedMemory!
+  createUnifiedMemory(createUnifiedMemoryInput: CreateUnifiedMemoryInput!): UnifiedMemory!
+  updateUnifiedMemory(updateUnifedMemoryInput: UpdateUnifiedMemoryInput!): UnifiedMemory!
   removeUnifedMemory(id: ID!): UnifiedMemory!
 }
 
