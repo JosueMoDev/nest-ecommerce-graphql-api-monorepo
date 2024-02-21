@@ -1,8 +1,8 @@
 import { InputType, Field } from '@nestjs/graphql';
 import { ChipFamilyName, ChipGama, NeuralEngine } from '../enums';
 import { IsArray, IsEnum, IsNotEmpty } from 'class-validator';
-import { OnChipInput } from './storage-on-chip.input';
-import { OnChip } from '../intefaces/storageOnChip.interface';
+import { OnChipInput } from './on-chip.input';
+import { OnChip } from '../intefaces/OnChip.interface';
 import { Type } from 'class-transformer';
 
 @InputType()

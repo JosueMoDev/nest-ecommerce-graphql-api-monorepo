@@ -1,15 +1,15 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Color } from '../color/entities/color.entity';
-import { ProductPicture } from '../product-picture/entities/product-picture.entity';
-import { Product } from './product.entity';
+// import { Product } from './product.entity';
+import { PicturesByColor } from './pictures-by-color.entity';
 
 @ObjectType()
 export class ColorOnProduct {
   @Field(() => Color)
   color: Color;
 
-  @Field(() => Product)
-  product: Product;
+  @Field(() => [PicturesByColor])
+  picturesByColor: [PicturesByColor];
 
   @Field(() => Int)
   stock: number;

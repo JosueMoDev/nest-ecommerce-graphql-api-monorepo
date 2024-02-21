@@ -9,9 +9,4 @@ export class ProductPicture {
   @Field(() => String)
   url: string;
 
-  // * Relations
-
-  @Field(() => Product)
-  product: Product;
-
 }

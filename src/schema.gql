@@ -135,17 +135,6 @@ type SubCategory {
   category: Category!
 }
 
-type Product {
-  """Product"""
-  id: ID!
-  name: String!
-  description: String!
-  slug: String!
-  price: Float!
-  subCategory: SubCategory!
-  chip: Chip!
-}
-
 type Color {
   id: ID!
   name: String!
@@ -156,7 +145,29 @@ type Color {
 type ProductPicture {
   id: ID!
   url: String!
-  product: Product!
+}
+
+type PicturesByColor {
+  color: String!
+  pictures: [ProductPicture!]!
+}
+
+type ColorOnProduct {
+  color: Color!
+  picturesByColor: [PicturesByColor!]!
+  stock: Int!
+}
+
+type Product {
+  """Product"""
+  id: ID!
+  name: String!
+  description: String!
+  slug: String!
+  price: Float!
+  subCategory: SubCategory!
+  colorAndStock: [ColorOnProduct!]!
+  chip: Chip!
 }
 
 type TechSpec {
@@ -185,7 +196,6 @@ type Query {
   product(id: Int!): Product!
   colors: [Color!]!
   color(id: ID!): Color!
-  productPicture(id: Int!): ProductPicture!
   techSpecs: [TechSpec!]!
   techSpec(id: Int!): TechSpec!
   orderItem(id: Int!): OrderItem!
@@ -226,9 +236,6 @@ type Mutation {
   createColor(createColorInput: CreateColorInput!): Color!
   updateColor(updateColorInput: UpdateColorInput!): Color!
   removeColor(id: ID!): Color!
-  createProductPicture(createProductPictureInput: CreateProductPictureInput!): ProductPicture!
-  updateProductPicture(updateProductPictureInput: UpdateProductPictureInput!): ProductPicture!
-  removeProductPicture(id: Int!): ProductPicture!
   createTechSpec(createTechSpecInput: CreateTechSpecInput!): TechSpec!
   updateTechSpec(updateTechSpecInput: UpdateTechSpecInput!): TechSpec!
   removeTechSpec(id: Int!): TechSpec!
@@ -355,17 +362,6 @@ input UpdateColorInput {
   hexadecimalColor: String
   release: DateTime
   id: ID!
-}
-
-input CreateProductPictureInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateProductPictureInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
 }
 
 input CreateTechSpecInput {
