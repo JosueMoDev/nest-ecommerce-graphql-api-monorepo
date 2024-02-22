@@ -12,5 +12,5 @@ export class Color {
   hexadecimalColor: string;
 
   @Field(() => Date)
-  release: Date
+  release: Date;
 }

@@ -158,6 +158,10 @@ type ColorOnProduct {
   stock: Int!
 }
 
+type ColorAndStock {
+  colorAndStock: [ColorOnProduct!]!
+}
+
 type Product {
   """Product"""
   id: ID!
@@ -166,7 +170,7 @@ type Product {
   slug: String!
   price: Float!
   subCategory: SubCategory!
-  colorAndStock: [ColorOnProduct!]!
+  colorAndStock: [ColorAndStock!]
   chip: Chip!
 }
 
@@ -233,6 +237,7 @@ type Mutation {
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(updateProductInput: UpdateProductInput!): Product!
   removeProduct(id: Int!): Product!
+  createColorAndStock(createColorAndStock: CreateColorAndStockInput!): ColorAndStock!
   createColor(createColorInput: CreateColorInput!): Color!
   updateColor(updateColorInput: UpdateColorInput!): Color!
   removeColor(id: ID!): Color!
@@ -341,14 +346,33 @@ input UpdateOrderInput {
 }
 
 input CreateProductInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
+  description: String!
+  price: Float!
+  subCategoryId: ID!
+  techSpecsOnProductId: ID!
+  chipId: ID!
 }
 
 input UpdateProductInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  name: String
+  description: String
+  price: Float
+  subCategoryId: ID
+  techSpecsOnProductId: ID
+  chipId: ID
   id: Int!
+}
+
+input CreateColorAndStockInput {
+  productId: ID!
+  colorAndStock: [ColorAndStockInput!]!
+}
+
+input ColorAndStockInput {
+  colorId: ID!
+  picturesUrls: [String!]!
+  stock: Int!
 }
 
 input CreateColorInput {

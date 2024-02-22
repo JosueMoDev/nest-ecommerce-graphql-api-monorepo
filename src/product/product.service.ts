@@ -1,11 +1,103 @@
-import { Injectable } from '@nestjs/common';
-import { CreateProductInput } from './inputs/create-product.input';
-import { UpdateProductInput } from './inputs/update-product.input';
+import { Inject, Injectable } from '@nestjs/common';
+import {
+  CreateProductInput,
+  UpdateProductInput,
+  CreateColorAndStockInput,
+} from './inputs';
+import { PrismaService } from 'src/prisma.service';
+import { ColorOnProduct } from './entities/color-on-product.entity';
 
 @Injectable()
 export class ProductService {
-  create(createProductInput: CreateProductInput) {
-    return 'This action adds a new product';
+  constructor(
+    @Inject(PrismaService) private readonly prismaService: PrismaService,
+  ) {}
+  async subCategory(id: string) {
+    return await this.prismaService.product
+      .findUnique({
+        where: { id },
+      })
+      .subCategory();
+  }
+
+  async chip(id: string) {
+    return await this.prismaService.product
+      .findUnique({
+        where: { id },
+      })
+      .chip();
+  }
+
+  async colorAndStock(id: string) {
+    const response = await this.prismaService.product.findMany({
+      where: {
+        id,
+      },
+      select: {
+        productPicture: {
+          select: {
+            PictureByColorOnProduct: {
+              select: {
+                productPicture: {
+                  select: {
+                    url: true,
+                  },
+                },
+                colorProduct: {
+                  select: {
+                    hexadecimalColor: true,
+                    name: true,
+                    ColorOnProduct: {
+                      select: {
+                        stockByColor: true,
+                        color: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    return response;
+  }
+
+  async createProduct(createProductInput: CreateProductInput) {
+    return await this.prismaService.product.create({
+      data: {
+        ...createProductInput,
+        slug: '',
+      },
+    });
+  }
+
+  async createColorAndStock(
+    createColorAndStockInput: CreateColorAndStockInput,
+  ) {
+    const { colorAndStock } = createColorAndStockInput;
+    return await this.prismaService.product.update({
+      where: { id: createColorAndStockInput.productId },
+      data: {
+        ColorOnProduct: {
+          create: {
+            colorId: colorAndStock[0].colorId,
+            stockByColor: colorAndStock[0].stock,
+          },
+        },
+        productPicture: {
+          create: {
+            url: colorAndStock[0].picturesUrls[0],
+            PictureByColorOnProduct: {
+              create: {
+                colorProductId: colorAndStock[0].colorId,
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   findAll() {
