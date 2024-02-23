@@ -113,11 +113,11 @@ model UnifiedMemory {
 }
 
 model UnifiedMemoryOnChip {
-  chip              Chip          @relation(fields: [chipId], references: [id])
-  chipId            String
+  chip            Chip          @relation(fields: [chipId], references: [id])
+  chipId          String
   unifiedMemory   UnifiedMemory @relation(fields: [unifiedMemoryId], references: [id])
   unifiedMemoryId String
-  price             Float
+  price           Float
 
   @@id([unifiedMemoryId, chipId])
 }
@@ -145,7 +145,7 @@ model Chip {
   id             String                @id @default(uuid())
   neuralEngine   NeuralEngine[]
   chipFamilyName ChipFamilyName
-  name           String                 @unique()
+  name           String                @unique()
   gama           ChipGama
   // * Relations
   gpu            GpuOnChip[]
@@ -189,12 +189,12 @@ model TechSpecsOnProduct {
 }
 
 model Product {
-  id          String @id @default(uuid())
-  name        String @unique
+  id          String   @id @default(uuid())
+  name        String   @unique
   description String
-  slug        String @unique
-  price       Float  @default(0)
-  release DateTime @default(now())
+  slug        String   @unique
+  price       Float    @default(0)
+  release     DateTime @default(now())
 
   // * Relations
 
@@ -205,22 +205,22 @@ model Product {
   productPicture       ProductPicture[]
   techSpecsOnProduct   TechSpecsOnProduct @relation(fields: [techSpecsOnProductId], references: [id])
   techSpecsOnProductId String             @unique
-  ColorOnProduct       ColorOnProduct[]
+  stockByColor       StockByColor[]
   OrderItem            OrderItem[]
 }
 
 model Color {
-  id               String @id @default(uuid())
+  id               String   @id @default(uuid())
   name             String
-  hexadecimalColor String @unique
-  release DateTime @default(now())
+  hexadecimalColor String   @unique
+  release          DateTime @default(now())
   // * Relations
 
-  ColorOnProduct          ColorOnProduct[]
-  PictureByColorOnProduct PictureByColorOnProduct[]
+  ColorOnProduct          StockByColor[]
+  ProductPicture          ProductPicture[]
 }
 
-model ColorOnProduct {
+model StockByColor {
   product      Product @relation(fields: [productId], references: [id])
   productId    String
   color        Color   @relation(fields: [colorId], references: [id])
@@ -230,23 +230,17 @@ model ColorOnProduct {
   @@id([productId, colorId])
 }
 
-model PictureByColorOnProduct {
-  colorProduct     Color          @relation(fields: [colorProductId], references: [id])
-  colorProductId   String
-  productPicture   ProductPicture @relation(fields: [productPictureId], references: [id])
-  productPictureId String
-
-  @@id([colorProductId, productPictureId])
-}
 
 model ProductPicture {
   id  String @id @default(uuid())
   url String
   // * Relations
 
-  product                 Product                   @relation(fields: [productId], references: [id])
-  productId               String
-  PictureByColorOnProduct PictureByColorOnProduct[]
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  color                   Color                     @relation(fields: [colorId], references: [id])
+  colorId                 String
 }
 
 model User {

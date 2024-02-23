@@ -142,24 +142,15 @@ type Color {
   release: DateTime!
 }
 
+type StockByColor {
+  color: Color!
+  stockByColor: Int!
+}
+
 type ProductPicture {
   id: ID!
   url: String!
-}
-
-type PicturesByColor {
   color: String!
-  pictures: [ProductPicture!]!
-}
-
-type ColorOnProduct {
-  color: Color!
-  picturesByColor: [PicturesByColor!]!
-  stock: Int!
-}
-
-type ColorAndStock {
-  colorAndStock: [ColorOnProduct!]!
 }
 
 type Product {
@@ -170,7 +161,8 @@ type Product {
   slug: String!
   price: Float!
   subCategory: SubCategory!
-  colorAndStock: [ColorAndStock!]
+  stockByColor: [StockByColor!]
+  picturesByColor: [ProductPicture!]
   chip: Chip!
 }
 
@@ -197,7 +189,8 @@ type Query {
   shippingAddress(id: ID!): ShippingAddress!
   orders: [Order!]!
   order(id: Int!): Order!
-  product(id: Int!): Product!
+  products: [Product!]!
+  product(id: ID!): Product!
   colors: [Color!]!
   color(id: ID!): Color!
   techSpecs: [TechSpec!]!
@@ -237,7 +230,6 @@ type Mutation {
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(updateProductInput: UpdateProductInput!): Product!
   removeProduct(id: Int!): Product!
-  createColorAndStock(createColorAndStock: CreateColorAndStockInput!): ColorAndStock!
   createColor(createColorInput: CreateColorInput!): Color!
   updateColor(updateColorInput: UpdateColorInput!): Color!
   removeColor(id: ID!): Color!
@@ -362,17 +354,6 @@ input UpdateProductInput {
   techSpecsOnProductId: ID
   chipId: ID
   id: Int!
-}
-
-input CreateColorAndStockInput {
-  productId: ID!
-  colorAndStock: [ColorAndStockInput!]!
-}
-
-input ColorAndStockInput {
-  colorId: ID!
-  picturesUrls: [String!]!
-  stock: Int!
 }
 
 input CreateColorInput {

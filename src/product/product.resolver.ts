@@ -6,6 +6,7 @@ import {
   Int,
   ResolveField,
   Root,
+  ID,
 } from '@nestjs/graphql';
 import { ProductService } from './product.service';
 import { Product } from './entities/product.entity';
@@ -13,6 +14,7 @@ import { CreateProductInput } from './inputs/create-product.input';
 import { UpdateProductInput } from './inputs/update-product.input';
 import { SubCategory } from 'src/sub-category/entities/sub-category.entity';
 import { Chip } from 'src/chip/entities';
+import { ProductPicture, StockByColor } from './entities';
 
 @Resolver(() => Product)
 export class ProductResolver {
@@ -28,9 +30,14 @@ export class ProductResolver {
     return this.productService.chip(product.id);
   }
 
-  @ResolveField()
-  colorAndStock(@Root() product: Product) {
-    return this.productService.chip(product.id);
+  @ResolveField(() => [StockByColor])
+  stockByColor(@Root() product: Product) {
+    return this.productService.stockByColor(product.id);
+  }
+
+  @ResolveField(() => [ProductPicture])
+  picturesByColor(@Root() product: Product) {
+    return this.productService.picturesByColor(product.id);
   }
 
   @Mutation(() => Product)
@@ -40,13 +47,13 @@ export class ProductResolver {
     return this.productService.createProduct(createProductInput);
   }
 
-  @Query(() => [Product], { name: 'product' })
+  @Query(() => [Product], { name: 'products' })
   findAll() {
     return this.productService.findAll();
   }
 
   @Query(() => Product, { name: 'product' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }) id: string) {
     return this.productService.findOne(id);
   }
 

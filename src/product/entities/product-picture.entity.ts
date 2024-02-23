@@ -7,4 +7,7 @@ export class ProductPicture {
 
   @Field(() => String)
   url: string;
+
+  @Field(() => String)
+  color: string;
 }

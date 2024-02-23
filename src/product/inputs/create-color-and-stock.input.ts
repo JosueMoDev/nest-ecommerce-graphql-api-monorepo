@@ -1,5 +1,5 @@
 import { Field, Int, ID, InputType } from '@nestjs/graphql';
-import { ColorAndStock } from '../interfaces/color-and-stock.interface';
+import { CreateColorAndStock } from '../interfaces/color-and-stock.interface';
 import {
   IsInt,
   IsUUID,
@@ -38,5 +38,5 @@ export class CreateColorAndStockInput {
   @IsNotEmpty()
   @IsArray()
   @Field(() => [ColorAndStockInput])
-  colorAndStock: ColorAndStock[];
+  colorAndStock: CreateColorAndStock[];
 }

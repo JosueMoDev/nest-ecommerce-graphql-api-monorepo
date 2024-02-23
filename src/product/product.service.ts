@@ -5,7 +5,6 @@ import {
   CreateColorAndStockInput,
 } from './inputs';
 import { PrismaService } from 'src/prisma.service';
-import { ColorOnProduct } from './entities/color-on-product.entity';
 
 @Injectable()
 export class ProductService {
@@ -28,40 +27,38 @@ export class ProductService {
       .chip();
   }
 
-  async colorAndStock(id: string) {
-    const response = await this.prismaService.product.findMany({
+  async stockByColor(id: string) {
+    return await this.prismaService.stockByColor.findMany({
       where: {
-        id,
+        productId: id,
       },
       select: {
-        productPicture: {
+        stockByColor: true,
+        color: true,
+      },
+    });
+  }
+
+  async picturesByColor(id: string) {
+    return await this.prismaService.productPicture.findMany({
+      where: {
+        productId: id,
+      },
+      select: {
+        id: true,
+        url: true,
+        color: {
           select: {
-            PictureByColorOnProduct: {
-              select: {
-                productPicture: {
-                  select: {
-                    url: true,
-                  },
-                },
-                colorProduct: {
-                  select: {
-                    hexadecimalColor: true,
-                    name: true,
-                    ColorOnProduct: {
-                      select: {
-                        stockByColor: true,
-                        color: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
+            name: true,
           },
         },
       },
+      orderBy: {
+        color: {
+          name: 'desc',
+        },
+      },
     });
-    return response;
   }
 
   async createProduct(createProductInput: CreateProductInput) {
@@ -77,35 +74,39 @@ export class ProductService {
     createColorAndStockInput: CreateColorAndStockInput,
   ) {
     const { colorAndStock } = createColorAndStockInput;
+    const pictures = colorAndStock.flatMap(
+      ({ colorId, productId, picturesUrls }) =>
+        picturesUrls.map((url) => ({
+          colorId,
+          productId,
+          url,
+        })),
+    );
     return await this.prismaService.product.update({
       where: { id: createColorAndStockInput.productId },
       data: {
-        ColorOnProduct: {
-          create: {
-            colorId: colorAndStock[0].colorId,
-            stockByColor: colorAndStock[0].stock,
-          },
+        stockByColor: {
+          create: colorAndStock.map(({ stock, colorId }) => ({
+            stockByColor: stock,
+            colorId,
+          })),
         },
         productPicture: {
-          create: {
-            url: colorAndStock[0].picturesUrls[0],
-            PictureByColorOnProduct: {
-              create: {
-                colorProductId: colorAndStock[0].colorId,
-              },
-            },
-          },
+          create: pictures,
         },
       },
     });
+    return;
   }
 
   findAll() {
     return `This action returns all product`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: string) {
+    return await this.prismaService.product.findUnique({
+      where: { id },
+    });
   }
 
   update(id: number, updateProductInput: UpdateProductInput) {

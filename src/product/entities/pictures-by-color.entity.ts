@@ -4,8 +4,8 @@ import { ProductPicture } from './product-picture.entity';
 @ObjectType()
 export class PicturesByColor {
   @Field(() => String)
-  color: string;
+  colorName: string;
 
   @Field(() => [ProductPicture])
-  pictures: ProductPicture[];
+  productPictures: ProductPicture[];
 }
