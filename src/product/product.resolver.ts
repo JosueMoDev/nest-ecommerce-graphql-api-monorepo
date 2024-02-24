@@ -14,7 +14,8 @@ import { CreateProductInput } from './inputs/create-product.input';
 import { UpdateProductInput } from './inputs/update-product.input';
 import { SubCategory } from 'src/sub-category/entities/sub-category.entity';
 import { Chip } from 'src/chip/entities';
-import { ProductPicture, StockByColor } from './entities';
+import { PicturesByColor, StockByColor } from './entities';
+import { SetStockByColorInput, PictureByColorInput } from './inputs';
 
 @Resolver(() => Product)
 export class ProductResolver {
@@ -35,7 +36,7 @@ export class ProductResolver {
     return this.productService.stockByColor(product.id);
   }
 
-  @ResolveField(() => [ProductPicture])
+  @ResolveField(() => [PicturesByColor])
   picturesByColor(@Root() product: Product) {
     return this.productService.picturesByColor(product.id);
   }
@@ -45,6 +46,23 @@ export class ProductResolver {
     @Args('createProductInput') createProductInput: CreateProductInput,
   ) {
     return this.productService.createProduct(createProductInput);
+  }
+
+  @Mutation(() => Product)
+  setStockByColor(
+    @Args('stockByColorInput')
+    setStockByColorInput: SetStockByColorInput,
+  ) {
+    return this.productService.setStockByColor(setStockByColorInput);
+  }
+
+  @Mutation(() => Product)
+  uploadPicturesByColor(
+    @Args('picturesByColor')
+    picturesByColor: PictureByColorInput,
+    @Args('productId', { type: () => ID }) id: string,
+  ) {
+    return this.productService.uploadPicturesByColor(id, picturesByColor);
   }
 
   @Query(() => [Product], { name: 'products' })

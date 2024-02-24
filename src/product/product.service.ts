@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
   CreateProductInput,
+  PictureByColorInput,
+  SetStockByColorInput,
   UpdateProductInput,
-  CreateColorAndStockInput,
 } from './inputs';
 import { PrismaService } from 'src/prisma.service';
 
@@ -33,7 +34,7 @@ export class ProductService {
         productId: id,
       },
       select: {
-        stockByColor: true,
+        stock: true,
         color: true,
       },
     });
@@ -70,33 +71,45 @@ export class ProductService {
     });
   }
 
-  async createColorAndStock(
-    createColorAndStockInput: CreateColorAndStockInput,
-  ) {
-    const { colorAndStock } = createColorAndStockInput;
-    const pictures = colorAndStock.flatMap(
-      ({ colorId, productId, picturesUrls }) =>
-        picturesUrls.map((url) => ({
-          colorId,
-          productId,
-          url,
-        })),
-    );
+  async setStockByColor(setStockByColorInput: SetStockByColorInput) {
+    const { colorAndStock } = setStockByColorInput;
     return await this.prismaService.product.update({
-      where: { id: createColorAndStockInput.productId },
+      where: { id: setStockByColorInput.productId },
       data: {
         stockByColor: {
           create: colorAndStock.map(({ stock, colorId }) => ({
-            stockByColor: stock,
+            stock,
             colorId,
           })),
         },
+      },
+    });
+  }
+
+  async uploadPicturesByColor(
+    id: string,
+    picturesByColor: PictureByColorInput,
+  ) {
+    const productPictures = picturesByColor.productPictures.flatMap(
+      ({ colorId, urls }) =>
+        urls.map((url) => ({
+          colorId,
+          productId: id,
+          url,
+        })),
+    );
+    console.log(productPictures);
+    return await this.prismaService.product.update({
+      where: { id },
+      data: {
         productPicture: {
-          create: pictures,
+          create: {
+            colorId: picturesByColor.productPictures[0].colorId,
+            url: picturesByColor.productPictures[0].urls[0],
+          },
         },
       },
     });
-    return;
   }
 
   findAll() {

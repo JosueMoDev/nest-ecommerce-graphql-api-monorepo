@@ -2,7 +2,7 @@ import { ObjectType, Field, Float, ID } from '@nestjs/graphql';
 import { Chip } from 'src/chip/entities/chip.entity';
 import { SubCategory } from 'src/sub-category/entities/sub-category.entity';
 import { StockByColor } from './stock-by-color.entity';
-import { ProductPicture } from './product-picture.entity';
+import { PicturesByColor } from './pictures-by-color.entity';
 
 @ObjectType()
 export class Product {
@@ -27,8 +27,8 @@ export class Product {
   @Field(() => [StockByColor], { nullable: true })
   stockByColor?: StockByColor[] | null;
 
-  @Field(() => [ProductPicture], { nullable: true })
-  picturesByColor?: ProductPicture[] | null;
+  @Field(() => [PicturesByColor], { nullable: true })
+  picturesByColor?: PicturesByColor[] | null;
 
   @Field(() => Chip)
   chip: Chip;

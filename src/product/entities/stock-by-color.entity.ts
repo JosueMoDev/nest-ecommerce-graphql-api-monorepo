@@ -7,5 +7,5 @@ export class StockByColor {
   color: Color;
 
   @Field(() => Int)
-  stockByColor: number;
+  stock: number;
 }

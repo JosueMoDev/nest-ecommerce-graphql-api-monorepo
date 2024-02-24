@@ -202,10 +202,10 @@ model Product {
   chipId               String
   subCategory          SubCategory        @relation(fields: [subCategoryId], references: [id])
   subCategoryId        String             @unique
-  productPicture       ProductPicture[]
+  productPicture       ProductPicture[]   @relation("productOnPicture")
   techSpecsOnProduct   TechSpecsOnProduct @relation(fields: [techSpecsOnProductId], references: [id])
   techSpecsOnProductId String             @unique
-  stockByColor       StockByColor[]
+  stockByColor         StockByColor[]     @relation("productOnStock")
   OrderItem            OrderItem[]
 }
 
@@ -216,31 +216,30 @@ model Color {
   release          DateTime @default(now())
   // * Relations
 
-  ColorOnProduct          StockByColor[]
-  ProductPicture          ProductPicture[]
+  ColorOnProduct StockByColor[]
+  ProductPicture ProductPicture[]
 }
 
 model StockByColor {
-  product      Product @relation(fields: [productId], references: [id])
-  productId    String
-  color        Color   @relation(fields: [colorId], references: [id])
-  colorId      String
-  stockByColor Int
+  product   Product @relation("productOnStock", fields: [productId], references: [id])
+  productId String
+  color     Color   @relation(fields: [colorId], references: [id])
+  colorId   String
+  stock     Int
 
   @@id([productId, colorId])
 }
-
 
 model ProductPicture {
   id  String @id @default(uuid())
   url String
   // * Relations
 
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation("productOnPicture", fields: [productId], references: [id])
   productId String
 
-  color                   Color                     @relation(fields: [colorId], references: [id])
-  colorId                 String
+  color   Color  @relation(fields: [colorId], references: [id])
+  colorId String
 }
 
 model User {

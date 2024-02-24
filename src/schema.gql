@@ -144,13 +144,17 @@ type Color {
 
 type StockByColor {
   color: Color!
-  stockByColor: Int!
+  stock: Int!
 }
 
 type ProductPicture {
   id: ID!
   url: String!
+}
+
+type PicturesByColor {
   color: String!
+  productPictures: [ProductPicture!]!
 }
 
 type Product {
@@ -162,7 +166,7 @@ type Product {
   price: Float!
   subCategory: SubCategory!
   stockByColor: [StockByColor!]
-  picturesByColor: [ProductPicture!]
+  picturesByColor: [PicturesByColor!]
   chip: Chip!
 }
 
@@ -228,6 +232,8 @@ type Mutation {
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
   removeOrder(id: Int!): Order!
   createProduct(createProductInput: CreateProductInput!): Product!
+  setStockByColor(stockByColorInput: SetStockByColorInput!): Product!
+  uploadPicturesByColor(picturesByColor: PictureByColorInput!, productId: ID!): Product!
   updateProduct(updateProductInput: UpdateProductInput!): Product!
   removeProduct(id: Int!): Product!
   createColor(createColorInput: CreateColorInput!): Color!
@@ -344,6 +350,25 @@ input CreateProductInput {
   subCategoryId: ID!
   techSpecsOnProductId: ID!
   chipId: ID!
+}
+
+input SetStockByColorInput {
+  productId: ID!
+  colorAndStock: [ColorAndStockInput!]!
+}
+
+input ColorAndStockInput {
+  colorId: ID!
+  stock: Int!
+}
+
+input PictureByColorInput {
+  productPictures: [PicturesUrl!]!
+}
+
+input PicturesUrl {
+  urls: [String!]!
+  colorId: ID!
 }
 
 input UpdateProductInput {
