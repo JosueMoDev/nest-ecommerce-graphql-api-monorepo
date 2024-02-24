@@ -6,6 +6,7 @@ import {
   UpdateProductInput,
 } from './inputs';
 import { PrismaService } from 'src/prisma.service';
+import { PicturesByColorMapper } from './mappers/pictures-by-color.mapper';
 
 @Injectable()
 export class ProductService {
@@ -41,7 +42,7 @@ export class ProductService {
   }
 
   async picturesByColor(id: string) {
-    return await this.prismaService.productPicture.findMany({
+    const response = await this.prismaService.productPicture.findMany({
       where: {
         productId: id,
       },
@@ -60,6 +61,7 @@ export class ProductService {
         },
       },
     });
+    return PicturesByColorMapper.fromObject(response);
   }
 
   async createProduct(createProductInput: CreateProductInput) {
@@ -94,19 +96,14 @@ export class ProductService {
       ({ colorId, urls }) =>
         urls.map((url) => ({
           colorId,
-          productId: id,
           url,
         })),
     );
-    console.log(productPictures);
     return await this.prismaService.product.update({
       where: { id },
       data: {
         productPicture: {
-          create: {
-            colorId: picturesByColor.productPictures[0].colorId,
-            url: picturesByColor.productPictures[0].urls[0],
-          },
+          create: productPictures,
         },
       },
     });
