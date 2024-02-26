@@ -43,19 +43,27 @@ type ShippingAddress {
   country: Country!
 }
 
+type OrderItem {
+  """Order Item Id"""
+  id: ID!
+  quantity: Int!
+  product: String!
+}
+
 type Order {
   id: ID!
   subTotal: Float!
   tax: Float!
   total: Float!
-  itemsInOrder: Int!
+  totalOfItems: Int!
   isPaid: Boolean!
-  paidAt: DateTime!
+  paidAt: DateTime
   createdAt: DateTime!
-  updatedAt: DateTime!
-  transactionId: String!
+  updatedAt: DateTime
+  transactionId: String
   user: User!
-  shippingAddress: ShippingAddress
+  shippingAddress: ShippingAddress!
+  itemsInOrder: [OrderItem!]!
 }
 
 type Cpu {
@@ -143,6 +151,7 @@ type Color {
 }
 
 type StockByColor {
+  id: ID!
   color: Color!
   stock: Int!
 }
@@ -176,15 +185,6 @@ type TechSpec {
   subCategory: SubCategory!
 }
 
-type OrderItem {
-  """Order Item Id"""
-  id: ID!
-  quantity: Int!
-  price: Float!
-  product: Product!
-  order: Order!
-}
-
 type Query {
   authentication(id: Int!): Authentication!
   users: [User!]!
@@ -192,14 +192,13 @@ type Query {
   shippingAddresses: [ShippingAddress!]!
   shippingAddress(id: ID!): ShippingAddress!
   orders: [Order!]!
-  order(id: Int!): Order!
+  order(id: ID!): Order!
   products: [Product!]!
   product(id: ID!): Product!
   colors: [Color!]!
   color(id: ID!): Color!
   techSpecs: [TechSpec!]!
   techSpec(id: Int!): TechSpec!
-  orderItem(id: Int!): OrderItem!
   category(id: Int!): Category!
   subCategories: [SubCategory!]!
   subCategory(id: ID!): SubCategory!
@@ -230,7 +229,7 @@ type Mutation {
   removeShippingAddress(id: Int!): ShippingAddress!
   createOrder(createOrderInput: CreateOrderInput!): Order!
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
-  removeOrder(id: Int!): Order!
+  removeOrder(id: ID!): Order!
   createProduct(createProductInput: CreateProductInput!): Product!
   setStockByColor(stockByColorInput: SetStockByColorInput!): Product!
   uploadPicturesByColor(picturesByColor: PictureByColorInput!, productId: ID!): Product!
@@ -242,9 +241,6 @@ type Mutation {
   createTechSpec(createTechSpecInput: CreateTechSpecInput!): TechSpec!
   updateTechSpec(updateTechSpecInput: UpdateTechSpecInput!): TechSpec!
   removeTechSpec(id: Int!): TechSpec!
-  createOrderItem(createOrderItemInput: CreateOrderItemInput!): OrderItem!
-  updateOrderItem(updateOrderItemInput: UpdateOrderItemInput!): OrderItem!
-  removeOrderItem(id: Int!): OrderItem!
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   removeCategory(id: Int!): Category!
@@ -333,13 +329,21 @@ input UpdateShippingAddressInput {
 }
 
 input CreateOrderInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  userId: ID!
+  shippingAddressId: ID!
+  itemsInOrder: [ItemInOrder!]!
+}
+
+input ItemInOrder {
+  productId: ID!
+  stockId: ID!
+  quantity: Int!
 }
 
 input UpdateOrderInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  userId: ID
+  shippingAddressId: ID
+  itemsInOrder: [ItemInOrder!]
   id: Int!
 }
 
@@ -400,17 +404,6 @@ input CreateTechSpecInput {
 }
 
 input UpdateTechSpecInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input CreateOrderItemInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateOrderItemInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!

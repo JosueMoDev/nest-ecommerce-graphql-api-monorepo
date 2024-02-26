@@ -10,7 +10,6 @@ import { UsersModule } from './users/users.module';
 import { ShippingAddressModule } from './shipping-address/shipping-address.module';
 import { OrdersModule } from './orders/orders.module';
 import { ProductModule } from './product/product.module';
-import { OrderItemModule } from './order-item/order-item.module';
 import { CategoryModule } from './category/category.module';
 import { SubCategoryModule } from './sub-category/sub-category.module';
 import { ChipModule } from './chip/chip.module';
@@ -41,7 +40,6 @@ import { ChipModule } from './chip/chip.module';
     ShippingAddressModule,
     OrdersModule,
     ProductModule,
-    OrderItemModule,
     CategoryModule,
     SubCategoryModule,
     ChipModule,

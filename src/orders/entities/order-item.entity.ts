@@ -1,7 +1,6 @@
-import { ObjectType, Field, Int, ID, Float } from '@nestjs/graphql';
+import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 // import { ProductDetails } from '../interfaces/productDetails.inteface';
 import { Product } from 'src/product/entities/product.entity';
-import { Order } from 'src/orders/entities/order.entity';
 
 @ObjectType()
 export class OrderItem {
@@ -11,16 +10,19 @@ export class OrderItem {
   @Field(() => Int)
   quantity: number;
 
-  @Field(() => Float)
-  price: number;
   //TODO implement a class to type and validate 'productDetails'
   // @Field(() => ProductDetails)
   // productDetails?: ProductDetails;
+  // productDetails: {
+  //   chip: "M1 Base",
+  //   storage: {
+  //     capacity: "256gb",
+  //     price: 0,
+  //   },
+  //   unifiedMemory: {},
 
+  // }
   // * Relations
-  @Field(() => Product)
-  product: Product;
-
-  @Field(() => Order)
-  order: Order;
+  @Field(() => String)
+  product: string;
 }

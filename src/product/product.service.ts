@@ -35,6 +35,7 @@ export class ProductService {
         productId: id,
       },
       select: {
+        id: true,
         stock: true,
         color: true,
       },

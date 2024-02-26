@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int, ID, Float } from '@nestjs/graphql';
 import { ShippingAddress } from 'src/shipping-address/entities/shipping-address.entity';
 import { User } from 'src/users/entities/user.entity';
+import { OrderItem } from './order-item.entity';
 
 @ObjectType()
 export class Order {
@@ -17,27 +18,30 @@ export class Order {
   total: number;
 
   @Field(() => Int)
-  itemsInOrder: number;
+  totalOfItems: number;
 
   @Field(() => Boolean)
   isPaid: boolean;
 
-  @Field(() => Date)
-  paidAt: Date;
+  @Field(() => Date, { nullable: true })
+  paidAt: Date | null;
 
   @Field(() => Date)
   createdAt: Date;
 
-  @Field(() => Date)
-  updatedAt: Date;
+  @Field(() => Date, { nullable: true })
+  updatedAt: Date | null;
 
-  @Field(() => String)
-  transactionId: string;
+  @Field(() => String, { nullable: true })
+  transactionId: string | null;
 
   // * Relations
   @Field(() => User)
   user: User;
 
-  @Field(() => ShippingAddress, { nullable: true })
-  shippingAddress?: ShippingAddress | null;
+  @Field(() => ShippingAddress)
+  shippingAddress: ShippingAddress;
+
+  @Field(() => [OrderItem])
+  itemsInOrder: OrderItem[];
 }
