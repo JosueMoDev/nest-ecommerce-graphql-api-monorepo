@@ -30,6 +30,6 @@ export class Product {
   @Field(() => [PicturesByColor], { nullable: true })
   picturesByColor?: PicturesByColor[] | null;
 
-  @Field(() => Chip)
-  chip: Chip;
+  @Field(() => Chip, { nullable: true })
+  chip?: Chip | null;
 }

@@ -1,5 +1,12 @@
 import { InputType, Field, Float, ID } from '@nestjs/graphql';
-import { IsNotEmpty, IsNumber, IsString, IsUUID, Min } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsUUID,
+  Min,
+  IsOptional,
+} from 'class-validator';
 
 @InputType()
 export class CreateProductInput {
@@ -29,8 +36,8 @@ export class CreateProductInput {
   @Field(() => ID)
   techSpecsOnProductId: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsUUID()
-  @Field(() => ID)
-  chipId: string;
+  @Field(() => ID, { nullable: true })
+  chipId?: string | null;
 }

@@ -176,7 +176,7 @@ type Product {
   subCategory: SubCategory!
   stockByColor: [StockByColor!]
   picturesByColor: [PicturesByColor!]
-  chip: Chip!
+  chip: Chip
 }
 
 type TechSpec {
@@ -353,7 +353,7 @@ input CreateProductInput {
   price: Float!
   subCategoryId: ID!
   techSpecsOnProductId: ID!
-  chipId: ID!
+  chipId: ID
 }
 
 input SetStockByColorInput {
