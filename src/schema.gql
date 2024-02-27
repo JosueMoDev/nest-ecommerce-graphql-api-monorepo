@@ -24,7 +24,7 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Country {
-  """Shipping id"""
+  """Country id"""
   id: String!
   name: String!
 }
@@ -66,8 +66,31 @@ type Order {
   itemsInOrder: [OrderItem!]!
 }
 
+type Color {
+  id: ID!
+  name: String!
+  hexadecimalColor: String!
+  release: DateTime!
+}
+
+type StockByColor {
+  id: ID!
+  color: Color!
+  stock: Int!
+}
+
+type ProductPicture {
+  id: ID!
+  url: String!
+}
+
+type PicturesByColor {
+  color: String!
+  productPictures: [ProductPicture!]!
+}
+
 type Cpu {
-  """Storage ID"""
+  """CPU ID"""
   id: ID!
   cores: Int!
 }
@@ -79,12 +102,12 @@ type CpuOnChip {
 }
 
 type Gpu {
-  """Storage ID"""
+  """GPU ID"""
   id: ID!
   cores: Int!
 }
 
-"""Cpu On Chip"""
+"""Gpu On Chip"""
 type GpuOnChip {
   gpu: Gpu!
   price: Float!
@@ -104,12 +127,12 @@ type StorageOnChip {
 }
 
 type UnifiedMemory {
-  """Undefined Memory ID"""
+  """Unified Memory ID"""
   id: ID!
   capacity: Int!
 }
 
-"""Undefined Memory On Chip"""
+"""Unified Memory On Chip"""
 type UnifedMemoryOnChip {
   unifiedMemory: UnifiedMemory!
   price: Float!
@@ -141,29 +164,6 @@ type SubCategory {
   gender: String!
   isActive: Boolean
   category: Category!
-}
-
-type Color {
-  id: ID!
-  name: String!
-  hexadecimalColor: String!
-  release: DateTime!
-}
-
-type StockByColor {
-  id: ID!
-  color: Color!
-  stock: Int!
-}
-
-type ProductPicture {
-  id: ID!
-  url: String!
-}
-
-type PicturesByColor {
-  color: String!
-  productPictures: [ProductPicture!]!
 }
 
 type Product {
@@ -199,7 +199,7 @@ type Query {
   color(id: ID!): Color!
   techSpecs: [TechSpec!]!
   techSpec(id: Int!): TechSpec!
-  category(id: Int!): Category!
+  category(id: ID!): Category!
   subCategories: [SubCategory!]!
   subCategory(id: ID!): SubCategory!
   chips: [Chip!]!
@@ -226,7 +226,7 @@ type Mutation {
   toggleActiveStatus(email: String!): User!
   createShippingAddress(createShippingAddressInput: CreateShippingAddressInput!): ShippingAddress!
   updateShippingAddress(updateShippingAddressInput: UpdateShippingAddressInput!): ShippingAddress!
-  removeShippingAddress(id: Int!): ShippingAddress!
+  removeShippingAddress(id: ID!): ShippingAddress!
   createOrder(createOrderInput: CreateOrderInput!): Order!
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
   removeOrder(id: ID!): Order!
@@ -234,7 +234,7 @@ type Mutation {
   setStockByColor(stockByColorInput: SetStockByColorInput!): Product!
   uploadPicturesByColor(picturesByColor: PictureByColorInput!, productId: ID!): Product!
   updateProduct(updateProductInput: UpdateProductInput!): Product!
-  removeProduct(id: Int!): Product!
+  removeProduct(id: ID!): Product!
   createColor(createColorInput: CreateColorInput!): Color!
   updateColor(updateColorInput: UpdateColorInput!): Color!
   removeColor(id: ID!): Color!
@@ -243,7 +243,7 @@ type Mutation {
   removeTechSpec(id: Int!): TechSpec!
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
-  removeCategory(id: Int!): Category!
+  removeCategory(id: ID!): Category!
   createSubCategory(createSubCategoryInput: CreateSubCategoryInput!): SubCategory!
   updateSubCategory(updateSubCategoryInput: UpdateSubCategoryInput!): SubCategory!
   toggleSubCategoryStatus(id: ID!): SubCategory!
@@ -489,6 +489,7 @@ enum NeuralEngine {
 }
 
 input OnChipInput {
+  """Could be Storage, Cpu, Gpu or Unified Memory Id"""
   id: ID!
   price: Float!
 }

@@ -8,12 +8,8 @@ import {
   Root,
 } from '@nestjs/graphql';
 import { OrdersService } from './orders.service';
-import { Order } from './entities/order.entity';
-import { CreateOrderInput } from './inputs/create-order.input';
-import { UpdateOrderInput } from './inputs/update-order.input';
-import { User } from 'src/users/entities/user.entity';
-import { ShippingAddress } from 'src/shipping-address/entities';
-import { OrderItem } from './entities/order-item.entity';
+import { Order, OrderItem, User, ShippingAddress } from './entities';
+import { CreateOrderInput, UpdateOrderInput } from './inputs';
 
 @Resolver(() => Order)
 export class OrdersResolver {

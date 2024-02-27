@@ -11,13 +11,10 @@ import { SubCategoryService } from './sub-category.service';
 import { SubCategory } from './entities/sub-category.entity';
 import { CreateSubCategoryInput, UpdateSubCategoryInput } from './inputs';
 
-
 @Resolver(() => SubCategory)
 export class SubCategoryResolver {
-  constructor(
-    private readonly subCategoryService: SubCategoryService,
-  ) {}
-  
+  constructor(private readonly subCategoryService: SubCategoryService) {}
+
   @ResolveField()
   category(@Root() subCategory: SubCategory) {
     return this.subCategoryService.category(subCategory.id);
@@ -27,7 +24,7 @@ export class SubCategoryResolver {
   createSubCategory(
     @Args('createSubCategoryInput')
     createSubCategoryInput: CreateSubCategoryInput,
-  ){
+  ) {
     return this.subCategoryService.create(createSubCategoryInput);
   }
 

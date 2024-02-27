@@ -1,4 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import {
   CreateProductInput,
   PictureByColorInput,
@@ -14,100 +18,128 @@ export class ProductService {
     @Inject(PrismaService) private readonly prismaService: PrismaService,
   ) {}
   async subCategory(id: string) {
-    return await this.prismaService.product
-      .findUnique({
-        where: { id },
-      })
-      .subCategory();
+    try {
+      return await this.prismaService.product
+        .findUnique({
+          where: { id },
+        })
+        .subCategory();
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async chip(id: string) {
-    return await this.prismaService.product
-      .findUnique({
-        where: { id },
-      })
-      .chip();
+    try {
+      return await this.prismaService.product
+        .findUnique({
+          where: { id },
+        })
+        .chip();
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async stockByColor(id: string) {
-    return await this.prismaService.stockByColor.findMany({
-      where: {
-        productId: id,
-      },
-      select: {
-        id: true,
-        stock: true,
-        color: true,
-      },
-    });
+    try {
+      return await this.prismaService.stockByColor.findMany({
+        where: {
+          productId: id,
+        },
+        select: {
+          id: true,
+          stock: true,
+          color: true,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async picturesByColor(id: string) {
-    const response = await this.prismaService.productPicture.findMany({
-      where: {
-        productId: id,
-      },
-      select: {
-        id: true,
-        url: true,
-        color: {
-          select: {
-            name: true,
+    try {
+      const response = await this.prismaService.productPicture.findMany({
+        where: {
+          productId: id,
+        },
+        select: {
+          id: true,
+          url: true,
+          color: {
+            select: {
+              name: true,
+            },
           },
         },
-      },
-      orderBy: {
-        color: {
-          name: 'desc',
+        orderBy: {
+          color: {
+            name: 'desc',
+          },
         },
-      },
-    });
-    return PicturesByColorMapper.fromObject(response);
+      });
+      return PicturesByColorMapper.fromObject(response);
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async createProduct(createProductInput: CreateProductInput) {
-    return await this.prismaService.product.create({
-      data: {
-        ...createProductInput,
-        slug: '',
-      },
-    });
+    try {
+      return await this.prismaService.product.create({
+        data: {
+          ...createProductInput,
+          slug: '',
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async setStockByColor(setStockByColorInput: SetStockByColorInput) {
-    const { colorAndStock } = setStockByColorInput;
-    return await this.prismaService.product.update({
-      where: { id: setStockByColorInput.productId },
-      data: {
-        stockByColor: {
-          create: colorAndStock.map(({ stock, colorId }) => ({
-            stock,
-            colorId,
-          })),
+    try {
+      const { colorAndStock } = setStockByColorInput;
+      return await this.prismaService.product.update({
+        where: { id: setStockByColorInput.productId },
+        data: {
+          stockByColor: {
+            create: colorAndStock.map(({ stock, colorId }) => ({
+              stock,
+              colorId,
+            })),
+          },
         },
-      },
-    });
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async uploadPicturesByColor(
     id: string,
     picturesByColor: PictureByColorInput,
   ) {
-    const productPictures = picturesByColor.productPictures.flatMap(
-      ({ colorId, urls }) =>
-        urls.map((url) => ({
-          colorId,
-          url,
-        })),
-    );
-    return await this.prismaService.product.update({
-      where: { id },
-      data: {
-        productPicture: {
-          create: productPictures,
+    try {
+      const productPictures = picturesByColor.productPictures.flatMap(
+        ({ colorId, urls }) =>
+          urls.map((url) => ({
+            colorId,
+            url,
+          })),
+      );
+      return await this.prismaService.product.update({
+        where: { id },
+        data: {
+          productPicture: {
+            create: productPictures,
+          },
         },
-      },
-    });
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   findAll() {
@@ -115,16 +147,20 @@ export class ProductService {
   }
 
   async findOne(id: string) {
-    return await this.prismaService.product.findUnique({
-      where: { id },
-    });
+    try {
+      return await this.prismaService.product.findUnique({
+        where: { id },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
-  update(id: number, updateProductInput: UpdateProductInput) {
-    return `This action updates a #${id} product`;
+  update(updateProductInput: UpdateProductInput) {
+    return `This action updates a product`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} product`;
   }
 }

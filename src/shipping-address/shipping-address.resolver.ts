@@ -3,15 +3,16 @@ import {
   Query,
   Mutation,
   Args,
-  Int,
   ID,
   ResolveField,
   Root,
 } from '@nestjs/graphql';
 import { ShippingAddressService } from './shipping-address.service';
 import { ShippingAddress } from './entities/shipping-address.entity';
-import { CreateShippingAddressInput } from './inputs/create-shipping-address.input';
-import { UpdateShippingAddressInput } from './inputs/update-shipping-address.input';
+import {
+  CreateShippingAddressInput,
+  UpdateShippingAddressInput,
+} from './inputs';
 
 @Resolver(() => ShippingAddress)
 export class ShippingAddressResolver {
@@ -56,7 +57,7 @@ export class ShippingAddressResolver {
   }
 
   @Mutation(() => ShippingAddress)
-  removeShippingAddress(@Args('id', { type: () => Int }) id: number) {
+  removeShippingAddress(@Args('id', { type: () => ID }) id: string) {
     return this.shippingAddressService.remove(id);
   }
 }

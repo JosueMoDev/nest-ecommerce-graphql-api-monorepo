@@ -1,8 +1,7 @@
 import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { StorageService } from './storage.service';
 import { Storage } from './entities/storage.entity';
-import { CreateStorageInput } from './inputs/create-storage.input';
-import { UpdateStorageInput } from './inputs/update-storage.input';
+import { CreateStorageInput, UpdateStorageInput } from './inputs';
 
 @Resolver(() => Storage)
 export class StorageResolver {

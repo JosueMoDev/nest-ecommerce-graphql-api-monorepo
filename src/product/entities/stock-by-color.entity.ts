@@ -5,6 +5,7 @@ import { Color } from '../color/entities/color.entity';
 export class StockByColor {
   @Field(() => ID)
   id: string;
+
   @Field(() => Color)
   color: Color;
 

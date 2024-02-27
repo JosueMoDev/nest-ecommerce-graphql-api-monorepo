@@ -1,8 +1,7 @@
-import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { ColorService } from './color.service';
 import { Color } from './entities/color.entity';
-import { CreateColorInput } from './inputs/create-color.input';
-import { UpdateColorInput } from './inputs/update-color.input';
+import { CreateColorInput, UpdateColorInput } from './inputs';
 
 @Resolver(() => Color)
 export class ColorResolver {

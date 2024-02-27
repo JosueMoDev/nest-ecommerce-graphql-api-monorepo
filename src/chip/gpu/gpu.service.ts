@@ -1,6 +1,10 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateGpuInput } from './inputs/create-gpu.input';
-import { UpdateGpuInput } from './inputs/update-gpu.input';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { CreateGpuInput, UpdateGpuInput } from './inputs';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
@@ -10,9 +14,13 @@ export class GpuService {
   ) {}
 
   async create(createGpuInput: CreateGpuInput) {
-    return await this.prismaService.gpu.create({
-      data: { ...createGpuInput },
-    });
+    try {
+      return await this.prismaService.gpu.create({
+        data: { ...createGpuInput },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async findAll() {
@@ -20,19 +28,28 @@ export class GpuService {
   }
 
   async findOne(id: string) {
-    const gpu = await this.prismaService.gpu.findUnique({
-      where: { id },
-    });
-    if (!gpu) throw new NotFoundException('Not Found');
-    return gpu;
+    try {
+      const gpu = await this.prismaService.gpu.findUnique({
+        where: { id },
+      });
+      if (!gpu) throw new NotFoundException('Not Found');
+      return gpu;
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async update(updateGpuInput: UpdateGpuInput) {
-    const { id, ...rest } = updateGpuInput;
-    return await this.prismaService.gpu.update({
-      where: { id },
-      data: { ...rest },
-    });
+    try {
+      const { id, cores } = updateGpuInput;
+      await this.findOne(id);
+      return await this.prismaService.gpu.update({
+        where: { id },
+        data: { cores },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   remove(id: string) {

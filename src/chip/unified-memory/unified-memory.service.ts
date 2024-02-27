@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUnifiedMemoryInput, UpdateUnifiedMemoryInput } from './inputs';
 import { PrismaService } from 'src/prisma.service';
 
@@ -9,9 +14,13 @@ export class UnifiedMemoryService {
   ) {}
 
   async create(createUnifiedMemoryInput: CreateUnifiedMemoryInput) {
-    return await this.prismaService.unifiedMemory.create({
-      data: { ...createUnifiedMemoryInput },
-    });
+    try {
+      return await this.prismaService.unifiedMemory.create({
+        data: { ...createUnifiedMemoryInput },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async findAll() {
@@ -19,19 +28,28 @@ export class UnifiedMemoryService {
   }
 
   async findOne(id: string) {
-    const unifiedMemory = await this.prismaService.unifiedMemory.findUnique({
-      where: { id },
-    });
-    if (!unifiedMemory) throw new NotFoundException('Not Found');
-    return unifiedMemory;
+    try {
+      const unifiedMemory = await this.prismaService.unifiedMemory.findUnique({
+        where: { id },
+      });
+      if (!unifiedMemory) throw new NotFoundException('Not Found');
+      return unifiedMemory;
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async update(updateUnifiedMemoryInput: UpdateUnifiedMemoryInput) {
-    const { id, ...rest } = updateUnifiedMemoryInput;
-    return await this.prismaService.unifiedMemory.update({
-      where: { id },
-      data: { ...rest },
-    });
+    try {
+      const { id, capacity } = updateUnifiedMemoryInput;
+      await this.findOne(id);
+      return await this.prismaService.unifiedMemory.update({
+        where: { id },
+        data: { capacity },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   remove(id: string) {

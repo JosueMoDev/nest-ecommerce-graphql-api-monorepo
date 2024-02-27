@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateSubCategoryInput } from './inputs/create-sub-category.input';
 import { UpdateSubCategoryInput } from './inputs/update-sub-category.input';
 import { PrismaService } from 'src/prisma.service';
@@ -11,32 +16,40 @@ export class SubCategoryService {
   ) {}
 
   async category(subCategoryId: string) {
-    return this.prismaService.subCategory
-      .findUnique({
-        where: {
-          id: subCategoryId,
-        },
-      })
-      .category();
+    try {
+      return this.prismaService.subCategory
+        .findUnique({
+          where: {
+            id: subCategoryId,
+          },
+        })
+        .category();
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async create(createSubCategoryInput: CreateSubCategoryInput) {
-    const slug = createSubCategoryInput.name
-      .split(' ')
-      .map((word) => word.toLowerCase())
-      .join('-');
-    return await this.prismaService.subCategory.create({
-      data: {
-        name: createSubCategoryInput.name,
-        slug: slug,
-        gender: ProductGender[createSubCategoryInput.productGender],
-        category: {
-          connect: {
-            id: createSubCategoryInput.categoryId,
+    try {
+      const slug = createSubCategoryInput.name
+        .split(' ')
+        .map((word) => word.toLowerCase())
+        .join('-');
+      return await this.prismaService.subCategory.create({
+        data: {
+          name: createSubCategoryInput.name,
+          slug: slug,
+          gender: ProductGender[createSubCategoryInput.productGender],
+          category: {
+            connect: {
+              id: createSubCategoryInput.categoryId,
+            },
           },
         },
-      },
-    });
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async findAll() {
@@ -44,37 +57,43 @@ export class SubCategoryService {
   }
 
   async findOne(id: string) {
-    const subCategory = await this.prismaService.subCategory.findUnique({
-      where: { id: id },
-    });
-    if (!subCategory) throw new NotFoundException('Sub Category not found');
-    return subCategory;
+    try {
+      const subCategory = await this.prismaService.subCategory.findUnique({
+        where: { id: id },
+      });
+      if (!subCategory) throw new NotFoundException('Sub Category not found');
+      return subCategory;
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async update(updateSubCategoryInput: UpdateSubCategoryInput) {
-    const subCategory = await this.findOne(updateSubCategoryInput.id);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, productGender, ...rest } = updateSubCategoryInput;
+    try {
+      const { id, productGender, ...rest } = updateSubCategoryInput;
+      const subCategory = await this.findOne(id);
+      const slug = rest.name
+        ? rest.name
+            .split(' ')
+            .map((word) => word.toLowerCase())
+            .join('-')
+        : subCategory.slug;
 
-    const slug = rest.name
-      ? rest.name
-          .split(' ')
-          .map((word) => word.toLowerCase())
-          .join('-')
-      : subCategory.slug;
-
-    const gender = !!productGender
-      ? ProductGender[productGender]
-      : subCategory.gender;
-    return await this.prismaService.subCategory.update({
-      where: { id: updateSubCategoryInput.id },
-      data: {
-        ...subCategory,
-        ...rest,
-        slug,
-        gender,
-      },
-    });
+      const gender = !!productGender
+        ? ProductGender[productGender]
+        : subCategory.gender;
+      return await this.prismaService.subCategory.update({
+        where: { id: updateSubCategoryInput.id },
+        data: {
+          ...subCategory,
+          ...rest,
+          slug,
+          gender,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async toggleSubCategoryStatus(id: string) {

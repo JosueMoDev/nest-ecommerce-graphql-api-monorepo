@@ -1,7 +1,11 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateStorageInput } from './inputs/create-storage.input';
-import { UpdateStorageInput } from './inputs/update-storage.input';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
+import { CreateStorageInput, UpdateStorageInput } from './inputs';
 import { CapacityOn } from './enums/capacity-on.enum';
 
 @Injectable()
@@ -11,12 +15,16 @@ export class StorageService {
   ) {}
 
   async create(createStorageInput: CreateStorageInput) {
-    return await this.prismaService.storage.create({
-      data: {
-        capacity: createStorageInput.capacity,
-        capacityOn: CapacityOn[createStorageInput.capacityOn],
-      },
-    });
+    try {
+      return await this.prismaService.storage.create({
+        data: {
+          capacity: createStorageInput.capacity,
+          capacityOn: CapacityOn[createStorageInput.capacityOn],
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async findAll() {
@@ -24,23 +32,31 @@ export class StorageService {
   }
 
   async findOne(id: string) {
-    const storage = await this.prismaService.storage.findUnique({
-      where: { id },
-    });
-    if (!storage) throw new NotFoundException('Not Found');
-    return storage;
+    try {
+      const storage = await this.prismaService.storage.findUnique({
+        where: { id },
+      });
+      if (!storage) throw new NotFoundException('Not Found');
+      return storage;
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async update(updateStorageInput: UpdateStorageInput) {
-    const storage = await this.findOne(updateStorageInput.id);
-    return await this.prismaService.storage.update({
-      where: { id: updateStorageInput.id },
-      data: {
-        capacity: updateStorageInput.capacity ?? storage.capacity,
-        capacityOn:
-          CapacityOn[updateStorageInput.capacityOn] ?? storage.capacityOn,
-      },
-    });
+    try {
+      const storage = await this.findOne(updateStorageInput.id);
+      return await this.prismaService.storage.update({
+        where: { id: updateStorageInput.id },
+        data: {
+          capacity: updateStorageInput.capacity ?? storage.capacity,
+          capacityOn:
+            CapacityOn[updateStorageInput.capacityOn] ?? storage.capacityOn,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   remove(id: string) {

@@ -3,19 +3,24 @@ import {
   Query,
   Mutation,
   Args,
-  Int,
   ResolveField,
   Root,
   ID,
 } from '@nestjs/graphql';
 import { ProductService } from './product.service';
-import { Product } from './entities/product.entity';
-import { CreateProductInput } from './inputs/create-product.input';
-import { UpdateProductInput } from './inputs/update-product.input';
-import { SubCategory } from 'src/sub-category/entities/sub-category.entity';
-import { Chip } from 'src/chip/entities';
-import { PicturesByColor, StockByColor } from './entities';
-import { SetStockByColorInput, PictureByColorInput } from './inputs';
+import {
+  CreateProductInput,
+  UpdateProductInput,
+  SetStockByColorInput,
+  PictureByColorInput,
+} from './inputs';
+import {
+  PicturesByColor,
+  StockByColor,
+  SubCategory,
+  Product,
+  Chip,
+} from './entities';
 
 @Resolver(() => Product)
 export class ProductResolver {
@@ -79,14 +84,11 @@ export class ProductResolver {
   updateProduct(
     @Args('updateProductInput') updateProductInput: UpdateProductInput,
   ) {
-    return this.productService.update(
-      updateProductInput.id,
-      updateProductInput,
-    );
+    return this.productService.update(updateProductInput);
   }
 
   @Mutation(() => Product)
-  removeProduct(@Args('id', { type: () => Int }) id: number) {
+  removeProduct(@Args('id', { type: () => ID }) id: string) {
     return this.productService.remove(id);
   }
 }

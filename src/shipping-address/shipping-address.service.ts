@@ -1,4 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateShippingAddressInput } from './inputs/create-shipping-address.input';
 import { UpdateShippingAddressInput } from './inputs/update-shipping-address.input';
 import { PrismaService } from 'src/prisma.service';
@@ -10,38 +14,50 @@ export class ShippingAddressService {
   ) {}
 
   async user(shippingAddressId: string) {
-    return await this.prismaService.shippingAddress
-      .findUnique({
-        where: { id: shippingAddressId },
-      })
-      .user();
+    try {
+      return await this.prismaService.shippingAddress
+        .findUnique({
+          where: { id: shippingAddressId },
+        })
+        .user();
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async country(shippingAddressId: string) {
-    return await this.prismaService.shippingAddress
-      .findUnique({
-        where: { id: shippingAddressId },
-      })
-      .country();
+    try {
+      return await this.prismaService.shippingAddress
+        .findUnique({
+          where: { id: shippingAddressId },
+        })
+        .country();
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async create(createShippingAddressInput: CreateShippingAddressInput) {
-    const { countryId, userId, ...rest } = createShippingAddressInput;
-    return await this.prismaService.shippingAddress.create({
-      data: {
-        ...rest,
-        country: {
-          connect: {
-            id: countryId,
+    try {
+      const { countryId, userId, ...rest } = createShippingAddressInput;
+      return await this.prismaService.shippingAddress.create({
+        data: {
+          ...rest,
+          country: {
+            connect: {
+              id: countryId,
+            },
+          },
+          user: {
+            connect: {
+              id: userId,
+            },
           },
         },
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
-      },
-    });
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async findAll() {
@@ -49,25 +65,34 @@ export class ShippingAddressService {
   }
 
   async findOne(id: string) {
-    return await this.prismaService.shippingAddress.findUnique({
-      where: { id },
-    });
+    try {
+      return await this.prismaService.shippingAddress.findUnique({
+        where: { id },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async update(updateShippingAddressInput: UpdateShippingAddressInput) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, ...rest } = updateShippingAddressInput;
-    return await this.prismaService.shippingAddress.update({
-      where: {
-        id: updateShippingAddressInput.id,
-      },
-      data: {
-        ...rest,
-      },
-    });
+    try {
+      const { id, ...rest } = updateShippingAddressInput;
+      const address = await this.findOne(id);
+      return await this.prismaService.shippingAddress.update({
+        where: {
+          id: updateShippingAddressInput.id,
+        },
+        data: {
+          ...address,
+          ...rest,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
   // TODO pensar implementacion de eliminar direccion
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} shippingAddress`;
   }
 }

@@ -1,6 +1,10 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateCpuInput } from './inputs/create-cpu.input';
-import { UpdateCpuInput } from './inputs/update-cpu.input';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { CreateCpuInput, UpdateCpuInput } from './inputs';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
@@ -10,9 +14,13 @@ export class CpuService {
   ) {}
 
   async create(createCpuInput: CreateCpuInput) {
-    return await this.prismaService.cpu.create({
-      data: { ...createCpuInput },
-    });
+    try {
+      return await this.prismaService.cpu.create({
+        data: { ...createCpuInput },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async findAll() {
@@ -20,19 +28,28 @@ export class CpuService {
   }
 
   async findOne(id: string) {
-    const cpu = await this.prismaService.cpu.findUnique({
-      where: { id },
-    });
-    if (!cpu) throw new NotFoundException('Not Found');
-    return cpu;
+    try {
+      const cpu = await this.prismaService.cpu.findUnique({
+        where: { id },
+      });
+      if (!cpu) throw new NotFoundException('Not Found');
+      return cpu;
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async update(updateCpuInput: UpdateCpuInput) {
-    const { id, ...rest } = updateCpuInput;
-    return await this.prismaService.cpu.update({
-      where: { id },
-      data: { ...rest },
-    });
+    try {
+      const { id, cores } = updateCpuInput;
+      await this.findOne(id);
+      return await this.prismaService.cpu.update({
+        where: { id },
+        data: { cores },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   remove(id: string) {

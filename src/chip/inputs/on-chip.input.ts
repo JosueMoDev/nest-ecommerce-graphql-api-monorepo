@@ -5,7 +5,9 @@ import { IsDecimal, IsNotEmpty, IsPositive, IsUUID } from 'class-validator';
 export class OnChipInput {
   @IsNotEmpty()
   @IsUUID()
-  @Field(() => ID)
+  @Field(() => ID, {
+    description: 'Could be Storage, Cpu, Gpu or Unified Memory Id',
+  })
   id: string;
 
   @IsNotEmpty()

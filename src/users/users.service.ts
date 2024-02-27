@@ -19,16 +19,20 @@ export class UsersService {
   ) {}
 
   async register(createUserInput: CreateUserInput) {
-    const passwordHash = await bcrypt.hash(createUserInput.password, 10);
-    return await this.prismaService.user.create({
-      data: {
-        name: createUserInput.name,
-        email: createUserInput.email,
-        password: passwordHash,
-        role: UserRole[createUserInput.userRole],
-        picture: createUserInput.picture ?? null,
-      },
-    });
+    try {
+      const passwordHash = await bcrypt.hash(createUserInput.password, 10);
+      return await this.prismaService.user.create({
+        data: {
+          name: createUserInput.name,
+          email: createUserInput.email,
+          password: passwordHash,
+          role: UserRole[createUserInput.userRole],
+          picture: createUserInput.picture ?? null,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 
   async findAll() {
@@ -67,11 +71,10 @@ export class UsersService {
 
   async update(updateUserInput: UpdateUserInput) {
     try {
-      const user = await this.prismaService.user.findUnique({
-        where: { id: updateUserInput.id },
-      });
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { id, ...rest } = updateUserInput;
+      const user = await this.prismaService.user.findUnique({
+        where: { id },
+      });
       if (!user) throw new NotFoundException('Not found user');
       return await this.prismaService.user.update({
         where: {
@@ -88,14 +91,18 @@ export class UsersService {
   }
 
   async toggleActivateStatus(email: string) {
-    const { isActive } = await this.findOne(email);
-    return this.prismaService.user.update({
-      where: {
-        email,
-      },
-      data: {
-        isActive: !isActive,
-      },
-    });
+    try {
+      const { isActive } = await this.findOne(email);
+      return this.prismaService.user.update({
+        where: {
+          email,
+        },
+        data: {
+          isActive: !isActive,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
   }
 }

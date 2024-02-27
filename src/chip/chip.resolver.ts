@@ -9,8 +9,7 @@ import {
 } from '@nestjs/graphql';
 import { ChipService } from './chip.service';
 import { Chip } from './entities/chip.entity';
-import { CreateChipInput } from './inputs/create-chip.input';
-import { UpdateChipInput } from './inputs/update-chip.input';
+import { CreateChipInput, UpdateChipInput } from './inputs';
 
 @Resolver(() => Chip)
 export class ChipResolver {
