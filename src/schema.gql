@@ -89,27 +89,24 @@ type PicturesByColor {
   productPictures: [ProductPicture!]!
 }
 
-type Cpu {
-  """CPU ID"""
-  id: ID!
-  cores: Int!
-}
-
-"""Cpu On Chip"""
-type CpuOnChip {
-  cpu: Cpu!
-  price: Float!
-}
-
 type Gpu {
   """GPU ID"""
   id: ID!
   cores: Int!
 }
 
+type Cpu {
+  """CPU ID"""
+  id: ID!
+  cores: Int!
+}
+
 """Gpu On Chip"""
-type GpuOnChip {
+type ConfigOnChip {
+  id: ID!
   gpu: Gpu!
+  cpu: Cpu!
+  neuralEngine: String!
   price: Float!
 }
 
@@ -144,11 +141,9 @@ type Chip {
   chipFamilyName: String!
   gama: String!
   name: String!
-  neuralEngine: [String!]!
   storageOnChip: [StorageOnChip!]!
   unifedMemoryOnChip: [UnifedMemoryOnChip!]!
-  cpuOnChip: [CpuOnChip!]!
-  gpuOnChip: [GpuOnChip!]!
+  configOnChip: [ConfigOnChip!]!
 }
 
 type Category {
@@ -457,11 +452,9 @@ input UpdateSubCategoryInput {
 input CreateChipInput {
   chipFamilyName: ChipFamilyName!
   gama: ChipGama!
-  neuralEngine: [NeuralEngine!]!
   storageOnChip: [OnChipInput!]!
   unifiedMemoryOnChip: [OnChipInput!]!
-  cpuOnChip: [OnChipInput!]!
-  gpuOnChip: [OnChipInput!]!
+  configOnChip: [ConfigOnChipInput!]!
 }
 
 enum ChipFamilyName {
@@ -483,25 +476,30 @@ enum ChipGama {
   ULTRA
 }
 
+input OnChipInput {
+  """Could be Storage,  Unified Memory Id"""
+  id: ID!
+  price: Float!
+}
+
+input ConfigOnChipInput {
+  cpuId: ID!
+  gpuId: ID!
+  neuralEngine: NeuralEngine!
+  price: Float!
+}
+
 enum NeuralEngine {
   SixTeenCores
   ThirtyCores
 }
 
-input OnChipInput {
-  """Could be Storage, Cpu, Gpu or Unified Memory Id"""
-  id: ID!
-  price: Float!
-}
-
 input UpdateChipInput {
   chipFamilyName: ChipFamilyName
   gama: ChipGama
-  neuralEngine: [NeuralEngine!]
   storageOnChip: [OnChipInput!]
   unifiedMemoryOnChip: [OnChipInput!]
-  cpuOnChip: [OnChipInput!]
-  gpuOnChip: [OnChipInput!]
+  configOnChip: [ConfigOnChipInput!]
   id: Int!
 }
 

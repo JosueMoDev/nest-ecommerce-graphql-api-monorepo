@@ -52,36 +52,25 @@ export class ChipService {
     }
   }
 
-  async CpuOnChip(chipId: string) {
+  async configOnChip(chipId: string) {
     try {
-      return await this.prismaService.cpuOnChip.findMany({
+      return await this.prismaService.configOnChip.findMany({
         where: { chipId },
         select: {
+          id: true,
           cpu: {
             select: {
               id: true,
               cores: true,
             },
           },
-          price: true,
-        },
-      });
-    } catch (error) {
-      throw new InternalServerErrorException(`${error}`);
-    }
-  }
-
-  async GpuOnChip(chipId: string) {
-    try {
-      return await this.prismaService.gpuOnChip.findMany({
-        where: { chipId },
-        select: {
           gpu: {
             select: {
               id: true,
               cores: true,
             },
           },
+          neuralEngine: true,
           price: true,
         },
       });
@@ -93,19 +82,18 @@ export class ChipService {
   async create(createChipInput: CreateChipInput) {
     try {
       const {
-        cpuOnChip,
-        gpuOnChip,
+        configOnChip,
         unifiedMemoryOnChip,
         storageOnChip,
         ...rest
       } = createChipInput;
 
-      const neuralEngineArray = rest.neuralEngine.map(
-        (neuralEngine) => NeuralEngine[neuralEngine],
-      );
-
-      const gpuArray = gpuOnChip.map(({ id, price }) => ({ gpuId: id, price }));
-      const cpuArray = cpuOnChip.map(({ id, price }) => ({ cpuId: id, price }));
+      const configOnChipArray = configOnChip.map(({ cpuId, gpuId, neuralEngine, price }) => ({ 
+        cpuId,
+        gpuId, 
+        neuralEngine: NeuralEngine[neuralEngine], 
+        price 
+      }));
       const storageArray = storageOnChip.map(({ id, price }) => ({
         storageId: id,
         price,
@@ -121,19 +109,16 @@ export class ChipService {
           name: `Apple Silicone ${ChipFamilyName[rest.chipFamilyName]} ${
             ChipGama[rest.gama]
           }`,
-          neuralEngine: neuralEngineArray,
           storage: {
             create: storageArray,
           },
           unifiedMemory: {
             create: unifiedMemoryArray,
           },
-          gpu: {
-            create: gpuArray,
-          },
-          cpu: {
-            create: cpuArray,
-          },
+          configOnChip: {
+            create: configOnChipArray,
+          }
+         
         },
       });
     } catch (error) {
@@ -149,7 +134,7 @@ export class ChipService {
     try {
       return await this.prismaService.chip.findUnique({
         where: { id },
-        include: { storage: true, cpu: true, gpu: true, unifiedMemory: true },
+        include: { storage: true, configOnChip: true, unifiedMemory: true },
       });
     } catch (error) {
       throw new InternalServerErrorException(`${error}`);

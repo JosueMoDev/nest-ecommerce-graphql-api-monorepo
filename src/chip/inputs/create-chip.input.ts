@@ -1,9 +1,9 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { ChipFamilyName, ChipGama, NeuralEngine } from '../enums';
+import { ChipFamilyName, ChipGama } from '../enums';
 import { IsArray, IsEnum, IsNotEmpty } from 'class-validator';
 import { OnChipInput } from './on-chip.input';
-import { OnChip } from '../intefaces/OnChip.interface';
 import { Type } from 'class-transformer';
+import { ConfigOnChipInput } from './';
 
 @InputType()
 export class CreateChipInput {
@@ -17,32 +17,24 @@ export class CreateChipInput {
   @Field(() => ChipGama)
   gama: string;
 
-  @IsNotEmpty()
-  @Field(() => [NeuralEngine])
-  neuralEngine: string[];
 
   // *Relations
   @IsNotEmpty()
   @IsArray()
   @Type(() => OnChipInput)
   @Field(() => [OnChipInput])
-  storageOnChip: OnChip[];
+  storageOnChip: OnChipInput[];
 
   @IsNotEmpty()
   @IsArray()
   @Type(() => OnChipInput)
   @Field(() => [OnChipInput])
-  unifiedMemoryOnChip: [];
+  unifiedMemoryOnChip: OnChipInput[];
 
   @IsNotEmpty()
   @IsArray()
-  @Type(() => OnChipInput)
-  @Field(() => [OnChipInput])
-  cpuOnChip: OnChip[];
+  @Type(() => ConfigOnChipInput)
+  @Field(() => [ConfigOnChipInput])
+  configOnChip: ConfigOnChipInput[];
 
-  @IsNotEmpty()
-  @IsArray()
-  @Type(() => OnChipInput)
-  @Field(() => [OnChipInput])
-  gpuOnChip: OnChip[];
 }

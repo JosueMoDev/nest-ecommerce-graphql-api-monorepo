@@ -25,14 +25,10 @@ export class ChipResolver {
     return this.chipService.UnifedMemoryOnChip(chip.id);
   }
 
+ 
   @ResolveField()
-  gpuOnChip(@Root() chip: Chip) {
-    return this.chipService.GpuOnChip(chip.id);
-  }
-
-  @ResolveField()
-  cpuOnChip(@Root() chip: Chip) {
-    return this.chipService.CpuOnChip(chip.id);
+  configOnChip(@Root() chip: Chip) {
+    return this.chipService.configOnChip(chip.id);
   }
 
   @Mutation(() => Chip)

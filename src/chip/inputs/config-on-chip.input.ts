@@ -1,14 +1,21 @@
 import { InputType, Field, ID, Float } from '@nestjs/graphql';
 import { IsDecimal, IsNotEmpty, IsPositive, IsUUID } from 'class-validator';
+import { NeuralEngine } from '../enums';
 
 @InputType()
-export class OnChipInput {
+export class ConfigOnChipInput {
   @IsNotEmpty()
   @IsUUID()
-  @Field(() => ID, {
-    description: 'Could be Storage,  Unified Memory Id',
-  })
-  id: string;
+  @Field(() => ID)
+  cpuId: string;
+
+  @IsUUID()
+  @Field(() => ID)
+  gpuId: string;
+
+  @IsNotEmpty()
+  @Field(() => NeuralEngine)
+  neuralEngine: string;
 
   @IsNotEmpty()
   @IsPositive()

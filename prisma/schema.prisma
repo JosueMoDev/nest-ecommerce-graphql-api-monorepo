@@ -72,18 +72,8 @@ model Cpu {
   id    String @id @default(uuid())
   cores Int
   // * Relations
+  configOnChip ConfigOnChip[]
 
-  cpuOnChip CpuOnChip[]
-}
-
-model CpuOnChip {
-  chip   Chip   @relation(fields: [chipId], references: [id])
-  chipId String
-  cpu    Cpu    @relation(fields: [cpuId], references: [id])
-  cpuId  String
-  price  Float
-
-  @@id([cpuId, chipId])
 }
 
 model Gpu {
@@ -91,17 +81,25 @@ model Gpu {
   cores Int
   // * Relations
 
-  gpuOnChip GpuOnChip[]
+  configOnChip ConfigOnChip[]
 }
 
-model GpuOnChip {
+model ConfigOnChip {
+  id    String @id @default(uuid())
+
   chip   Chip   @relation(fields: [chipId], references: [id])
   chipId String
-  gpu    Gpu    @relation(fields: [gpuId], references: [id])
-  gpuId  String
-  price  Float
 
-  @@id([gpuId, chipId])
+  neuralEngine   NeuralEngine
+
+  gpu   Gpu    @relation(fields: [gpuId], references: [id])
+  gpuId String
+
+  cpu   Cpu    @relation(fields: [cpuId], references: [id])
+  cpuId String
+
+  price Float
+
 }
 
 model UnifiedMemory {
@@ -143,13 +141,11 @@ model StorageOnChip {
 
 model Chip {
   id             String                @id @default(uuid())
-  neuralEngine   NeuralEngine[]
   chipFamilyName ChipFamilyName
   name           String                @unique()
   gama           ChipGama
   // * Relations
-  gpu            GpuOnChip[]
-  cpu            CpuOnChip[]
+  configOnChip   ConfigOnChip[]
   storage        StorageOnChip[]
   unifiedMemory  UnifiedMemoryOnChip[]
   product        Product[]
