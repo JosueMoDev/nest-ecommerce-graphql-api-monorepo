@@ -1,6 +1,21 @@
-import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
+import { ObjectType, Field, Int, ID, Float } from '@nestjs/graphql';
+import {
+  ConfigOnChip,
+  StorageOnChip,
+  UnifedMemoryOnChip,
+} from 'src/chip/entities';
 // import { ProductDetails } from '../interfaces/productDetails.inteface';
+@ObjectType()
+export class ProductDetails {
+  @Field(() => StorageOnChip, { nullable: true })
+  storageOnChip?: StorageOnChip | null;
 
+  @Field(() => UnifedMemoryOnChip, { nullable: true })
+  unifiedMemoryOnChip?: UnifedMemoryOnChip | null;
+
+  @Field(() => ConfigOnChip, { nullable: true })
+  configOnChip?: ConfigOnChip | null;
+}
 @ObjectType()
 export class OrderItem {
   @Field(() => ID, { description: 'Order Item Id' })
@@ -9,18 +24,12 @@ export class OrderItem {
   @Field(() => Int)
   quantity: number;
 
-  //TODO implement a class to type and validate 'productDetails'
-  // @Field(() => ProductDetails)
-  // productDetails?: ProductDetails;
-  // productDetails: {
-  //   chip: "M1 Base",
-  //   storage: {
-  //     capacity: "256gb",
-  //     price: 0,
-  //   },
-  //   unifiedMemory: {},
+  @Field(() => ProductDetails)
+  productDetails?: ProductDetails;
 
-  // }
+  @Field(() => Float)
+  price: string;
+
   // * Relations
   @Field(() => String)
   product: string;

@@ -69,11 +69,10 @@ enum CategoryName {
 }
 
 model Cpu {
-  id    String @id @default(uuid())
-  cores Int
+  id           String         @id @default(uuid())
+  cores        Int
   // * Relations
   configOnChip ConfigOnChip[]
-
 }
 
 model Gpu {
@@ -85,12 +84,12 @@ model Gpu {
 }
 
 model ConfigOnChip {
-  id    String @id @default(uuid())
+  id String @id @default(uuid())
 
   chip   Chip   @relation(fields: [chipId], references: [id])
   chipId String
 
-  neuralEngine   NeuralEngine
+  neuralEngine NeuralEngine
 
   gpu   Gpu    @relation(fields: [gpuId], references: [id])
   gpuId String
@@ -99,7 +98,6 @@ model ConfigOnChip {
   cpuId String
 
   price Float
-
 }
 
 model UnifiedMemory {
@@ -111,13 +109,13 @@ model UnifiedMemory {
 }
 
 model UnifiedMemoryOnChip {
+  id              String        @id @default(uuid())
+  price           Float
+  // * Relations
   chip            Chip          @relation(fields: [chipId], references: [id])
   chipId          String
   unifiedMemory   UnifiedMemory @relation(fields: [unifiedMemoryId], references: [id])
   unifiedMemoryId String
-  price           Float
-
-  @@id([unifiedMemoryId, chipId])
 }
 
 model Storage {
@@ -130,13 +128,13 @@ model Storage {
 }
 
 model StorageOnChip {
+  id        String  @id @default(uuid())
+  price     Float
+  // * Relations
   chip      Chip    @relation(fields: [chipId], references: [id])
   chipId    String
   storage   Storage @relation(fields: [storageId], references: [id])
   storageId String
-  price     Float
-
-  @@id([storageId, chipId])
 }
 
 model Chip {
@@ -146,8 +144,8 @@ model Chip {
   gama           ChipGama
   // * Relations
   configOnChip   ConfigOnChip[]
-  storage        StorageOnChip[]
-  unifiedMemory  UnifiedMemoryOnChip[]
+  storageOnChip        StorageOnChip[]
+  unifiedMemoryOnChip  UnifiedMemoryOnChip[]
   product        Product[]
 }
 
@@ -241,7 +239,8 @@ model ProductPicture {
 
 model User {
   id            String    @id @default(uuid())
-  name          String
+  firstName     String
+  lastName      String
   email         String    @unique
   emailVerified DateTime?
   password      String

@@ -18,6 +18,7 @@ export class ChipService {
       return await this.prismaService.storageOnChip.findMany({
         where: { chipId },
         select: {
+          id: true,
           storage: {
             select: {
               id: true,
@@ -38,6 +39,7 @@ export class ChipService {
       return await this.prismaService.unifiedMemoryOnChip.findMany({
         where: { chipId },
         select: {
+          id: true,
           unifiedMemory: {
             select: {
               id: true,
@@ -81,19 +83,17 @@ export class ChipService {
 
   async create(createChipInput: CreateChipInput) {
     try {
-      const {
-        configOnChip,
-        unifiedMemoryOnChip,
-        storageOnChip,
-        ...rest
-      } = createChipInput;
+      const { configOnChip, unifiedMemoryOnChip, storageOnChip, ...rest } =
+        createChipInput;
 
-      const configOnChipArray = configOnChip.map(({ cpuId, gpuId, neuralEngine, price }) => ({ 
-        cpuId,
-        gpuId, 
-        neuralEngine: NeuralEngine[neuralEngine], 
-        price 
-      }));
+      const configOnChipArray = configOnChip.map(
+        ({ cpuId, gpuId, neuralEngine, price }) => ({
+          cpuId,
+          gpuId,
+          neuralEngine: NeuralEngine[neuralEngine],
+          price,
+        }),
+      );
       const storageArray = storageOnChip.map(({ id, price }) => ({
         storageId: id,
         price,
@@ -109,16 +109,15 @@ export class ChipService {
           name: `Apple Silicone ${ChipFamilyName[rest.chipFamilyName]} ${
             ChipGama[rest.gama]
           }`,
-          storage: {
+          storageOnChip: {
             create: storageArray,
           },
-          unifiedMemory: {
+          unifiedMemoryOnChip: {
             create: unifiedMemoryArray,
           },
           configOnChip: {
             create: configOnChipArray,
-          }
-         
+          },
         },
       });
     } catch (error) {
@@ -134,7 +133,11 @@ export class ChipService {
     try {
       return await this.prismaService.chip.findUnique({
         where: { id },
-        include: { storage: true, configOnChip: true, unifiedMemory: true },
+        include: {
+          storageOnChip: true,
+          configOnChip: true,
+          unifiedMemoryOnChip: true,
+        },
       });
     } catch (error) {
       throw new InternalServerErrorException(`${error}`);

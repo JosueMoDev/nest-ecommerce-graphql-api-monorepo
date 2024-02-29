@@ -13,9 +13,15 @@ import { UserRole } from '../enum/user-role.enum';
 export class CreateUserInput {
   @IsNotEmpty()
   @IsString()
-  @MinLength(3, { message: 'Name should be at least 3 characters long' })
+  @MinLength(3, { message: 'First Name should be at least 3 characters long' })
   @Field(() => String)
-  name: string;
+  firstName: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(3, { message: 'Last name should be at least 3 characters long' })
+  @Field(() => String)
+  lastName: string;
 
   @IsNotEmpty()
   @IsEmail()

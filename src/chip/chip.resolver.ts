@@ -25,7 +25,6 @@ export class ChipResolver {
     return this.chipService.UnifedMemoryOnChip(chip.id);
   }
 
- 
   @ResolveField()
   configOnChip(@Root() chip: Chip) {
     return this.chipService.configOnChip(chip.id);

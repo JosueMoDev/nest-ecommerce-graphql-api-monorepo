@@ -142,8 +142,8 @@ export class ProductService {
     }
   }
 
-  findAll() {
-    return `This action returns all product`;
+  async findAll() {
+    return await this.prismaService.product.findMany();
   }
 
   async findOne(id: string) {

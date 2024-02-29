@@ -9,10 +9,10 @@ type Authentication {
 
 type User {
   id: ID!
-  name: String!
+  lastName: String!
+  firstName: String!
   email: String!
   emailVerified: DateTime
-  password: String!
   role: String!
   isActive: Boolean
   picture: String
@@ -43,10 +43,77 @@ type ShippingAddress {
   country: Country!
 }
 
+type Chip {
+  """Chip ID"""
+  id: ID!
+  chipFamilyName: String!
+  gama: String!
+  name: String!
+  storageOnChip: [StorageOnChip!]!
+  unifedMemoryOnChip: [UnifedMemoryOnChip!]!
+  configOnChip: [ConfigOnChip!]!
+}
+
+type Gpu {
+  """GPU ID"""
+  id: ID!
+  cores: Int!
+}
+
+type Cpu {
+  """CPU ID"""
+  id: ID!
+  cores: Int!
+}
+
+"""Gpu On Chip"""
+type ConfigOnChip {
+  id: ID!
+  gpu: Gpu!
+  cpu: Cpu!
+  neuralEngine: String!
+  price: Float!
+}
+
+type Storage {
+  """Storage ID"""
+  id: ID!
+  capacity: Int!
+  capacityOn: String!
+}
+
+"""Storage On Chip"""
+type StorageOnChip {
+  id: ID!
+  storage: Storage!
+  price: Float!
+}
+
+type UnifiedMemory {
+  """Unified Memory ID"""
+  id: ID!
+  capacity: Int!
+}
+
+"""Unified Memory On Chip"""
+type UnifedMemoryOnChip {
+  id: ID!
+  unifiedMemory: UnifiedMemory!
+  price: Float!
+}
+
+type ProductDetails {
+  storageOnChip: StorageOnChip
+  unifiedMemoryOnChip: UnifedMemoryOnChip
+  configOnChip: ConfigOnChip
+}
+
 type OrderItem {
   """Order Item Id"""
   id: ID!
   quantity: Int!
+  productDetails: ProductDetails!
+  price: Float!
   product: String!
 }
 
@@ -87,63 +154,6 @@ type ProductPicture {
 type PicturesByColor {
   color: String!
   productPictures: [ProductPicture!]!
-}
-
-type Gpu {
-  """GPU ID"""
-  id: ID!
-  cores: Int!
-}
-
-type Cpu {
-  """CPU ID"""
-  id: ID!
-  cores: Int!
-}
-
-"""Gpu On Chip"""
-type ConfigOnChip {
-  id: ID!
-  gpu: Gpu!
-  cpu: Cpu!
-  neuralEngine: String!
-  price: Float!
-}
-
-type Storage {
-  """Storage ID"""
-  id: ID!
-  capacity: Int!
-  capacityOn: String!
-}
-
-"""Storage On Chip"""
-type StorageOnChip {
-  storage: Storage!
-  price: Float!
-}
-
-type UnifiedMemory {
-  """Unified Memory ID"""
-  id: ID!
-  capacity: Int!
-}
-
-"""Unified Memory On Chip"""
-type UnifedMemoryOnChip {
-  unifiedMemory: UnifiedMemory!
-  price: Float!
-}
-
-type Chip {
-  """Chip ID"""
-  id: ID!
-  chipFamilyName: String!
-  gama: String!
-  name: String!
-  storageOnChip: [StorageOnChip!]!
-  unifedMemoryOnChip: [UnifedMemoryOnChip!]!
-  configOnChip: [ConfigOnChip!]!
 }
 
 type Category {
@@ -271,7 +281,8 @@ input UpdateAuthenticationInput {
 }
 
 input CreateUserInput {
-  name: String!
+  firstName: String!
+  lastName: String!
   email: String!
   password: String!
   userRole: UserRole!
@@ -285,7 +296,8 @@ enum UserRole {
 }
 
 input UpdateUserInput {
-  name: String
+  firstName: String
+  lastName: String
   email: String
   userRole: UserRole
   picture: String
@@ -332,7 +344,15 @@ input CreateOrderInput {
 input ItemInOrder {
   productId: ID!
   stockId: ID!
+  productDetails: ProductDetailsInput
   quantity: Int!
+  price: Float!
+}
+
+input ProductDetailsInput {
+  storageOnChipId: ID
+  unifiedMemoryOnChipId: ID
+  configOnChipId: ID
 }
 
 input UpdateOrderInput {

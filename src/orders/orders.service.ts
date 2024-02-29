@@ -5,8 +5,13 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateOrderInput, UpdateOrderInput } from './inputs';
+import {
+  CreateOrderInput,
+  ProductDetailsInput,
+  UpdateOrderInput,
+} from './inputs';
 import { PrismaService } from 'src/prisma.service';
+import { OrderItem } from './entities/order-item.entity';
 
 @Injectable()
 export class OrdersService {
@@ -14,6 +19,10 @@ export class OrdersService {
     @Inject(PrismaService) private readonly prismaService: PrismaService,
   ) {}
 
+  async productDetails(orderItems: OrderItem[]) {
+    orderItems.map((orderItem) => console.log(orderItem.id));
+    return;
+  }
   async user(id: string) {
     try {
       return await this.prismaService.order
@@ -37,7 +46,7 @@ export class OrdersService {
       throw new InternalServerErrorException(`${error}`);
     }
   }
-
+  // TODO product Details,
   async itemsInOnder(id: string) {
     try {
       const response = await this.prismaService.orderItem.findMany({
@@ -51,13 +60,15 @@ export class OrdersService {
               name: true,
             },
           },
+          price: true,
           id: true,
         },
       });
-      return response.map(({ quantity, product, id }) => ({
+      return response.map(({ quantity, product, id, price }) => ({
         id,
         quantity,
         product: product.name,
+        price,
       }));
     } catch (error) {
       throw new InternalServerErrorException(`${error}`);
@@ -91,27 +102,90 @@ export class OrdersService {
           throw new BadRequestException('Any products found');
 
         //* Step 2: Calculate prices
+        const getOverCharge = async (productDetials: ProductDetailsInput) => {
+          const { price: storageOverCharge } = productDetials.storageOnChipId
+            ? await this.prismaService.storageOnChip.findUnique({
+                where: { id: productDetials.storageOnChipId },
+                select: { price: true },
+              })
+            : { price: 0 };
+          const { price: unifiedMemoryOverCharge } =
+            productDetials.unifiedMemoryOnChipId
+              ? await this.prismaService.unifiedMemoryOnChip.findUnique({
+                  where: { id: productDetials.unifiedMemoryOnChipId },
+                  select: { price: true },
+                })
+              : { price: 0 };
 
-        const { subTotal, tax, total } = itemsInOrder.reduce(
-          (totals, item) => {
+          const { price: configChipOverCharge } = productDetials.configOnChipId
+            ? await this.prismaService.configOnChip.findUnique({
+                where: { id: productDetials.configOnChipId },
+                select: { price: true },
+              })
+            : { price: 0 };
+
+          return (
+            storageOverCharge + unifiedMemoryOverCharge + configChipOverCharge
+          );
+        };
+        // const { subTotal, tax, total } = itemsInOrder.reduce(
+        //   (totals, item) => {
+        //     const productQuantity = item.quantity;
+        //     const product = products.find(
+        //       (product) => product.id === item.productId,
+        //     );
+        //     if (!product) throw new NotFoundException('Not Found Product');
+        //     // TODO si existen variaciones de precio acorde al chip
+        //     if (!item.productDetails) {
+        //       const subTotal = product.price * productQuantity;
+        //       totals.subTotal += subTotal;
+        //       totals.tax += subTotal * 0.15;
+        //       totals.total += subTotal * 1.15;
+        //       return totals;
+        //     }
+
+        //     getOverCharge(item.productDetails).then((overCharge) =>
+        //       console.log(overCharge),
+        //     );
+
+        //     const subTotal = (product.price + 0) * productQuantity;
+        //     totals.subTotal += subTotal;
+        //     totals.tax += subTotal * 0.15;
+        //     totals.total += subTotal * 1.15;
+
+        //     return totals;
+        //   },
+        //   { subTotal: 0, tax: 0, total: 0 },
+        // );
+        //* Step 3: Check if product has stock
+        const { subTotal, tax, total } = await itemsInOrder.reduce(
+          async (accumulatorPromise, item) => {
+            const accumulator = await accumulatorPromise;
+            const totals = { ...accumulator };
             const productQuantity = item.quantity;
             const product = products.find(
               (product) => product.id === item.productId,
             );
-
             if (!product) throw new NotFoundException('Not Found Product');
-            // TODO si existen variaciones de precio acorde al chip
-            const subTotal = product.price * productQuantity;
 
+            if (!item.productDetails) {
+              const subTotal = product.price * productQuantity;
+              totals.subTotal += subTotal;
+              totals.tax += subTotal * 0.15;
+              totals.total += subTotal * 1.15;
+              return totals;
+            }
+
+            const overCharge = await getOverCharge(item.productDetails);
+            const subTotal = (product.price + overCharge) * productQuantity;
             totals.subTotal += subTotal;
             totals.tax += subTotal * 0.15;
             totals.total += subTotal * 1.15;
 
             return totals;
           },
-          { subTotal: 0, tax: 0, total: 0 },
+          Promise.resolve({ subTotal: 0, tax: 0, total: 0 }),
         );
-        //* Step 3: Check if product has stock
 
         const updateStock = products.map((product) => {
           const { quantity, stockId } = itemsInOrder
@@ -160,13 +234,11 @@ export class OrdersService {
             totalOfItems: totalItemsInOrder,
             OrderItem: {
               createMany: {
-                data: itemsInOrder.map(({ quantity, productId }) => ({
+                data: itemsInOrder.map(({ quantity, productId, price }) => ({
                   quantity,
                   productId,
                   productDetails: {},
-                  price:
-                    products.find((product) => product.id === productId)
-                      ?.price ?? 0,
+                  price,
                 })),
               },
             },

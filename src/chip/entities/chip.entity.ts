@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import {ConfigOnChip, StorageOnChip, UnifedMemoryOnChip } from './';
+import { ConfigOnChip, StorageOnChip, UnifedMemoryOnChip } from './';
 
 @ObjectType()
 export class Chip {
@@ -15,15 +15,13 @@ export class Chip {
   @Field(() => String)
   name: string;
 
-  
   // *Relations
   @Field(() => [StorageOnChip])
   storageOnChip: StorageOnChip[];
-  
+
   @Field(() => [UnifedMemoryOnChip])
   unifedMemoryOnChip: UnifedMemoryOnChip[];
 
   @Field(() => [ConfigOnChip])
   configOnChip: ConfigOnChip[];
- 
 }
