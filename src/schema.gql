@@ -112,7 +112,7 @@ type OrderItem {
   """Order Item Id"""
   id: ID!
   quantity: Int!
-  productDetails: ProductDetails!
+  productDetails: ProductDetails
   price: Float!
   product: String!
 }

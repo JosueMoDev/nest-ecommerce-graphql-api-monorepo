@@ -10,7 +10,7 @@ export interface Color {
 export class PicturesByColorMapper {
   static fromObject(object: ProductPictures[]) {
     const groupedByColor = object.reduce((acc, curr) => {
-      const {color, id, url} = curr;
+      const { color, id, url } = curr;
       if (!acc[color.name]) {
         acc[color.name] = { color: color.name, productPictures: [] };
       }
@@ -19,6 +19,5 @@ export class PicturesByColorMapper {
     }, {});
 
     return Object.values(groupedByColor);
-  
   }
 }

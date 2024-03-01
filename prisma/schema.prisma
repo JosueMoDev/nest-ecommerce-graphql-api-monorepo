@@ -97,7 +97,8 @@ model ConfigOnChip {
   cpu   Cpu    @relation(fields: [cpuId], references: [id])
   cpuId String
 
-  price Float
+  price                Float
+  ProductDetailsOnItem ProductDetailsOnItem[]
 }
 
 model UnifiedMemory {
@@ -109,13 +110,14 @@ model UnifiedMemory {
 }
 
 model UnifiedMemoryOnChip {
-  id              String        @id @default(uuid())
-  price           Float
+  id                   String                 @id @default(uuid())
+  price                Float
   // * Relations
-  chip            Chip          @relation(fields: [chipId], references: [id])
-  chipId          String
-  unifiedMemory   UnifiedMemory @relation(fields: [unifiedMemoryId], references: [id])
-  unifiedMemoryId String
+  chip                 Chip                   @relation(fields: [chipId], references: [id])
+  chipId               String
+  unifiedMemory        UnifiedMemory          @relation(fields: [unifiedMemoryId], references: [id])
+  unifiedMemoryId      String
+  ProductDetailsOnItem ProductDetailsOnItem[]
 }
 
 model Storage {
@@ -128,25 +130,26 @@ model Storage {
 }
 
 model StorageOnChip {
-  id        String  @id @default(uuid())
-  price     Float
+  id                   String                 @id @default(uuid())
+  price                Float
   // * Relations
-  chip      Chip    @relation(fields: [chipId], references: [id])
-  chipId    String
-  storage   Storage @relation(fields: [storageId], references: [id])
-  storageId String
+  chip                 Chip                   @relation(fields: [chipId], references: [id])
+  chipId               String
+  storage              Storage                @relation(fields: [storageId], references: [id])
+  storageId            String
+  ProductDetailsOnItem ProductDetailsOnItem[]
 }
 
 model Chip {
-  id             String                @id @default(uuid())
-  chipFamilyName ChipFamilyName
-  name           String                @unique()
-  gama           ChipGama
+  id                  String                @id @default(uuid())
+  chipFamilyName      ChipFamilyName
+  name                String                @unique()
+  gama                ChipGama
   // * Relations
-  configOnChip   ConfigOnChip[]
-  storageOnChip        StorageOnChip[]
-  unifiedMemoryOnChip  UnifiedMemoryOnChip[]
-  product        Product[]
+  configOnChip        ConfigOnChip[]
+  storageOnChip       StorageOnChip[]
+  unifiedMemoryOnChip UnifiedMemoryOnChip[]
+  product             Product[]
 }
 
 model Category {
@@ -279,16 +282,32 @@ model ShippingAddress {
   order     Order[]
 }
 
-model OrderItem {
-  id             String  @id @default(uuid())
-  quantity       Int
-  price          Float
-  productDetails Json
+model ProductDetailsOnItem {
+  id              String         @id @default(uuid())
   //* Relations
-  order          Order   @relation(fields: [orderId], references: [id])
-  orderId        String
-  product        Product @relation(fields: [productId], references: [id])
-  productId      String
+  storageOnChip   StorageOnChip? @relation(fields: [storageOnChipId], references: [id])
+  storageOnChipId String?
+
+  unifiedMemoryOnChip   UnifiedMemoryOnChip? @relation(fields: [unifiedMemoryOnChipId], references: [id])
+  unifiedMemoryOnChipId String?
+
+  configOnChip   ConfigOnChip? @relation(fields: [configOnChipId], references: [id])
+  configOnChipId String?
+
+  orderItem   OrderItem @relation(fields: [orderItemId], references: [id])
+  orderItemId String @unique
+}
+
+model OrderItem {
+  id                   String                 @id @default(uuid())
+  quantity             Int
+  price                Float
+  //* Relations
+  order                Order                  @relation(fields: [orderId], references: [id])
+  orderId              String
+  product              Product                @relation(fields: [productId], references: [id])
+  productId            String
+  productDetailsOnItem ProductDetailsOnItem?
 }
 
 model Order {

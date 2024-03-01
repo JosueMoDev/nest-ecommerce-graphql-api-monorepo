@@ -24,8 +24,8 @@ export class OrderItem {
   @Field(() => Int)
   quantity: number;
 
-  @Field(() => ProductDetails)
-  productDetails?: ProductDetails;
+  @Field(() => ProductDetails, { nullable: true })
+  productDetails?: ProductDetails | null;
 
   @Field(() => Float)
   price: string;

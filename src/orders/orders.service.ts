@@ -12,6 +12,7 @@ import {
 } from './inputs';
 import { PrismaService } from 'src/prisma.service';
 import { OrderItem } from './entities/order-item.entity';
+import { OrderItemMapper } from './mappers/order-item.mapper';
 
 @Injectable()
 export class OrdersService {
@@ -60,16 +61,38 @@ export class OrdersService {
               name: true,
             },
           },
+          productDetailsOnItem: {
+            select: {
+              configOnChip: {
+                select: {
+                  neuralEngine: true,
+                  id: true,
+                  price: true,
+                  cpu: true,
+                  gpu: true,
+                },
+              },
+              storageOnChip: {
+                select: {
+                  id: true,
+                  price: true,
+                  storage: true,
+                },
+              },
+              unifiedMemoryOnChip: {
+                select: {
+                  id: true,
+                  price: true,
+                  unifiedMemory: true,
+                },
+              },
+            },
+          },
           price: true,
           id: true,
         },
       });
-      return response.map(({ quantity, product, id, price }) => ({
-        id,
-        quantity,
-        product: product.name,
-        price,
-      }));
+      return response.map(OrderItemMapper.fromObject);
     } catch (error) {
       throw new InternalServerErrorException(`${error}`);
     }
@@ -233,14 +256,16 @@ export class OrdersService {
             total,
             totalOfItems: totalItemsInOrder,
             OrderItem: {
-              createMany: {
-                data: itemsInOrder.map(({ quantity, productId, price }) => ({
+              create: itemsInOrder.map(
+                ({ quantity, productId, price, productDetails }) => ({
                   quantity,
                   productId,
-                  productDetails: {},
                   price,
-                })),
-              },
+                  productDetailsOnItem: {
+                    create: productDetails,
+                  },
+                }),
+              ),
             },
           },
         });
