@@ -1,0 +1,567 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Authentication {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type User {
+  id: ID!
+  lastName: String!
+  firstName: String!
+  email: String!
+  emailVerified: DateTime
+  role: String!
+  isActive: Boolean
+  picture: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Country {
+  """Country id"""
+  id: String!
+  name: String!
+}
+
+type ShippingAddress {
+  """Shipping id"""
+  id: ID!
+  firstName: String!
+  lastName: String!
+  address: String!
+  address2: String
+  postalCode: String!
+  phone: String!
+  city: String!
+  user: User!
+  country: Country!
+}
+
+type Chip {
+  """Chip ID"""
+  id: ID!
+  chipFamilyName: String!
+  gama: String!
+  name: String!
+  storageOnChip: [StorageOnChip!]!
+  unifedMemoryOnChip: [UnifedMemoryOnChip!]!
+  configOnChip: [ConfigOnChip!]!
+}
+
+type Gpu {
+  """GPU ID"""
+  id: ID!
+  cores: Int!
+}
+
+type Cpu {
+  """CPU ID"""
+  id: ID!
+  cores: Int!
+}
+
+"""Gpu On Chip"""
+type ConfigOnChip {
+  id: ID!
+  gpu: Gpu!
+  cpu: Cpu!
+  neuralEngine: String!
+  price: Float!
+}
+
+type Storage {
+  """Storage ID"""
+  id: ID!
+  capacity: Int!
+  capacityOn: String!
+}
+
+"""Storage On Chip"""
+type StorageOnChip {
+  id: ID!
+  storage: Storage!
+  price: Float!
+}
+
+type UnifiedMemory {
+  """Unified Memory ID"""
+  id: ID!
+  capacity: Int!
+}
+
+"""Unified Memory On Chip"""
+type UnifedMemoryOnChip {
+  id: ID!
+  unifiedMemory: UnifiedMemory!
+  price: Float!
+}
+
+type ProductDetails {
+  storageOnChip: StorageOnChip
+  unifiedMemoryOnChip: UnifedMemoryOnChip
+  configOnChip: ConfigOnChip
+}
+
+type OrderItem {
+  """Order Item Id"""
+  id: ID!
+  quantity: Int!
+  productDetails: ProductDetails
+  price: Float!
+  product: String!
+}
+
+type Order {
+  id: ID!
+  subTotal: Float!
+  tax: Float!
+  total: Float!
+  totalOfItems: Int!
+  isPaid: Boolean!
+  paidAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime
+  transactionId: String
+  user: User!
+  shippingAddress: ShippingAddress!
+  itemsInOrder: [OrderItem!]!
+}
+
+type Color {
+  id: ID!
+  name: String!
+  hexadecimalColor: String!
+  release: DateTime!
+}
+
+type StockByColor {
+  id: ID!
+  color: Color!
+  stock: Int!
+}
+
+type ProductPicture {
+  id: ID!
+  url: String!
+}
+
+type PicturesByColor {
+  color: String!
+  productPictures: [ProductPicture!]!
+}
+
+type Category {
+  id: ID!
+  name: String!
+}
+
+type SubCategory {
+  """Subcategory Id"""
+  id: ID!
+  name: String!
+  slug: String!
+  gender: String!
+  isActive: Boolean
+  category: Category!
+}
+
+type Product {
+  """Product"""
+  id: ID!
+  name: String!
+  description: String!
+  slug: String!
+  price: Float!
+  subCategory: SubCategory!
+  stockByColor: [StockByColor!]
+  picturesByColor: [PicturesByColor!]
+  chip: Chip
+}
+
+type TechSpec {
+  id: ID!
+  name: String!
+  subCategory: SubCategory!
+}
+
+type Query {
+  authentication(id: Int!): Authentication!
+  users: [User!]!
+  user(email: String!): User!
+  shippingAddresses: [ShippingAddress!]!
+  shippingAddress(id: ID!): ShippingAddress!
+  orders: [Order!]!
+  order(id: ID!): Order!
+  products: [Product!]!
+  product(id: ID!): Product!
+  colors: [Color!]!
+  color(id: ID!): Color!
+  techSpecs: [TechSpec!]!
+  techSpec(id: Int!): TechSpec!
+  category(id: ID!): Category!
+  subCategories: [SubCategory!]!
+  subCategory(id: ID!): SubCategory!
+  chips: [Chip!]!
+  chip(id: ID!): Chip!
+  storages: [Storage!]!
+  storage(id: ID!): Storage!
+  cpus: [Cpu!]!
+  cpu(id: ID!): Cpu!
+  gpus: [Gpu!]!
+  gpu(id: ID!): Gpu!
+  unifiedMemories: [UnifiedMemory!]!
+  unifiedMemory(id: ID!): UnifiedMemory!
+}
+
+type Mutation {
+  createAuthentication(createAuthenticationInput: CreateAuthenticationInput!): Authentication!
+  updateAuthentication(updateAuthenticationInput: UpdateAuthenticationInput!): Authentication!
+  removeAuthentication(id: Int!): Authentication!
+  registerUser(registerUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  changePassword(changePasswordInput: ChangePasswordInput!): Boolean!
+
+  """This mutations change user activate status"""
+  toggleActiveStatus(email: String!): User!
+  createShippingAddress(createShippingAddressInput: CreateShippingAddressInput!): ShippingAddress!
+  updateShippingAddress(updateShippingAddressInput: UpdateShippingAddressInput!): ShippingAddress!
+  removeShippingAddress(id: ID!): ShippingAddress!
+  createOrder(createOrderInput: CreateOrderInput!): Order!
+  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  removeOrder(id: ID!): Order!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  setStockByColor(stockByColorInput: SetStockByColorInput!): Product!
+  uploadPicturesByColor(picturesByColor: PictureByColorInput!, productId: ID!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: ID!): Product!
+  createColor(createColorInput: CreateColorInput!): Color!
+  updateColor(updateColorInput: UpdateColorInput!): Color!
+  removeColor(id: ID!): Color!
+  createTechSpec(createTechSpecInput: CreateTechSpecInput!): TechSpec!
+  updateTechSpec(updateTechSpecInput: UpdateTechSpecInput!): TechSpec!
+  removeTechSpec(id: Int!): TechSpec!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  removeCategory(id: ID!): Category!
+  createSubCategory(createSubCategoryInput: CreateSubCategoryInput!): SubCategory!
+  updateSubCategory(updateSubCategoryInput: UpdateSubCategoryInput!): SubCategory!
+  toggleSubCategoryStatus(id: ID!): SubCategory!
+  createChip(createChipInput: CreateChipInput!): Chip!
+  updateChip(updateChipInput: UpdateChipInput!): Chip!
+  removeChip(id: ID!): Chip!
+  createStorage(createStorageInput: CreateStorageInput!): Storage!
+  updateStorage(updateStorageInput: UpdateStorageInput!): Storage!
+  removeStorage(id: ID!): Storage!
+  createCpu(createCpuInput: CreateCpuInput!): Cpu!
+  updateCpu(updateCpuInput: UpdateCpuInput!): Cpu!
+  removeCpu(id: ID!): Cpu!
+  createGpu(createGpuInput: CreateGpuInput!): Gpu!
+  updateGpu(updateGpuInput: UpdateGpuInput!): Gpu!
+  removeGpu(id: ID!): Gpu!
+  createUnifiedMemory(createUnifiedMemoryInput: CreateUnifiedMemoryInput!): UnifiedMemory!
+  updateUnifiedMemory(updateUnifedMemoryInput: UpdateUnifiedMemoryInput!): UnifiedMemory!
+  removeUnifedMemory(id: ID!): UnifiedMemory!
+}
+
+input CreateAuthenticationInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateAuthenticationInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateUserInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  userRole: UserRole!
+  picture: String
+}
+
+enum UserRole {
+  CLIENT
+  USER
+  SUPERUSER
+}
+
+input UpdateUserInput {
+  firstName: String
+  lastName: String
+  email: String
+  userRole: UserRole
+  picture: String
+  id: ID!
+}
+
+input ChangePasswordInput {
+  newPassword: String!
+  password: String!
+  email: String!
+}
+
+input CreateShippingAddressInput {
+  firstName: String!
+  lastName: String!
+  address: String!
+  address2: String
+  postalCode: String!
+  phone: String!
+  city: String!
+  userId: ID!
+  countryId: String!
+}
+
+input UpdateShippingAddressInput {
+  firstName: String
+  lastName: String
+  address: String
+  address2: String
+  postalCode: String
+  phone: String
+  city: String
+  userId: ID
+  countryId: String
+  id: ID!
+}
+
+input CreateOrderInput {
+  userId: ID!
+  shippingAddressId: ID!
+  itemsInOrder: [ItemInOrder!]!
+}
+
+input ItemInOrder {
+  productId: ID!
+  stockId: ID!
+  productDetails: ProductDetailsInput
+  quantity: Int!
+  price: Float!
+}
+
+input ProductDetailsInput {
+  storageOnChipId: ID
+  unifiedMemoryOnChipId: ID
+  configOnChipId: ID
+}
+
+input UpdateOrderInput {
+  userId: ID
+  shippingAddressId: ID
+  itemsInOrder: [ItemInOrder!]
+  id: Int!
+}
+
+input CreateProductInput {
+  name: String!
+  description: String!
+  price: Float!
+  subCategoryId: ID!
+  techSpecsOnProductId: ID!
+  chipId: ID
+}
+
+input SetStockByColorInput {
+  productId: ID!
+  colorAndStock: [ColorAndStockInput!]!
+}
+
+input ColorAndStockInput {
+  colorId: ID!
+  stock: Int!
+}
+
+input PictureByColorInput {
+  productPictures: [PicturesUrl!]!
+}
+
+input PicturesUrl {
+  urls: [String!]!
+  colorId: ID!
+}
+
+input UpdateProductInput {
+  name: String
+  description: String
+  price: Float
+  subCategoryId: ID
+  techSpecsOnProductId: ID
+  chipId: ID
+  id: Int!
+}
+
+input CreateColorInput {
+  name: String!
+  hexadecimalColor: String!
+  release: DateTime
+}
+
+input UpdateColorInput {
+  name: String
+  hexadecimalColor: String
+  release: DateTime
+  id: ID!
+}
+
+input CreateTechSpecInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateTechSpecInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCategoryInput {
+  categoryName: CategoryName!
+}
+
+enum CategoryName {
+  IPHONE
+  IPAD
+  WATCH
+  MAC
+  VISION
+  AIRPODS
+  TVHOME
+  ACCESSORIES
+}
+
+input UpdateCategoryInput {
+  categoryName: CategoryName
+  id: Int!
+}
+
+input CreateSubCategoryInput {
+  name: String!
+  productGender: ProductGender!
+  categoryId: ID!
+}
+
+enum ProductGender {
+  DISPLAY
+  LAPTOP
+  DESKTOP
+  PHONE
+  TABLET
+  WATCH
+  AUDIO
+  ACCESSORY
+  VISION
+}
+
+input UpdateSubCategoryInput {
+  name: String
+  productGender: ProductGender
+  categoryId: ID
+  id: ID!
+}
+
+input CreateChipInput {
+  chipFamilyName: ChipFamilyName!
+  gama: ChipGama!
+  storageOnChip: [OnChipInput!]!
+  unifiedMemoryOnChip: [OnChipInput!]!
+  configOnChip: [ConfigOnChipInput!]!
+}
+
+enum ChipFamilyName {
+  M1
+  M2
+  M3
+  S8
+  S9
+  A15
+  A16
+  A17
+}
+
+enum ChipGama {
+  BASE
+  PRO
+  BIONIC
+  MAX
+  ULTRA
+}
+
+input OnChipInput {
+  """Could be Storage,  Unified Memory Id"""
+  id: ID!
+  price: Float!
+}
+
+input ConfigOnChipInput {
+  cpuId: ID!
+  gpuId: ID!
+  neuralEngine: NeuralEngine!
+  price: Float!
+}
+
+enum NeuralEngine {
+  SixTeenCores
+  ThirtyCores
+}
+
+input UpdateChipInput {
+  chipFamilyName: ChipFamilyName
+  gama: ChipGama
+  storageOnChip: [OnChipInput!]
+  unifiedMemoryOnChip: [OnChipInput!]
+  configOnChip: [ConfigOnChipInput!]
+  id: Int!
+}
+
+input CreateStorageInput {
+  capacity: Int!
+  capacityOn: CapacityOn!
+}
+
+enum CapacityOn {
+  GB
+  TB
+}
+
+input UpdateStorageInput {
+  capacity: Int
+  capacityOn: CapacityOn
+  id: ID!
+}
+
+input CreateCpuInput {
+  cores: Int!
+}
+
+input UpdateCpuInput {
+  cores: Int
+  id: ID!
+}
+
+input CreateGpuInput {
+  cores: Int!
+}
+
+input UpdateGpuInput {
+  cores: Int
+  id: ID!
+}
+
+input CreateUnifiedMemoryInput {
+  capacity: Int!
+}
+
+input UpdateUnifiedMemoryInput {
+  capacity: Int
+  id: ID!
+}
