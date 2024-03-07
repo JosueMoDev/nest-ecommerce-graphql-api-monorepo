@@ -277,21 +277,13 @@ input CreateUserInput {
   lastName: String!
   email: String!
   password: String!
-  userRole: UserRole!
   picture: String
-}
-
-enum UserRole {
-  CLIENT
-  USER
-  SUPERUSER
 }
 
 input UpdateUserInput {
   firstName: String
   lastName: String
   email: String
-  userRole: UserRole
   picture: String
   id: ID!
 }

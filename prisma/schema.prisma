@@ -247,7 +247,7 @@ model User {
   email         String    @unique
   emailVerified DateTime?
   password      String
-  role          Role
+  role          Role      @default(CLIENT)
   picture       String?
   isActive      Boolean   @default(true)
   // * Relations
@@ -295,17 +295,17 @@ model ProductDetailsOnItem {
   configOnChipId String?
 
   orderItem   OrderItem @relation(fields: [orderItemId], references: [id])
-  orderItemId String @unique
+  orderItemId String    @unique
 }
 
 model OrderItem {
-  id                   String                 @id @default(uuid())
+  id                   String                @id @default(uuid())
   quantity             Int
   price                Float
   //* Relations
-  order                Order                  @relation(fields: [orderId], references: [id])
+  order                Order                 @relation(fields: [orderId], references: [id])
   orderId              String
-  product              Product                @relation(fields: [productId], references: [id])
+  product              Product               @relation(fields: [productId], references: [id])
   productId            String
   productDetailsOnItem ProductDetailsOnItem?
 }

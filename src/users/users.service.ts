@@ -19,13 +19,12 @@ export class UsersService {
   ) {}
 
   async register(createUserInput: CreateUserInput) {
-    const { userRole, password, picture, ...rest } = createUserInput;
+    const { password, picture, ...rest } = createUserInput;
     try {
       const passwordHash = await bcrypt.hash(password, 10);
       return await this.prismaService.user.create({
         data: {
           password: passwordHash,
-          role: UserRole[userRole],
           picture: picture ?? null,
           ...rest,
         },
