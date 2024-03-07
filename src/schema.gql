@@ -2,11 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Authentication {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 type User {
   id: ID!
   lastName: String!
@@ -22,6 +17,10 @@ type User {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type Authentication {
+  user: User!
+}
 
 type Country {
   """Country id"""
@@ -191,7 +190,7 @@ type TechSpec {
 }
 
 type Query {
-  authentication(id: Int!): Authentication!
+  Login(loginInput: LoginInput!): Authentication!
   users: [User!]!
   user(email: String!): User!
   shippingAddresses: [ShippingAddress!]!
@@ -219,10 +218,14 @@ type Query {
   unifiedMemory(id: ID!): UnifiedMemory!
 }
 
+input LoginInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
-  createAuthentication(createAuthenticationInput: CreateAuthenticationInput!): Authentication!
-  updateAuthentication(updateAuthenticationInput: UpdateAuthenticationInput!): Authentication!
-  removeAuthentication(id: Int!): Authentication!
+  createAuthentication: Authentication!
+  validate: Authentication!
   registerUser(registerUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   changePassword(changePasswordInput: ChangePasswordInput!): Boolean!
@@ -267,17 +270,6 @@ type Mutation {
   createUnifiedMemory(createUnifiedMemoryInput: CreateUnifiedMemoryInput!): UnifiedMemory!
   updateUnifiedMemory(updateUnifedMemoryInput: UpdateUnifiedMemoryInput!): UnifiedMemory!
   removeUnifedMemory(id: ID!): UnifiedMemory!
-}
-
-input CreateAuthenticationInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateAuthenticationInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
 }
 
 input CreateUserInput {
