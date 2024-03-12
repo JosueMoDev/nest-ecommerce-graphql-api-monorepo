@@ -203,6 +203,7 @@ type Query {
   color(id: ID!): Color!
   techSpecs: [TechSpec!]!
   techSpec(id: Int!): TechSpec!
+  categories: [Category!]!
   category(id: ID!): Category!
   subCategories: [SubCategory!]!
   subCategory(id: ID!): SubCategory!
