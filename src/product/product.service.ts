@@ -11,6 +11,7 @@ import {
 } from './inputs';
 import { PrismaService } from 'src/prisma.service';
 import { PicturesByColorMapper } from './mappers/pictures-by-color.mapper';
+import { CategoryName } from '@prisma/client';
 
 @Injectable()
 export class ProductService {
@@ -150,6 +151,22 @@ export class ProductService {
     try {
       return await this.prismaService.product.findUnique({
         where: { slug },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`${error}`);
+    }
+  }
+
+  async findManyByCategory(category: string) {
+    try {
+      return await this.prismaService.product.findMany({
+        where: {
+          subCategory: {
+            category: {
+              name: CategoryName[category],
+            },
+          },
+        },
       });
     } catch (error) {
       throw new InternalServerErrorException(`${error}`);

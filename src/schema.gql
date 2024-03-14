@@ -198,6 +198,7 @@ type Query {
   orders: [Order!]!
   order(id: ID!): Order!
   products: [Product!]!
+  productsByCategory(category: String!): [Product!]!
   product(slug: String!): Product!
   colors: [Color!]!
   color(id: ID!): Color!

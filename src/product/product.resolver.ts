@@ -75,6 +75,13 @@ export class ProductResolver {
     return this.productService.findAll();
   }
 
+  @Query(() => [Product], { name: 'productsByCategory' })
+  findManyByCategory(
+    @Args('category', { type: () => String }) category: string,
+  ) {
+    return this.productService.findManyByCategory(category);
+  }
+
   @Query(() => Product, { name: 'product' })
   findOne(@Args('slug', { type: () => String }) slug: string) {
     return this.productService.findOne(slug);
