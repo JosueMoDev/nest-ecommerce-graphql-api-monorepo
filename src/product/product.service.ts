@@ -146,10 +146,10 @@ export class ProductService {
     return await this.prismaService.product.findMany();
   }
 
-  async findOne(id: string) {
+  async findOne(slug: string) {
     try {
       return await this.prismaService.product.findUnique({
-        where: { id },
+        where: { slug },
       });
     } catch (error) {
       throw new InternalServerErrorException(`${error}`);

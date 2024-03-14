@@ -76,8 +76,8 @@ export class ProductResolver {
   }
 
   @Query(() => Product, { name: 'product' })
-  findOne(@Args('id', { type: () => ID }) id: string) {
-    return this.productService.findOne(id);
+  findOne(@Args('slug', { type: () => String }) slug: string) {
+    return this.productService.findOne(slug);
   }
 
   @Mutation(() => Product)
