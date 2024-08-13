@@ -33,11 +33,6 @@ export class CreateUserInput {
   @Field(() => String)
   password: string;
 
-  @IsNotEmpty()
-  @IsEnum(UserRole)
-  @Field(() => UserRole)
-  userRole: string;
-
   @IsOptional()
   @IsString()
   @Field(() => String, {

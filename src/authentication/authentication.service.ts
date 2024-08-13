@@ -1,26 +1,33 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthenticationInput } from './inputs/create-authentication.input';
-import { UpdateAuthenticationInput } from './inputs/update-authentication.input';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { LoginInput } from './inputs';
+import { PrismaService } from 'src/prisma.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthenticationService {
-  create(createAuthenticationInput: CreateAuthenticationInput) {
+  constructor(
+    @Inject(PrismaService) private readonly prismaService: PrismaService,
+  ) {}
+
+  register() {
     return 'This action adds a new authentication';
   }
 
-  findAll() {
-    return `This action returns all authentication`;
+  async login(loginInput: LoginInput) {
+    const { email, password } = loginInput;
+
+    const user = await this.prismaService.user.findUnique({ where: { email } });
+    if (!user) throw new NotFoundException('User not found');
+    const hasPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!hasPasswordMatch) throw new NotFoundException('Wrong Credentials');
+
+    return {
+      user,
+      token: 'ljñfjlskjalksjdalksdjalskdjasldk',
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} authentication`;
-  }
-
-  update(id: number, updateAuthenticationInput: UpdateAuthenticationInput) {
-    return `This action updates a #${id} authentication`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} authentication`;
+  validate() {
+    return `This action updates a authentication`;
   }
 }

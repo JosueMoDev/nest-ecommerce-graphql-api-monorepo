@@ -23,8 +23,8 @@ export class CategoryService {
     }
   }
 
-  findAll() {
-    return `This action returns all category`;
+  async findAll() {
+    return await this.prismaService.category.findMany({});
   }
 
   findOne(id: string) {
