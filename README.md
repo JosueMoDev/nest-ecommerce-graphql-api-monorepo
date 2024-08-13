@@ -28,7 +28,7 @@ This setup ensures a scalable and maintainable system, with clear separation of 
 ### 1. **Clone the repository:**
 
 ```bash
-  git clone https://github.com/YourUsername/ecommerce-backend
+  git clone https://github.com/JosueMoDev/nest-ecommerce-graphql-api
   cd ecommerce-backend
 ```
 
