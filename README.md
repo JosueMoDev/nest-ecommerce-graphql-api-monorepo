@@ -1,75 +1,76 @@
-<!-- <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 🛒 E-commerce - Nest and GraphQL
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a backend system for an e-commerce platform built as a monorepo using NestJS. The current setup includes an **Admin Module** with features such as:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  [![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)
+- **Product Management**: Create, update, and delete products.
+- **Image Upload**: Upload product images to AWS S3.
 
-## Description
+In the future, we plan to transition to a microservices architecture. The Admin Module will be part of this architecture, while additional microservices will handle sales and other functionalities:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Sales Microservice**: To be developed with Golang and Gin for managing sales and orders.
+- **Message Broker**: RabbitMQ will be used for communication between microservices.
 
-## Installation
+This setup ensures a scalable and maintainable system, with clear separation of concerns between different modules and services.
 
-```bash
-$ yarn install
-```
+🛠️ Technologies
 
-## Running the app
+- **Backend:**
+  - NestJS
+  - GraphQL (Apollo Server)
+  - TypeScript
+  - PostgreSQL
+  - Prisma ORM
+  - Docker for containerization
+  - Apollo Client for testing GraphQL API
+
+## ⚙️ Setup
+
+### 1. **Clone the repository:**
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+  git clone https://github.com/YourUsername/ecommerce-backend
+  cd ecommerce-backend
 ```
 
-## Test
+Copiar código
+### 1. **Install dependencies**
+```bash
+yarn install
+```
+
+### 2. Set up environment variables:
+Rename the .env.template file to .env and configure the following variables:
+
+env
+```bash
+DB_USER=
+DB_NAME=
+DB_PASSWORD=
+DATABASE_URL=
+PORT=
+```
+
+### 3. 🐋 Docker Setup:
+To run the application using Docker:
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+  docker-compose up -d
 ```
 
-## Support
+### 4. Run Prisma migrations:
+```bash
+  npx prisma migrate dev
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### 5. Generate Prisma Client:
+```bash
+  npx prisma generate
+```
+### 6. Run the development server:
+```bash
+  yarn start:dev
+```
 
-## Stay in touch
+### 7. Access the API:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE). -->
-
-<!-- Todo Encontrar un medio para que la data tenga el mismo tipo para prisma que paga el schema de gql, validar envs, crear el schema de base de datos(prisma) -->
+You can access the API at http://localhost:3000/graphql. Use a tool like Apollo Client or Postman to interact with the GraphQL API.
