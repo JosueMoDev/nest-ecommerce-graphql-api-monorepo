@@ -8,7 +8,7 @@ This is a backend system for an e-commerce platform built as a monorepo using Ne
 In the future, we plan to transition to a microservices architecture. The Admin Module will be part of this architecture, while additional microservices will handle sales and other functionalities:
 
 - **Sales Microservice**: To be developed with Golang and Gin for managing sales and orders.
-- **Message Broker**: RabbitMQ will be used for communication between microservices.
+- **Message Broker**: RabbitMQ or NATS will be used for communication between microservices.
 
 This setup ensures a scalable and maintainable system, with clear separation of concerns between different modules and services.
 
