@@ -1,13 +1,22 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  // * this cors enable this origin
-  app.enableCors({
-    origin: 'http://localhost:3001',
-  });
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.RMQ,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'cats_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+  );
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -15,6 +24,6 @@ async function bootstrap() {
       forbidNonWhitelisted: false,
     }),
   );
-  await app.listen(3000);
+  await app.listen();
 }
 bootstrap();
