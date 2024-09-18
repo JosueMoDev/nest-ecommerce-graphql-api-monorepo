@@ -1,5 +1,4 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { User } from 'src/users/entities/user.entity';
 import { Country } from './country.entity';
 
 @ObjectType()
@@ -29,10 +28,6 @@ export class ShippingAddress {
   city: string;
 
   // * Relations
-
-  @Field(() => User)
-  user: User;
-
   @Field(() => Country)
   country: Country;
 }

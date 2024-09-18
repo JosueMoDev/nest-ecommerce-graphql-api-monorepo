@@ -13,18 +13,6 @@ export class ShippingAddressService {
     @Inject(PrismaService) private readonly prismaService: PrismaService,
   ) {}
 
-  async user(shippingAddressId: string) {
-    try {
-      return await this.prismaService.shippingAddress
-        .findUnique({
-          where: { id: shippingAddressId },
-        })
-        .user();
-    } catch (error) {
-      throw new InternalServerErrorException(`${error}`);
-    }
-  }
-
   async country(shippingAddressId: string) {
     try {
       return await this.prismaService.shippingAddress
@@ -39,18 +27,13 @@ export class ShippingAddressService {
 
   async create(createShippingAddressInput: CreateShippingAddressInput) {
     try {
-      const { countryId, userId, ...rest } = createShippingAddressInput;
+      const { countryId, ...rest } = createShippingAddressInput;
       return await this.prismaService.shippingAddress.create({
         data: {
           ...rest,
           country: {
             connect: {
               id: countryId,
-            },
-          },
-          user: {
-            connect: {
-              id: userId,
             },
           },
         },

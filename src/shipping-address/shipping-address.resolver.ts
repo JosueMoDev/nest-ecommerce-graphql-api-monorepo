@@ -21,11 +21,6 @@ export class ShippingAddressResolver {
   ) {}
 
   @ResolveField()
-  user(@Root() shippingAddress: ShippingAddress) {
-    return this.shippingAddressService.user(shippingAddress.id);
-  }
-
-  @ResolveField()
   country(@Root() shippingAddress: ShippingAddress) {
     return this.shippingAddressService.country(shippingAddress.id);
   }

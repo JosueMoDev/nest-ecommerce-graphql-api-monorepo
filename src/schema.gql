@@ -2,26 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  id: ID!
-  lastName: String!
-  firstName: String!
-  email: String!
-  emailVerified: DateTime
-  role: String!
-  isActive: Boolean
-  picture: String
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type Authentication {
-  user: User!
-}
-
 type Country {
   """Country id"""
   id: String!
@@ -38,7 +18,6 @@ type ShippingAddress {
   postalCode: String!
   phone: String!
   city: String!
-  user: User!
   country: Country!
 }
 
@@ -127,10 +106,14 @@ type Order {
   createdAt: DateTime!
   updatedAt: DateTime
   transactionId: String
-  user: User!
   shippingAddress: ShippingAddress!
   itemsInOrder: [OrderItem!]!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Color {
   id: ID!
@@ -190,9 +173,6 @@ type TechSpec {
 }
 
 type Query {
-  Login(loginInput: LoginInput!): Authentication!
-  users: [User!]!
-  user(email: String!): User!
   shippingAddresses: [ShippingAddress!]!
   shippingAddress(id: ID!): ShippingAddress!
   orders: [Order!]!
@@ -220,20 +200,7 @@ type Query {
   unifiedMemory(id: ID!): UnifiedMemory!
 }
 
-input LoginInput {
-  email: String!
-  password: String!
-}
-
 type Mutation {
-  createAuthentication: Authentication!
-  validate: Authentication!
-  registerUser(registerUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  changePassword(changePasswordInput: ChangePasswordInput!): Boolean!
-
-  """This mutations change user activate status"""
-  toggleActiveStatus(email: String!): User!
   createShippingAddress(createShippingAddressInput: CreateShippingAddressInput!): ShippingAddress!
   updateShippingAddress(updateShippingAddressInput: UpdateShippingAddressInput!): ShippingAddress!
   removeShippingAddress(id: ID!): ShippingAddress!
@@ -272,28 +239,6 @@ type Mutation {
   createUnifiedMemory(createUnifiedMemoryInput: CreateUnifiedMemoryInput!): UnifiedMemory!
   updateUnifiedMemory(updateUnifedMemoryInput: UpdateUnifiedMemoryInput!): UnifiedMemory!
   removeUnifedMemory(id: ID!): UnifiedMemory!
-}
-
-input CreateUserInput {
-  firstName: String!
-  lastName: String!
-  email: String!
-  password: String!
-  picture: String
-}
-
-input UpdateUserInput {
-  firstName: String
-  lastName: String
-  email: String
-  picture: String
-  id: ID!
-}
-
-input ChangePasswordInput {
-  newPassword: String!
-  password: String!
-  email: String!
 }
 
 input CreateShippingAddressInput {
