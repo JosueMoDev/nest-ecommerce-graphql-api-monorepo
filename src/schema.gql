@@ -2,25 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Country {
-  """Country id"""
-  id: String!
-  name: String!
-}
-
-type ShippingAddress {
-  """Shipping id"""
-  id: ID!
-  firstName: String!
-  lastName: String!
-  address: String!
-  address2: String
-  postalCode: String!
-  phone: String!
-  city: String!
-  country: Country!
-}
-
 type Chip {
   """Chip ID"""
   id: ID!
@@ -106,7 +87,6 @@ type Order {
   createdAt: DateTime!
   updatedAt: DateTime
   transactionId: String
-  shippingAddress: ShippingAddress!
   itemsInOrder: [OrderItem!]!
 }
 
@@ -173,8 +153,6 @@ type TechSpec {
 }
 
 type Query {
-  shippingAddresses: [ShippingAddress!]!
-  shippingAddress(id: ID!): ShippingAddress!
   orders: [Order!]!
   order(id: ID!): Order!
   products: [Product!]!
@@ -201,9 +179,6 @@ type Query {
 }
 
 type Mutation {
-  createShippingAddress(createShippingAddressInput: CreateShippingAddressInput!): ShippingAddress!
-  updateShippingAddress(updateShippingAddressInput: UpdateShippingAddressInput!): ShippingAddress!
-  removeShippingAddress(id: ID!): ShippingAddress!
   createOrder(createOrderInput: CreateOrderInput!): Order!
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
   removeOrder(id: ID!): Order!
@@ -239,31 +214,6 @@ type Mutation {
   createUnifiedMemory(createUnifiedMemoryInput: CreateUnifiedMemoryInput!): UnifiedMemory!
   updateUnifiedMemory(updateUnifedMemoryInput: UpdateUnifiedMemoryInput!): UnifiedMemory!
   removeUnifedMemory(id: ID!): UnifiedMemory!
-}
-
-input CreateShippingAddressInput {
-  firstName: String!
-  lastName: String!
-  address: String!
-  address2: String
-  postalCode: String!
-  phone: String!
-  city: String!
-  userId: ID!
-  countryId: String!
-}
-
-input UpdateShippingAddressInput {
-  firstName: String
-  lastName: String
-  address: String
-  address2: String
-  postalCode: String
-  phone: String
-  city: String
-  userId: ID
-  countryId: String
-  id: ID!
 }
 
 input CreateOrderInput {

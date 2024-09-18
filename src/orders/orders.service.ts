@@ -24,19 +24,6 @@ export class OrdersService {
     orderItems.map((orderItem) => console.log(orderItem.id));
     return;
   }
-
-  async shippingAddress(id: string) {
-    try {
-      return await this.prismaService.order
-        .findUnique({
-          where: { id },
-        })
-        .shippingAddress();
-    } catch (error) {
-      throw new InternalServerErrorException(`${error}`);
-    }
-  }
-  // TODO product Details,
   async itemsInOnder(id: string) {
     try {
       const response = await this.prismaService.orderItem.findMany({
@@ -89,7 +76,7 @@ export class OrdersService {
 
   async create(createOrderInput: CreateOrderInput) {
     try {
-      const { shippingAddressId, itemsInOrder } = createOrderInput;
+      const { itemsInOrder } = createOrderInput;
 
       const totalItemsInOrder = itemsInOrder.reduce(
         (count, p) => count + p.quantity,
@@ -238,7 +225,6 @@ export class OrdersService {
 
         const order = await transaction.order.create({
           data: {
-            shippingAddressId,
             subTotal,
             tax,
             total,

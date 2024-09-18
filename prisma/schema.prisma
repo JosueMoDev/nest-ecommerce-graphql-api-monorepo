@@ -240,31 +240,6 @@ model ProductPicture {
   colorId String
 }
 
-
-model Country {
-  id   String @id
-  name String
-  // * Relations
-
-  shippingAddress ShippingAddress[]
-}
-
-model ShippingAddress {
-  id         String  @id @default(uuid())
-  firstName  String
-  lastName   String
-  address    String
-  address2   String?
-  postalCode String
-  phone      String
-  city       String
-  // * Relations
-
-  country   Country @relation(fields: [countryId], references: [id])
-  countryId String
-  order     Order[]
-}
-
 model ProductDetailsOnItem {
   id              String         @id @default(uuid())
   //* Relations
@@ -305,8 +280,6 @@ model Order {
   updatedAt     DateTime  @updatedAt
   transactionId String?
 
-  // * Relations
-  shippingAddress   ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
-  shippingAddressId String?
+  // * Relation
   OrderItem         OrderItem[]
 }

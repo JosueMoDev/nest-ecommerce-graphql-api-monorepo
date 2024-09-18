@@ -8,17 +8,12 @@ import {
   Root,
 } from '@nestjs/graphql';
 import { OrdersService } from './orders.service';
-import { Order, OrderItem, ShippingAddress } from './entities';
+import { Order, OrderItem } from './entities';
 import { CreateOrderInput, UpdateOrderInput } from './inputs';
 
 @Resolver(() => Order)
 export class OrdersResolver {
   constructor(private readonly ordersService: OrdersService) {}
-
-  @ResolveField(() => ShippingAddress)
-  shippingAddress(@Root() order: Order) {
-    return this.ordersService.shippingAddress(order.id);
-  }
 
   @ResolveField(() => [OrderItem])
   itemsInOrder(@Root() order: Order) {
