@@ -5,7 +5,6 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { PrismaService } from './prisma.service';
-import { OrdersModule } from './orders/orders.module';
 import { ProductModule } from './product/product.module';
 import { CategoryModule } from './category/category.module';
 import { SubCategoryModule } from './sub-category/sub-category.module';
@@ -32,7 +31,6 @@ import { ChipModule } from './chip/chip.module';
         // TODO implement -> context() {},
       }),
     }),
-    OrdersModule,
     ProductModule,
     CategoryModule,
     SubCategoryModule,

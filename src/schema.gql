@@ -2,15 +2,32 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Chip {
-  """Chip ID"""
+type Color {
   id: ID!
-  chipFamilyName: String!
-  gama: String!
   name: String!
-  storageOnChip: [StorageOnChip!]!
-  unifedMemoryOnChip: [UnifedMemoryOnChip!]!
-  configOnChip: [ConfigOnChip!]!
+  hexadecimalColor: String!
+  release: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type StockByColor {
+  id: ID!
+  color: Color!
+  stock: Int!
+}
+
+type ProductPicture {
+  id: ID!
+  url: String!
+}
+
+type PicturesByColor {
+  color: String!
+  productPictures: [ProductPicture!]!
 }
 
 type Gpu {
@@ -61,61 +78,15 @@ type UnifedMemoryOnChip {
   price: Float!
 }
 
-type ProductDetails {
-  storageOnChip: StorageOnChip
-  unifiedMemoryOnChip: UnifedMemoryOnChip
-  configOnChip: ConfigOnChip
-}
-
-type OrderItem {
-  """Order Item Id"""
+type Chip {
+  """Chip ID"""
   id: ID!
-  quantity: Int!
-  productDetails: ProductDetails
-  price: Float!
-  product: String!
-}
-
-type Order {
-  id: ID!
-  subTotal: Float!
-  tax: Float!
-  total: Float!
-  totalOfItems: Int!
-  isPaid: Boolean!
-  paidAt: DateTime
-  createdAt: DateTime!
-  updatedAt: DateTime
-  transactionId: String
-  itemsInOrder: [OrderItem!]!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type Color {
-  id: ID!
+  chipFamilyName: String!
+  gama: String!
   name: String!
-  hexadecimalColor: String!
-  release: DateTime!
-}
-
-type StockByColor {
-  id: ID!
-  color: Color!
-  stock: Int!
-}
-
-type ProductPicture {
-  id: ID!
-  url: String!
-}
-
-type PicturesByColor {
-  color: String!
-  productPictures: [ProductPicture!]!
+  storageOnChip: [StorageOnChip!]!
+  unifedMemoryOnChip: [UnifedMemoryOnChip!]!
+  configOnChip: [ConfigOnChip!]!
 }
 
 type Category {
@@ -153,8 +124,6 @@ type TechSpec {
 }
 
 type Query {
-  orders: [Order!]!
-  order(id: ID!): Order!
   products: [Product!]!
   productsByCategory(category: String!): [Product!]!
   product(slug: String!): Product!
@@ -179,9 +148,6 @@ type Query {
 }
 
 type Mutation {
-  createOrder(createOrderInput: CreateOrderInput!): Order!
-  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
-  removeOrder(id: ID!): Order!
   createProduct(createProductInput: CreateProductInput!): Product!
   setStockByColor(stockByColorInput: SetStockByColorInput!): Product!
   uploadPicturesByColor(picturesByColor: PictureByColorInput!, productId: ID!): Product!
@@ -214,33 +180,6 @@ type Mutation {
   createUnifiedMemory(createUnifiedMemoryInput: CreateUnifiedMemoryInput!): UnifiedMemory!
   updateUnifiedMemory(updateUnifedMemoryInput: UpdateUnifiedMemoryInput!): UnifiedMemory!
   removeUnifedMemory(id: ID!): UnifiedMemory!
-}
-
-input CreateOrderInput {
-  userId: ID!
-  shippingAddressId: ID!
-  itemsInOrder: [ItemInOrder!]!
-}
-
-input ItemInOrder {
-  productId: ID!
-  stockId: ID!
-  productDetails: ProductDetailsInput
-  quantity: Int!
-  price: Float!
-}
-
-input ProductDetailsInput {
-  storageOnChipId: ID
-  unifiedMemoryOnChipId: ID
-  configOnChipId: ID
-}
-
-input UpdateOrderInput {
-  userId: ID
-  shippingAddressId: ID
-  itemsInOrder: [ItemInOrder!]
-  id: Int!
 }
 
 input CreateProductInput {
