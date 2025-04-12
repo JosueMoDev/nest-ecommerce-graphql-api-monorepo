@@ -30,6 +30,10 @@ import { ChipModule } from './chip/chip.module';
         },
         playground: false,
         autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+        cors: {
+          origin: 'http://localhost:4200',
+          credentials: true,
+        },
         // sortSchema: true,
         plugins: [ApolloServerPluginLandingPageLocalDefault()],
         // TODO implement -> context() {},
